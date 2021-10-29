@@ -917,7 +917,7 @@ command! RenameFiles :call RenameFiles()
 
 " NOTE: Option idea for project:
 "   C/C++ with compile scripts and main
-"   Client projects (compile scripts and a folder inside with the actual code)
+"   Client projects (compile scripts and a directory inside with the actual code)
 " TODO: Project files in json format to get
 if !exists('g:projects_directory')
     let g:projects_directory = has('win32') ? 'C:\projects' : '~/projects'
@@ -931,9 +931,9 @@ function! ProjectsCompletionList(ArgLead, CmdLine, CursorPos)
 
         for path in split(globpath(g:projects_directory, "*"), "\n")
             if isdirectory(path)
-                let folder_name = split(path, g:path_separator)[-1]
-                if folder_name =~ arg_match
-                    call add(result, folder_name)
+                let directory_name = split(path, g:path_separator)[-1]
+                if directory_name =~ arg_match
+                    call add(result, directory_name)
                 endif
             endif
         endfor
