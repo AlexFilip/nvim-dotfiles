@@ -1,0 +1,28 @@
+# Neovim config
+Most of the configuration is taken from my [original vim config](https://github.com/AlexFilip/dotvim) like persistent undo and automatic reloading of the vimrc when it's modified.
+I also added other plugins like fzf and ripgrep.
+There are still some kinks I need to work out, especially with the terminal and compile command.
+
+## Installation:
+Save this directory as `~/.config/nvim/`
+```
+git clone https://github.com/AlexFilip/nvim ~/.config/nvim
+```
+
+or symlink it from your preferred location
+
+```
+git clone https://github.com/AlexFilip/nvim your/preferred/location
+ln -sf ~/.config/nvim your/preferred/location
+```
+
+## Project projects_directory searching
+You can search your project directory using the `:Project` command followed by the project's name. This command supports tab-completion. It will automatically change to that directory and display the top-level files. If the directory does not exist, it will be automatically created.
+You can assign the path of your project directory in the global variable `g:projects_directory`. By default this is `"~/projects"` on linux and macos and `"C:\projects"` on windows.
+This command will report an error if a file exists with the specified name. You can use `:Project!` to delete this file and replace it with a directory.
+
+## Local vimrc
+This config also checks for a file named `~/.local/vimrc` and executes it if it exists. That file is executed after many of the options are set but before plugins are loaded. You can create the following functions in your local vimrc and they will be executed at the specified times.
+- `LocalVimRCPlugins()` run after all plugins have been specified. Here you can specify other plugins using [vim-plug](https://github.com/junegunn/vim-plug) syntax.
+- `LocalVimRCEnd()` run at the end of the script so you can override any variable or option
+
