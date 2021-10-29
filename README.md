@@ -16,7 +16,7 @@ git clone https://github.com/AlexFilip/nvim your/preferred/location
 ln -sf ~/.config/nvim your/preferred/location
 ```
 
-## Project projects_directory searching
+## Project directory searching
 You can search your project directory using the `:Project` command followed by the project's name. This command supports tab-completion. It will automatically change to that directory and display the top-level files. If the directory does not exist, it will be automatically created.
 You can assign the path of your project directory in the global variable `g:projects_directory`. By default this is `"~/projects"` on linux and macos and `"C:\projects"` on windows.
 This command will report an error if a file exists with the specified name. You can use `:Project!` to delete this file and replace it with a directory.
