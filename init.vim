@@ -54,7 +54,6 @@ function! AddToPath(...)
             let paths[path] = ''
         endif
     endfor
-
     " Previously the filter used 'val !~# $PATH' but that didn't work
     " for some reason
     let new_components = filter(copy(a:000),
@@ -85,6 +84,12 @@ if filereadable(s:local_vimrc_path)
     execute "source " . s:local_vimrc_path
 endif
 
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsListSnippets = "<c-tab>"
+let g:UltiSnipsJumpForwardTrigger = "<c-b>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-z>"
+let g:UltiSnipsSnippetDirectories = [s:dot_vim_path . "/UltiSnips"]
+
 let g:fzf_command_prefix = 'Fzf'
 if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     call plug#begin(s:dot_vim_path . '/plugins')
@@ -96,7 +101,10 @@ if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     Plug 'vim-utils/vim-man'
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
-    Plug 'uarun/vim-protobuf'
+    Plug 'SirVer/ultisnips'
+    " Plug 'neoclide/coc.nvim'
+    " Plug 'neoclide/coc-snippets'
+    " Plug 'uarun/vim-protobuf'
     " Plug 'derekwyatt/vim-scala'
 
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -120,7 +128,7 @@ endif
 filetype plugin on
 colorscheme custom
 
-let g:scala_scaladoc_indent = 1
+" let g:scala_scaladoc_indent = 1
 
 let $PATH="/usr/local/homebrew/bin:".$PATH
 
@@ -159,10 +167,8 @@ function! RipgrepFzf()
 
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview({
         \ 'options': [
-        \     '--delimiter',
-        \     '/',
-        \     '--with-nth',
-        \     '-1',
+        \     '--delimiter', '/',
+        \     '--with-nth', '-1',
         \     '--info=inline',
         \     '--phony',
         \     '--bind',
@@ -180,19 +186,19 @@ let g:golden_ratio_exclude_nonmodifiable = 1
 
 " NERDTree specific
 let g:NERDTreeGitStatusIndicatorMapCustom = {
-                \ 'Modified'  : '✹',
-                \ 'Staged'    : '✚',
-                \ 'Untracked' : '✭',
-                \ 'Renamed'   : '➜',
-                \ 'Unmerged'  : '═',
-                \ 'Deleted'   : '✖',
-                \ 'Dirty'     : '✗',
-                \ 'Ignored'   : '☒',
-                \ 'Clean'     : '✔︎',
-                \ 'Unknown'   : '?',
+                \     'Modified'  : '✹',
+                \     'Staged'    : '✚',
+                \     'Untracked' : '✭',
+                \     'Renamed'   : '➜',
+                \     'Unmerged'  : '═',
+                \     'Deleted'   : '✖',
+                \     'Dirty'     : '✗',
+                \     'Ignored'   : '☒',
+                \     'Clean'     : '✔︎',
+                \     'Unknown'   : '?',
                 \ }
 
-let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline_theme='apprentice'
 
@@ -579,7 +585,7 @@ function! StatusLine() abort
 endfunction
 
 " set statusline=%!StatusLine()
-" set tabline=%!Tabs()
+set tabline=%!Tabs()
 
 call timer_stopall()
 function! RedrawTabLineRepeated(timer)
