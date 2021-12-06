@@ -37,7 +37,7 @@ set noeol             " Give it a mean look so it understands
 
 " Indenting
 set tabstop=4 shiftwidth=0 softtabstop=-1 expandtab
-set cindent cinoptions=l1,=0,:4,(0,{0,+2,w1,W4,t0
+set cindent cinoptions=l1,=0,:4,(0,{0,+2,w1,W4,t0,j1,J1
 set shortmess=filnxtToOIs
 
 set viminfo+=n~/.local/viminfo " Out of sight, out of mind
@@ -107,6 +107,11 @@ if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     " Plug 'uarun/vim-protobuf'
     " Plug 'derekwyatt/vim-scala'
 
+    " Org mode (tree sitter requrires nvim nightly)
+    " Plug 'nvim-treesitter/nvim-treesitter'
+    " Plug 'https://github.com/kristijanhusak/orgmode.nvim'
+
+
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
     Plug 'jremmen/vim-ripgrep'
@@ -117,6 +122,10 @@ if filereadable(s:dot_vim_path . '/autoload/plug.vim')
 
     " Git support
     Plug 'tpope/vim-fugitive'
+
+    " Writing
+    Plug 'junegunn/goyo.vim'
+    Plug 'junegunn/limelight.vim'
 
     if exists('*g:LocalVimRCPlugins')
         call g:LocalVimRCPlugins()
@@ -184,6 +193,7 @@ nnoremap <silent> <C-f> :call RipgrepFzf()<CR>
 
 let g:golden_ratio_exclude_nonmodifiable = 1
 
+
 " NERDTree specific
 let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \     'Modified'  : '✹',
@@ -201,6 +211,8 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 " let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline_theme='apprentice'
+
+" lua require("org_init")
 
 " Make help window show up on right, not above
 augroup MiscFile
@@ -321,8 +333,16 @@ endfunction
 " inoremap          {<CR> {<CR>}<Esc>=ko
 " inoremap <silent> } }<Esc>%:call RebalanceCurrentBlock()<CR>%a
 
+nnoremap <CR>  <nop>
+nnoremap <CR>j o<Esc>
+nnoremap <CR>k O<Esc>
+
+" Maybe I can find a use for these
+nnoremap <CR><CR>        <nop>
+nnoremap <leader><Space> <nop>
+nnoremap <BS>            <nop>
+
 " Useless Keys
-nnoremap <CR>    <nop>
 nnoremap <BS>    <nop>
 nnoremap <Del>   <nop>
 nnoremap <Space> <nop>
@@ -400,10 +420,9 @@ function! RemoveCommentLeadersVisual() range
             let command = join([(a:firstline + 1), ",", a:lastline, 's/^\s*', leader, '\s*//e'], "")
             execute command
         endif
-
-        normal! gvJ
-        " echo command
     endif
+
+    normal! gvJ
 endfunction
 vnoremap <silent> J :call RemoveCommentLeadersVisual()<CR>
 nnoremap <silent> J :<C-U>call RemoveCommentLeadersNormal(v:count)<CR>
@@ -535,22 +554,24 @@ function! Tabs() abort
         let bufnum = tabpagebuflist(n)[tabpagewinnr(n) - 1]
 
         " %<num>T specifies the beginning of a tab
-        let s[num_prefixes + i * strings_per_tab + 0] = "%"
-        let s[num_prefixes + i * strings_per_tab + 1] = n
-
-        let s[num_prefixes + i * strings_per_tab + 2] = n == cur_tab_page ? "T%#TabLineSel# " : "T%#TabLine# "
-
-        let s[num_prefixes + i * strings_per_tab + 3] = n
+        let first_index = num_prefixes + i * strings_per_tab
+        let s[first_index + 0] = "%"
+        let s[first_index + 1] = n
+        let s[first_index + 2] = n == cur_tab_page ? "T%#TabLineSel# " : "T%#TabLine# "
+        let s[first_index + 3] = n
 
         " '-' for non-modifiable buffer, '+' for modified, ':' otherwise
         let modifiable = getbufvar(bufnum, "&modifiable")
         let modified   = getbufvar(bufnum, "&modified")
-        let s[num_prefixes + i * strings_per_tab + 4] = !modifiable ?  "- " : modified ? "* " : ": "
+        let s[first_index + 4] = !modifiable ?  "- " : modified ? "* " : ": "
 
         let name = bufname(bufnum)
-        let s[num_prefixes + i * strings_per_tab + 5] = name == "" ? "[New file]" : (len(name) >= max_file_name_length ? "<" . name[-max_file_name_length:] : name)
-
-        let s[num_prefixes + i * strings_per_tab + 6] = " "
+        let s[first_index + 5] = name == "" ?
+                    \ "[New file]" : 
+                    \ (len(name) >= max_file_name_length ?
+                        \ "<" . name[-max_file_name_length:] :
+                        \ name)
+        let s[first_index + 6] = " "
     endfor
 
     return join(s, "")

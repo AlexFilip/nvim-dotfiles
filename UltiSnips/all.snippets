@@ -1,10 +1,5 @@
 global !p
-def getText(text):
-	if len(text) > 0:
-		if len(text) % 2 == 0:
-			return "2"
-		else:
-			return "3"
+
 endglobal
 
 # NOTE:
@@ -17,11 +12,3 @@ endglobal
 #		snip.rv is the return value
 #		snip.c is the current value
 #		t is an array of the current tabstop values (updated as you type)
-
-snippet test "Test"
-
-(${1:hello})Hello world($1)
-$2`!p snip.rv = getText(t[2])`
-${3:blah}
-
-endsnippet

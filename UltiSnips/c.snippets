@@ -1,11 +1,9 @@
-# Ideas
-#  - tagged union (enum, struct { union })
+# TODO
+#  - Finish tagged union (enum, struct { union })
 
 global !p
 
-
-def flatten(t: list) -> list:
-	return [item for sublist in t for item in sublist]
+from ultisnips_helpers import *
 
 def split_member_name(name) -> list:
 	"""
@@ -51,13 +49,10 @@ def snake_to_camel_case(name: str) -> str:
 	name = filter_type_name(name)
 	name_components = name.split('_')
 	return "".join([comp[0].upper() + comp[1:].lower() for comp in name_components if comp])
-	
-
 
 def members_to_args(members_string: str) -> str:
 	line_components = [v.strip().replace(";", "") for v in members_string.strip().splitlines()]
 	return ", ".join(line_components)
-
 
 def components_to_assignments(component_list: list, is_pointer: bool) -> str:
 		def has_name(components: list) -> bool:
@@ -91,7 +86,7 @@ def args_to_assignment(argument_string: str, is_pointer: bool) -> str:
 		return components_to_assignments(arguments, is_pointer);
 	else:
 		return ""
-	
+
 def struct_initializer(_type: str):
 	t = _type.strip()
 	if t.endswith("*"):
@@ -99,6 +94,32 @@ def struct_initializer(_type: str):
 	else:
 		return "{}"
 	pass
+
+stdint_regex = re.compile("^u?int(8|16|32|64)_t$")
+def result_definition_with_type(_type):
+	global stdint_regex
+
+	t = _type.strip()
+	result = ""
+	if t != "void":
+		ResultInitializer = "{}"
+		if t.endswith("short") or \
+		   t.endswith("int") or \
+		   t.endswith("long") or \
+		   t.startswith("unsigned") or \
+		   stdint_regex.match(t):
+			ResultInitializer = "0"
+		elif t == "char":
+			ResultInitializer = "'\\0'"
+		elif t == "double":
+			ResultInitializer = "0.0";
+		elif t == "float":
+			ResultInitializer = "0.0f";
+		elif t.endswith("*"):
+			ResultInitializer = "NULL";
+
+		result = "{} Result = {};\n\n    ".format(t, ResultInitializer);
+	return result
 
 endglobal
 
@@ -130,3 +151,77 @@ internal ${1:type_name}
 }
 endsnippet
 
+# ---
+# 
+
+snippet main "Main funcition declaration" b
+int
+main(int ArgCount, char* Args[]) {
+	$0
+}
+endsnippet
+
+snippet libstd "Common include statements" b
+endsnippet
+
+snippet if "If statement"
+if($1) {
+	$0
+}
+endsnippet
+
+snippet elif "If statement"
+else if($1) {
+	$0
+}
+endsnippet
+
+snippet else "If statement"
+else {
+	$0
+}
+endsnippet
+
+snippet while "While loop"
+while($1) {
+	$0
+}
+endsnippet
+
+snippet for "For loop"
+for(int ${1:Index} = 0; $1 < ${3:ArrayLength(${2:ArrayName})}; ++$1) {
+	$0
+}
+endsnippet
+
+snippet switch "Switch statement"
+switch($1) {
+	case $2: {
+		$0
+		break;
+	}
+	default: {
+		break;
+	}
+}
+endsnippet
+
+snippet fn "Basic funciton definition"
+${2:void} ${1:FunctionName}($3) {
+	`!p snip.rv=result_definition_with_type(t[2])`$0`!p snip.rv="" if t[2] == "void" else "\n\n    return Result;"`
+}
+endsnippet
+
+# TODO
+# snippet tunion "A tagged union definition"
+# enum $1_type {
+# 	`!p snip.rv=""`
+# };
+# 
+# struct ${1:name} {
+# 	$1_type Type;
+# 	union {
+# 		$2
+# 	};
+# }
+# endsnippet
