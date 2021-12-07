@@ -369,7 +369,7 @@ nnoremap <C-H> zh
 
 " Commands for convenience
 command! -bang Q q<bang>
-command! -bang -complete=file W w<bang> <args>
+command! -bang -nargs=? -complete=file W w<bang> <args>
 command! -bang -nargs=? -complete=file E e<bang> <args>
 
 " Leader mappings
