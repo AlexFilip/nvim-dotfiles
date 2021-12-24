@@ -37,7 +37,7 @@ set noeol             " Give it a mean look so it understands
 
 " Indenting
 set tabstop=4 shiftwidth=0 softtabstop=-1 expandtab
-set cindent cinoptions=l1,=0,:4,(0,{0,+2,w1,W4,t0,j1,J1
+set cindent cinoptions=l1,=4,:4,(0,{0,+2,w1,W4,t0,j1,J1
 set shortmess=filnxtToOIs
 
 set viminfo+=n~/.local/viminfo " Out of sight, out of mind
@@ -116,6 +116,9 @@ if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     Plug 'junegunn/fzf.vim'
     Plug 'jremmen/vim-ripgrep'
 
+    " nnn
+    Plug 'mcchrish/nnn.vim'
+
     "NERDTree
     Plug 'preservim/nerdtree'
     Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -133,6 +136,8 @@ if filereadable(s:dot_vim_path . '/autoload/plug.vim')
 
     call plug#end()
 endif
+
+packadd termdebug
 
 filetype plugin on
 colorscheme custom
@@ -758,9 +763,32 @@ function! IsTerm()
     return get(getwininfo(bufwinid(bufnr()))[0], 'terminal', 0)
 endfunction
 
+if has('nvim')
+    if !exists('g:term_statuses')
+        " Don't remove terminal statuses if I'm working on this init file
+        let g:term_statuses = {}
+    endif
+    augroup NeovimTerm
+        autocmd!
+        autocmd TermOpen  * let g:term_statuses[b:terminal_job_id] = 1
+        autocmd TermClose * let g:term_statuses[b:terminal_job_id] = 0
+    augroup END
+endif
+
+" function! s:TermExit(job_id, data, event) dict
+"     let g:term_statuses[job_id] = 0
+"     echo "Terminal exited"
+" endfunction
+
 function! IsTermAlive()
-    let job = term_getjob(bufnr())
-    return job != v:null && job_status(job) != "dead"
+    if has('nvim') 
+        let name = getbufvar("%", "terminal_job_id")
+        echo "name = " . name
+        return get(g:term_statuses, name, 0)
+    else
+        let job = term_getjob(bufnr())
+        return job != v:null && job_status(job) != "dead"
+    endif
 endfunction
 
 function! SwitchToOtherPaneOrCreate()
@@ -768,8 +796,12 @@ function! SwitchToOtherPaneOrCreate()
     let layout = winlayout()
     if layout[0] == 'leaf'
         " Create new vertical pane and go to left one
-        wincmd v
-        wincmd l
+        if has('nvim')
+            vnew
+        else
+            wincmd v
+            wincmd l
+        endif
     elseif layout[0] == 'row'
         " Buffers layed out side by side
         wincmd l
@@ -798,7 +830,6 @@ function! GotoLineFromTerm()
                 let filepath = line_contents[:open_paren-1]
                 let line_num = line_contents[open_paren+1:close_paren-1]
                 let col_num = 0
-
             else
                 let [filepath, line_num, col_num] = split(line_contents, ":")[:2]
             endif
@@ -839,7 +870,6 @@ function! DoCommandsInTerm(shell, commands, parent_dir, message)
     endif
 
     let all_commands = a:commands
-
     if a:parent_dir isnot 0
         let all_commands = join(['cd "', a:parent_dir, '" && ', all_commands], "")
     endif
@@ -848,16 +878,25 @@ function! DoCommandsInTerm(shell, commands, parent_dir, message)
         let all_commands .= ' && echo ' . a:message
     endif
 
-    if IsTermAlive()
-        " NOTE: In neovim, this is problematic, make it work (FIX IT FIX IT FIX IT FIX IT...)
-        if get(job_info(term_getjob(bufnr())), 'cmd', [''])[0] =~ 'zsh'
-            let all_commands = join(["\<Esc>cc", all_commands, "\r\n"], "")
+    if has('nvim')
+        if IsTermAlive()
+            call chansend(b:terminal_job_id, all_commands . "\n")
+        else
+            let cmd = join(["terminal ", a:shell, "-c", '"' . all_commands . '"'], " ")
+            execute cmd
+            " call termopen(['zsh', '-c', all_commands]) ", { 'on_exit': 's:TermExit' })
         endif
-
-        call term_sendkeys(bufnr(), all_commands)
     else
-        let cmd = join(["terminal", a:shell, all_commands], " ")
-        execute cmd
+        if IsTermAlive()
+            if get(job_info(term_getjob(bufnr())), 'cmd', [''])[0] =~ 'zsh'
+                let all_commands = join(["\<Esc>cc", all_commands, "\r\n"], "")
+            endif
+
+            call term_sendkeys(bufnr(), all_commands)
+        else
+            let cmd = join(["terminal", a:shell, all_commands], " ")
+            execute cmd
+        endif
     endif
 endfunction
 
@@ -881,7 +920,7 @@ function! SearchAndRun(script_name)
                 let completed_message = 0
             endif
 
-            call DoCommandsInTerm('++shell', script, directory_path, completed_message)
+            call DoCommandsInTerm(&shell, script, directory_path, completed_message)
             return
         elseif filereadable(file_path)
             echoerr a:script_name . " found but is not executable"
