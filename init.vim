@@ -804,13 +804,24 @@ endfunction
 function! SwitchToOtherPaneOrCreate()
     let start_win = winnr()
     let layout = winlayout()
+
     if layout[0] == 'leaf'
         " Create new vertical pane and go to left one
+        let is_window_vertical = str2float(&lines) * 1.5 < str2float(&columns)
         if has('nvim')
-            vnew
+            if (is_window_vertical)
+                new
+            else
+                vnew
+            endif
         else
-            wincmd v
-            wincmd l
+            if (is_window_vertical) 
+                wincmd s
+                wincmd j
+            else
+                wincmd v
+                wincmd l
+            endif
         endif
     elseif layout[0] == 'row'
         " Buffers layed out side by side
