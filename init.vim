@@ -111,24 +111,15 @@ if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     " Plug 'nvim-treesitter/nvim-treesitter'
     " Plug 'https://github.com/kristijanhusak/orgmode.nvim'
 
-
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
     Plug 'jremmen/vim-ripgrep'
 
     " nnn
-    Plug 'mcchrish/nnn.vim'
-
-    "NERDTree
-    " Plug 'preservim/nerdtree'
-    " Plug 'Xuyuanp/nerdtree-git-plugin'
+    " Plug 'mcchrish/nnn.vim'
 
     " Git support
     Plug 'tpope/vim-fugitive'
-
-    " Writing
-    Plug 'junegunn/goyo.vim'
-    Plug 'junegunn/limelight.vim'
 
     if exists('*g:LocalVimRCPlugins')
         call g:LocalVimRCPlugins()
@@ -206,21 +197,6 @@ nnoremap <silent> <C-f> :call RipgrepFzf()<CR>
 
 let g:golden_ratio_exclude_nonmodifiable = 1
 
-
-" NERDTree specific
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-                \     'Modified'  : '✹',
-                \     'Staged'    : '✚',
-                \     'Untracked' : '✭',
-                \     'Renamed'   : '➜',
-                \     'Unmerged'  : '═',
-                \     'Deleted'   : '✖',
-                \     'Dirty'     : '✗',
-                \     'Ignored'   : '☒',
-                \     'Clean'     : '✔︎',
-                \     'Unknown'   : '?',
-                \ }
-
 " let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline_theme='apprentice'
@@ -296,12 +272,15 @@ function! GotoBeginningOfLine()
 endfunction
 
 nnoremap <silent> 0 :<C-U>call GotoBeginningOfLine()<CR>
+nnoremap <silent> ^ :<C-U>call GotoBeginningOfLine()<CR>
 nnoremap <silent> - $
 
 vnoremap <silent> 0 :<C-U>call ReenterVisual() \| call GotoBeginningOfLine()<CR>
+vnoremap <silent> ^ :<C-U>call ReenterVisual() \| call GotoBeginningOfLine()<CR>
 vnoremap <silent> - $
 
 onoremap <silent> 0 :<C-U>call GotoBeginningOfLine()<CR>
+onoremap <silent> ^ :<C-U>call GotoBeginningOfLine()<CR>
 onoremap <silent> - $
 
 " Some terminal shortcuts
@@ -406,7 +385,7 @@ let s:comment_leaders = {
     \ 'tex' : '%'
 \ }
 
-function! RemoveCommentLeadersNormal(count)
+function! s:normRemoveCommentsAndJoinLines()
     if has_key(s:comment_leaders, &filetype)
         let leader = substitute(s:comment_leaders[&filetype], '\/', '\\/', 'g')
 
@@ -416,7 +395,7 @@ function! RemoveCommentLeadersNormal(count)
         " TODO: consider making the removal of the comment leader depend on
         " whether or not the previous line has the leader.
         if getline(current_line) =~ '^\s*' . leader
-            let lastline = current_line + (a:count == 0 ? 1 : a:count)
+            let lastline = current_line + (v:count == 0 ? 1 : v:count)
             let command = join([(current_line+1), ",", lastline, 's/^\s*', leader, "\s*//e"], "")
             execute command
         endif
@@ -424,8 +403,11 @@ function! RemoveCommentLeadersNormal(count)
         call setpos(".", cur_pos)
     endif
 
-    execute join(["normal! ", (a:count+1), "J"], "")
+    execute join(["normal! ", (v:count+1), "J"], "")
+    silent! call repeat#set("\<Plug>JoinLines", v:count)
 endfunction
+nnoremap <Plug>JoinLines :<C-U>call <SID>normRemoveCommentsAndJoinLines()<CR>
+nmap J <Plug>JoinLines
 
 function! RemoveCommentLeadersVisual() range
     if has_key(s:comment_leaders, &filetype)
@@ -440,7 +422,6 @@ function! RemoveCommentLeadersVisual() range
     normal! gvJ
 endfunction
 vnoremap <silent> J :call RemoveCommentLeadersVisual()<CR>
-nnoremap <silent> J :<C-U>call RemoveCommentLeadersNormal(v:count)<CR>
 
 " NOTE: redrawtabline doesn't exist on all vim compiles so I have to check for
 " it. Use this function instead so that the check isn't done every time
@@ -702,7 +683,6 @@ function! CreateSourceHeader()
 
     let l:header = []
     for str in g:header
-
         let start_idx = 0
         while 1
             let option_idx =  match(str, '{[A-Za-z_]\+}', start_idx)
@@ -807,7 +787,7 @@ function! SwitchToOtherPaneOrCreate()
 
     if layout[0] == 'leaf'
         " Create new vertical pane and go to left one
-        let is_window_vertical = str2float(&lines) * 1.5 < str2float(&columns)
+        let is_window_vertical = str2float(&lines) * 2 > str2float(&columns)
         if has('nvim')
             if (is_window_vertical)
                 new
