@@ -912,7 +912,7 @@ function! ProjectsCompletionList(ArgLead, CmdLine, CursorPos)
             let slash_index -= 1
         endwhile
 
-        let [project_lead, project_name_start] = slash_index < 0 ? ["", a:ArgLead] : [a:ArgLead[:slash_index], a:ArgLead[slash_index + 1:]]
+        let [project_lead, project_name_start] = slash_index < 0 ? ["", a:ArgLead ] : [a:ArgLead[:slash_index], a:ArgLead[slash_index + 1:]]
 
         let result = []
         let arg_match = join(["^", project_name_start, ".*"], "")
