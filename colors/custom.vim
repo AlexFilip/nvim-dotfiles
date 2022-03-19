@@ -14,7 +14,7 @@ set background=dark
 
 " General Colors
 hi Normal          guifg=#d7d7d7    guibg=#262626    ctermfg=251     ctermbg=234     gui=none      cterm=none
-hi Comment         guifg=#8a8a8a    guibg=NONE       ctermfg=245     ctermbg=NONE    gui=none      cterm=none
+hi Comment         guifg=#629755    guibg=NONE       ctermfg=245     ctermbg=NONE    gui=none      cterm=none
 hi Constant        guifg=#d7d7af    guibg=NONE       ctermfg=187     ctermbg=NONE    gui=none      cterm=none
 hi Identifier      guifg=#afd7d7    guibg=NONE       ctermfg=152     ctermbg=NONE    gui=none      cterm=none
 hi Statement       guifg=#87afd7    guibg=NONE       ctermfg=110     ctermbg=NONE    gui=none      cterm=none

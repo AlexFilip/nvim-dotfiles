@@ -29,7 +29,7 @@ set wildmenu          " Display a menu of all completions for commands when pres
 
 set nowrap linebreak breakindent " Don't wrap long lines
 set breakindentopt=shift:0,min:20
-set formatoptions+=n 
+set formatoptions+=n
 set virtualedit=block " Visual block mode is not limited to the character locations
 
 set nofixendofline    " Don't insert an end of line at the end of the file
@@ -97,26 +97,13 @@ if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     " Utilities
     Plug 'tpope/vim-surround'
     Plug 'tpope/vim-repeat'
-    Plug 'roman/golden-ratio'
-    Plug 'vim-utils/vim-man'
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
     Plug 'SirVer/ultisnips'
-    " Plug 'neoclide/coc.nvim'
-    " Plug 'neoclide/coc-snippets'
-    " Plug 'uarun/vim-protobuf'
-    " Plug 'derekwyatt/vim-scala'
-
-    " Org mode (tree sitter requires nvim nightly)
-    " Plug 'nvim-treesitter/nvim-treesitter'
-    " Plug 'https://github.com/kristijanhusak/orgmode.nvim'
 
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
     Plug 'jremmen/vim-ripgrep'
-
-    " nnn
-    " Plug 'mcchrish/nnn.vim'
 
     " Git support
     Plug 'tpope/vim-fugitive'
@@ -287,57 +274,27 @@ onoremap <silent> - $
 nnoremap <silent> ght :vertical terminal<CR>
 nnoremap <silent> gct :tabnew \| terminal<CR>
 
-if !has('win32')
-    " Debugger
-    let s:debugger = "lldb"
-    function! LaunchDebugger(vertical, options)
-        if a:vertical
-            let prev_command = "vertical"
-        else
-            let prev_command = "tabnew \|"
-        endif
-        execute join([prev_command, " terminal ", a:options, " ++noclose ", s:debugger], "")
-    endfunction
-    nnoremap <silent> ghd :call LaunchDebugger(1, "")<CR>
-    nnoremap <silent> gcd :call LaunchDebugger(0, "++curwin")<CR>
-
-    " Htop
-    nnoremap <silent> ghh :vertical terminal htop<CR>
-    nnoremap <silent> gch :tabnew \| terminal++curwin htop<CR>
-endif
-
 " Enter normal mode without getting emacs pinky
 tnoremap <C-w>  <C-\><C-n><C-w>
 tnoremap <C-w>[ <C-\><C-n>
 tnoremap <C-w><C-[> <C-\><C-n>
 
-function! RebalanceCurrentBlock()
-    let open_pos = getpos(".")
-    let indent_before = indent(".")
-
-    normal! =%
-
-    let open_pos[2] += indent(".") - indent_before
-    call setpos(".", open_pos)
-endfunction
-
-" Autocomplete blocks
-" inoremap          {<CR> {<CR>}<Esc>=ko
-" inoremap <silent> } }<Esc>%:call RebalanceCurrentBlock()<CR>%a
-
 nnoremap <CR>  <nop>
 nnoremap <CR>j o<Esc>
 nnoremap <CR>k O<Esc>
-
-" Maybe I can find a use for these
-nnoremap <CR><CR>        <nop>
-nnoremap <leader><Space> <nop>
-nnoremap <BS>            <nop>
 
 " Useless Keys
 nnoremap <BS>    <nop>
 nnoremap <Del>   <nop>
 nnoremap <Space> <nop>
+
+vnoremap <BS>    <nop>
+vnoremap <Del>   <nop>
+vnoremap <Space> <nop>
+
+onoremap <BS>    <nop>
+onoremap <Del>   <nop>
+onoremap <Space> <nop>
 
 " Who needs Ex-mode these days?
 nnoremap Q <nop>
@@ -404,7 +361,7 @@ function! s:normRemoveCommentsAndJoinLines()
     endif
 
     execute join(["normal! ", (v:count+1), "J"], "")
-    silent! call repeat#set("\<Plug>JoinLines", v:count)
+    silent! call repeat#set("\<Plug>JoinLines", v:count - 1)
 endfunction
 nnoremap <Plug>JoinLines :<C-U>call <SID>normRemoveCommentsAndJoinLines()<CR>
 nmap J <Plug>JoinLines
@@ -420,6 +377,8 @@ function! RemoveCommentLeadersVisual() range
     endif
 
     normal! gvJ
+    let count = a:lastline - a:firstline
+    silent! call repeat#set("\<Plug>JoinLines", count)
 endfunction
 vnoremap <silent> J :call RemoveCommentLeadersVisual()<CR>
 
@@ -481,32 +440,6 @@ let g:netrw_keepdir = 1
 " Docs: http://vimhelp.appspot.com/eval.txt.html
 set fillchars=stlnc:\|,vert:\|,fold:.,diff:.
 
-" let s:mode_name_override = 0
-" function! OverrideModeName(name)
-"     let s:mode_name_override = a:name
-" endfunction
-
-let s:current_mode = {
-    \ 'n'  : 'Normal',
-    \ 'i'  : 'Insert',
-    \ 'v'  : 'Visual',
-    \ 'V'  : 'Visual Line',
-    \ '' : 'Visual Block',
-    \ 'R'  : 'Replace',
-    \ 'c'  : 'Command Line',
-    \ 't'  : 'Terminal'
-\ }
-
-function! GetCurrentMode()
-    " if s:mode_name_override isnot 0
-    "     return s:mode_name_override
-    " else
-
-    return get(s:current_mode, mode(), mode())
-
-    " endif
-endfunction
-
 " Hours (24-hour clock) followed by minutes
 let s:timeformat = has('win32') ? '%H:%M' : '%k:%M'
 
@@ -521,7 +454,7 @@ function! Tabs() abort
     " NOTE: Repeat is used to pre-allocate space, make sure that this is the
     " correct number of characters, otherwise you'll get an error
 
-    let prefixes = [" ", GetCurrentMode(), " "]
+    let prefixes = []
     " %= is the separator between left and right side of tabline
     " %T specifies the end of the last tab
     let suffixes = ["%T%#TabLineFill#%=%#TabLineSel# ", strftime(s:timeformat), " "]
@@ -540,10 +473,6 @@ function! Tabs() abort
     for i in range(num_suffixes)
         let s[i - num_suffixes] = suffixes[i]
     endfor
-
-    " Previously this was initialized to an empty list and I was using
-    " extend() to add elements
-    " let s = [] " Not sure if a list is faster than a string but there is no stringbuilder in vimscript
 
     for i in range(n_tabs)
         let n = i + 1
@@ -649,13 +578,6 @@ hi CustomOrange      guifg=#e54f00 guibg=NONE ctermfg=166 ctermbg=NONE gui=none 
 hi CustomDarkBlue    guifg=#5f87ff guibg=NONE ctermfg=69  ctermbg=NONE gui=none cterm=none
 hi CustomHotPink     guifg=#d75faf guibg=NONE ctermfg=169 ctermbg=NONE gui=none cterm=none
 hi CustomPurple      guifg=#950087 guibg=NONE ctermfg=90  ctermbg=NONE gui=none cterm=none
-
-augroup work_errors
-    autocmd!
-    autocmd Syntax python,scala syn match Error /:[A-Za-z]/
-    autocmd Syntax scala syn match Error / :/
-    " autocmd Syntax groovy
-augroup END
 
 " ============================================
 " Common variables that may be needed by other functions
@@ -939,14 +861,6 @@ endfunction
 nnoremap <silent> <leader>g :call GotoLineFromTerm()<CR>
 nnoremap <silent> <leader>c :call SearchAndCompile()<CR>
 
-" = Man =================================
-" if has('win32')
-"     function! ManEntry(name)
-"         execute "vertical term ++close man " . a:name
-"     endfunction
-"     command! -nargs=1 Man :call ManEntry(<q-args>)
-" endif
-
 " =======================================
 
 function! RenameFiles()
@@ -993,14 +907,21 @@ function! ProjectsCompletionList(ArgLead, CmdLine, CursorPos)
     if a:ArgLead =~ '^-.\+' || a:ArgLead =~ '^++.\+'
         " TODO: command completion for options
     else
-        let result = []
-        let arg_match = join(["^", a:ArgLead, ".*"], "")
+        let slash_index = len(a:ArgLead)
+        while(slash_index >= 0 && a:ArgLead[slash_index] != '/')
+            let slash_index -= 1
+        endwhile
 
-        for path in split(globpath(g:projects_directory, "*"), "\n")
+        let [project_lead, project_name_start] = slash_index < 0 ? ["", a:ArgLead] : [a:ArgLead[:slash_index], a:ArgLead[slash_index + 1:]]
+
+        let result = []
+        let arg_match = join(["^", project_name_start, ".*"], "")
+
+        for path in split(globpath(g:projects_directory . g:path_separator . project_lead, "*"), "\n")
             if isdirectory(path)
                 let directory_name = split(path, g:path_separator)[-1]
                 if directory_name =~ arg_match
-                    call add(result, directory_name)
+                    call add(result, project_lead . directory_name)
                 endif
             endif
         endfor
@@ -1059,16 +980,6 @@ function! GoToProjectOrMake(bang, command_line)
     endif
 endfunction
 command! -bang -nargs=1 -complete=customlist,ProjectsCompletionList  Project :call GoToProjectOrMake(<bang>0, <q-args>)
-
-
-" = Search ====================================
-function! SearchFolder(searchTerm)
-    let searchTerm = a:searchTerm
-    let searchTerm = substitute(searchTerm, '\\', '\\\\', 'g')
-    let searchTerm = join(['"', substitute(searchTerm, '"', '\"', 'g'), '" .'], "")
-    call DoCommandsInTerm('grep -REn', searchTerm, 0, 0)
-endfunction
-command! -nargs=1 Search :call SearchFolder(<q-args>)
 
 " = RFC =======================================
 function! GetRFC(num)
