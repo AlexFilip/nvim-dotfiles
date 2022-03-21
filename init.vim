@@ -915,13 +915,13 @@ function! ProjectsCompletionList(ArgLead, CmdLine, CursorPos)
         let [project_lead, project_name_start] = slash_index < 0 ? ["", a:ArgLead ] : [a:ArgLead[:slash_index], a:ArgLead[slash_index + 1:]]
 
         let result = []
-        let arg_match = join(["^", project_name_start, ".*"], "")
+        let arg_match = join(["^", project_name_start, '.*\c'], "")
 
         for path in split(globpath(g:projects_directory . g:path_separator . project_lead, "*"), "\n")
             if isdirectory(path)
                 let directory_name = split(path, g:path_separator)[-1]
                 if directory_name =~ arg_match
-                    call add(result, project_lead . directory_name)
+                    call add(result, project_lead . directory_name . '/')
                 endif
             endif
         endfor
