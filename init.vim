@@ -15,17 +15,17 @@ if !isdirectory(s:undo_dir)
 endif
 
 " Miscellaneous
-set splitright        " Vertical split goes right, not left
-set showcmd           " Show the current command in operator pending mode
-set cursorline        " Make the cursor line a visible color
-set noshowmode        " Don't show -- INSERT --
-set mouse=a           " Allow mouse input
-set sidescroll=1      " Number of columns to scroll left and right
-set backspace=indent  " allow backspacing only over automatic indenting (:help 'backspace')
-set showtabline=1     " 0 = never show tabline, 1 = when more than one tab, 2 = always
-set laststatus=2      " Whether or not to show the status line. Values same as showtabline
-set clipboard=unnamed " Use system clipboard
-set wildmenu          " Display a menu of all completions for commands when pressing tab
+set splitright            " Vertical split goes right, not left
+set showcmd               " Show the current command in operator pending mode
+set cursorline            " Make the cursor line a visible color
+set noshowmode            " Don't show -- INSERT --
+set mouse=a               " Allow mouse input
+set sidescroll=1          " Number of columns to scroll left and right
+set backspace=indent      " allow backspacing only over automatic indenting (:help 'backspace')
+set showtabline=1         " 0 = never show tabline, 1 = when more than one tab, 2 = always
+set laststatus=2          " Whether or not to show the status line. Values same as showtabline
+set clipboard=unnamedplus " Use system clipboard
+set wildmenu              " Display a menu of all completions for commands when pressing tab
 
 set nowrap linebreak breakindent " Don't wrap long lines
 set breakindentopt=shift:0,min:20
@@ -120,7 +120,7 @@ packadd termdebug
 filetype plugin on
 colorscheme custom
 
-let g:nnn#command = expand('~/projects/Forks/nnn/nnn') . ' -d'
+" let g:nnn#command = expand('~/projects/Forks/nnn/nnn') . ' -d'
 " let g:nnn#layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Comment' } }
 " let g:nnn#layout = { 'left': '10%' }
 nnoremap <silent> <leader>f :NnnPicker<CR>
@@ -158,6 +158,7 @@ let g:fzf_preview_window = [
     \   'right:50%',
     \   'ctrl-/',
     \ ]
+
 " rg --no-heading --smart-case --no-messages --ignore-file ~/.config/rgignore --column --line-number --color=never -- '' | fzf --delimiter / --with-nth -1 --info=inline --phony --bind 'change:reload:rg --no-heading --smart-case --no-messages --ignore-file ~/.config/rgignore --column --line-number --color=never -- {q}'
 function! RipgrepFzf()
   let command_fmt = s:rg_command_basis . "--column --line-number --color=always -- "
@@ -232,7 +233,6 @@ function! MoveTab(multiplier, count)
         endif
 
         let cmd = join(cmd, "")
-        " echo "Moving Tabs " . cmd
         execute cmd
     endif
 endfunction
@@ -695,7 +695,6 @@ endif
 function! IsTermAlive()
     if has('nvim') 
         let name = getbufvar("%", "terminal_job_id")
-        echo "name = " . name
         return get(g:term_statuses, name, 0)
     else
         let job = term_getjob(bufnr())
@@ -829,29 +828,33 @@ function! SearchAndRun(script_name)
     let working_dir = has('win32') ? [] : [""]
     call extend(working_dir, split(getcwd(), g:path_separator))
 
-    while len(working_dir) > 0
-        let directory_path = join(working_dir, g:path_separator)
-        let file_path = join([directory_path, g:path_separator, a:script_name], "")
-        if executable(file_path)
+    let directory_path = join(working_dir, g:path_separator)
+    let file_path = join([directory_path, g:path_separator, a:script_name], "")
+
+    if filereadable(file_path)
+        if !executable(file_path)
+            echoerr a:script_name . " found but is not executable"
+        else
             " One problem with this is that I can't scroll through the
             " history to see all the errors from the beginning
             let script = a:script_name
-
             let completed_message = "Compiled Successfully"
+
             if has('win32')
+                " shell-init.bat should contain information to initialize the
+                " terminal environment with the compile path. This usually means
+                " calling vcvarsall.bat in the appropriate directory.
                 let script = 'C:\tools\shell-init.bat && ' . script
                 let completed_message = 0
             endif
 
             call DoCommandsInTerm(&shell, script, directory_path, completed_message)
-            return
-        elseif filereadable(file_path)
-            echoerr a:script_name . " found but is not executable"
-            return
         endif
-        let working_dir = working_dir[:-2] " remove last path element
-    endwhile
-    echo join(["No file named \"", a:script_name, "\" found"], "")
+    elseif filereadable(join([directory_path, g:path_separator, "Makefile"], ""))
+        call DoCommandsInTerm(&shell, "make", directory_path, "Compiled Successfully")
+    else
+        echo join(["No file named \"", a:script_name, "\" found in current directory"], "")
+    endif
 endfunction
 
 function! SearchAndCompile()
@@ -899,10 +902,11 @@ command! RenameFiles :call RenameFiles()
 " NOTE: Option idea for project:
 "   C/C++ with compile scripts and main
 "   Client projects (compile scripts and a directory inside with the actual code)
-" TODO: Project files in json format to get
+" TODO: Project files that do not rely on compile command
 if !exists('g:projects_directory')
     let g:projects_directory = has('win32') ? 'C:\projects' : '~/projects'
 endif
+
 function! ProjectsCompletionList(ArgLead, CmdLine, CursorPos)
     if a:ArgLead =~ '^-.\+' || a:ArgLead =~ '^++.\+'
         " TODO: command completion for options
