@@ -4,3 +4,4 @@ plugins
 lua/
 pythonx/
 spell/
+python*-env/

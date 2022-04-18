@@ -84,6 +84,11 @@ if filereadable(s:local_vimrc_path)
     execute "source " . s:local_vimrc_path
 endif
 
+" To activate python bindings, create one or both of these 2 environments and
+" run pip install neovim from within them.
+let g:python_host_prog  = s:dot_vim_path . "/python2-env/bin/python"
+let g:python3_host_prog = s:dot_vim_path . "/python3-env/bin/python"
+
 let g:UltiSnipsExpandTrigger = "<tab>"
 let g:UltiSnipsListSnippets = "<c-tab>"
 let g:UltiSnipsJumpForwardTrigger = "<c-b>"
@@ -123,12 +128,12 @@ colorscheme custom
 " let g:nnn#command = expand('~/projects/Forks/nnn/nnn') . ' -d'
 " let g:nnn#layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Comment' } }
 " let g:nnn#layout = { 'left': '10%' }
-nnoremap <silent> <leader>f :NnnPicker<CR>
+" nnoremap <silent> <leader>f :NnnPicker<CR>
 
 " Start in current file's path
 " nnoremap <silent> <leader>f :NnnPicker %:p:h<CR>
 
-let $PATH="/usr/local/homebrew/bin:".$PATH
+" let $PATH="/usr/local/homebrew/bin:".$PATH
 
 set rtp+=/usr/local/opt/fzf
 
