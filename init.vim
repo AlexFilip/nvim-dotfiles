@@ -89,10 +89,10 @@ endif
 let g:python_host_prog  = s:dot_vim_path . "/python2-env/bin/python"
 let g:python3_host_prog = s:dot_vim_path . "/python3-env/bin/python"
 
-let g:UltiSnipsExpandTrigger = "<tab>"
-let g:UltiSnipsListSnippets = "<c-tab>"
-let g:UltiSnipsJumpForwardTrigger = "<c-b>"
-let g:UltiSnipsJumpBackwardTrigger = "<c-z>"
+let g:UltiSnipsExpandTrigger = "<c-b>"
+" let g:UltiSnipsListSnippets = "<c-tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-tab>"
 let g:UltiSnipsSnippetDirectories = [s:dot_vim_path . "/UltiSnips"]
 
 let g:fzf_command_prefix = 'Fzf'
@@ -122,7 +122,7 @@ endif
 
 packadd termdebug
 
-filetype plugin on
+filetype plugin indent on
 colorscheme custom
 
 " let g:nnn#command = expand('~/projects/Forks/nnn/nnn') . ' -d'
