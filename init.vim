@@ -110,6 +110,8 @@ if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     Plug 'junegunn/fzf.vim'
     Plug 'jremmen/vim-ripgrep'
 
+    " Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+
     " Git support
     Plug 'tpope/vim-fugitive'
 
@@ -124,6 +126,12 @@ packadd termdebug
 
 filetype plugin indent on
 colorscheme custom
+
+augroup CommentHighlighting
+    autocmd!
+    autocmd FileType json syntax match Comment +\/\/.\+$+
+augroup END
+
 
 " let g:nnn#command = expand('~/projects/Forks/nnn/nnn') . ' -d'
 " let g:nnn#layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Comment' } }
@@ -265,15 +273,15 @@ endfunction
 
 nnoremap <silent> 0 :<C-U>call GotoBeginningOfLine()<CR>
 nnoremap <silent> ^ :<C-U>call GotoBeginningOfLine()<CR>
-nnoremap <silent> - $
+nnoremap <silent> <BS> $
 
 vnoremap <silent> 0 :<C-U>call ReenterVisual() \| call GotoBeginningOfLine()<CR>
 vnoremap <silent> ^ :<C-U>call ReenterVisual() \| call GotoBeginningOfLine()<CR>
-vnoremap <silent> - $
+vnoremap <silent> <BS> $
 
 onoremap <silent> 0 :<C-U>call GotoBeginningOfLine()<CR>
 onoremap <silent> ^ :<C-U>call GotoBeginningOfLine()<CR>
-onoremap <silent> - $
+onoremap <silent> <BS> $
 
 " Some terminal shortcuts
 nnoremap <silent> ght :vertical terminal<CR>
@@ -289,15 +297,12 @@ nnoremap <CR>j o<Esc>
 nnoremap <CR>k O<Esc>
 
 " Useless Keys
-nnoremap <BS>    <nop>
 nnoremap <Del>   <nop>
 nnoremap <Space> <nop>
 
-vnoremap <BS>    <nop>
 vnoremap <Del>   <nop>
 vnoremap <Space> <nop>
 
-onoremap <BS>    <nop>
 onoremap <Del>   <nop>
 onoremap <Space> <nop>
 
