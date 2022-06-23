@@ -45,6 +45,9 @@ set viminfo+=n~/.local/viminfo " Out of sight, out of mind
 set display=lastline " For writing prose
 set noswapfile
 
+" Leader mappings
+let mapleader = " "
+
 function! AddToPath(...)
     " NOTE: Apparently regexp matching doesn't do its job here so I had to
     " take matters into my own hands.
@@ -110,8 +113,6 @@ if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     Plug 'junegunn/fzf.vim'
     Plug 'jremmen/vim-ripgrep'
 
-    " Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-
     " Git support
     Plug 'tpope/vim-fugitive'
 
@@ -156,7 +157,7 @@ let $FZF_DEFAULT_COMMAND=s:rg_command_basis . "--color=never --files"
 
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, {
-    \ 'window': {'width': 1.0, 'height': 1.0},
+    \ 'window': {'width': 0.9, 'height': 0.9},
     \ 'options': [
     \   '--delimiter', '/',
     \   '--with-nth', '-1',
@@ -196,7 +197,13 @@ nnoremap <silent> <C-f> :call RipgrepFzf()<CR>
 " command! -nargs=* -bang RG 'rg --column --line-number --no-heading --color=always --smart-case "" || true'
 " nnoremap <C-f> :Rg<CR>
 
-let g:golden_ratio_exclude_nonmodifiable = 1
+" Diff files
+nnoremap <leader>d :if &diff \| diffoff \| else \| diffthis \| endif<CR>
+
+" Git merge conflicts
+nnoremap <leader>gd :vert Gdiffsplit!<CR>
+nnoremap <leader>gh :diffget //2<CR>
+nnoremap <leader>gl :diffget //3<CR>
 
 " let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
@@ -332,9 +339,6 @@ command! -bang Qa qa<bang>
 command! -bang QA qa<bang>
 command! -bang -nargs=? -complete=file W w<bang> <args>
 command! -bang -nargs=? -complete=file E e<bang> <args>
-
-" Leader mappings
-let mapleader = " "
 
 function! ToggleLineNumbers()
     set norelativenumber!
@@ -940,7 +944,7 @@ function! ProjectsCompletionList(ArgLead, CmdLine, CursorPos)
             endif
         endfor
 
-        return result
+        return sort(result, 'i')
     endif
 endfunction
 
