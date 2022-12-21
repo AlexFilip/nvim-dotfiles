@@ -7,9 +7,9 @@ set autoread " automatically reload file when changed on disk
 set undofile                  " Save undos after file closes
 set undolevels=1000           " How many undos
 set undoreload=10000          " number of lines to save for undo
-set undodir=$HOME/.local/vim-undos " where to save undo histories
+set undodir=$HOME/.local/nvim-undos " where to save undo histories
 
-let s:undo_dir = expand("~/.local/vim-undos/")
+let s:undo_dir = expand("~/.local/nvim-undos/")
 if !isdirectory(s:undo_dir)
     call mkdir(s:undo_dir)
 endif
@@ -40,7 +40,8 @@ set tabstop=4 shiftwidth=0 softtabstop=-1 expandtab
 set cindent cinoptions=l1,=4,:4,(0,{0,+2,w1,W4,t0,j1,J1
 set shortmess=filnxtToOIs
 
-set viminfo+=n~/.local/viminfo " Out of sight, out of mind
+" set viminfo+=n~/.local/nviminfo " Out of sight, out of mind
+set viminfo=
 
 set display=lastline " For writing prose
 set noswapfile
@@ -82,7 +83,7 @@ let s:dot_vim_path = fnamemodify(expand("$MYVIMRC"), ":p:h")
 let g:path_separator = has('win32') ? '\' : '/'
 
 " For machine specific additions changes
-let s:local_vimrc_path = join([$HOME, '.local', 'vimrc'], g:path_separator)
+let s:local_vimrc_path = join([$HOME, '.local', 'neovimrc'], g:path_separator)
 if filereadable(s:local_vimrc_path)
     execute "source " . s:local_vimrc_path
 endif
@@ -98,6 +99,7 @@ let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-tab>"
 let g:UltiSnipsSnippetDirectories = [s:dot_vim_path . "/UltiSnips"]
 
+let g:fzf_history_dir = "$HOME/.local/fzf-history"
 let g:fzf_command_prefix = 'Fzf'
 if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     call plug#begin(s:dot_vim_path . '/plugins')
@@ -112,6 +114,11 @@ if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
     Plug 'jremmen/vim-ripgrep'
+
+    " Languages
+    Plug 'rust-lang/rust.vim'
+    Plug 'fatih/vim-go'
+    Plug 'keith/swift.vim'
 
     " Git support
     Plug 'tpope/vim-fugitive'
@@ -280,14 +287,17 @@ endfunction
 
 nnoremap <silent> 0 :<C-U>call GotoBeginningOfLine()<CR>
 nnoremap <silent> ^ :<C-U>call GotoBeginningOfLine()<CR>
+nnoremap <silent> - $
 nnoremap <silent> <BS> $
 
 vnoremap <silent> 0 :<C-U>call ReenterVisual() \| call GotoBeginningOfLine()<CR>
 vnoremap <silent> ^ :<C-U>call ReenterVisual() \| call GotoBeginningOfLine()<CR>
+vnoremap <silent> - $
 vnoremap <silent> <BS> $
 
 onoremap <silent> 0 :<C-U>call GotoBeginningOfLine()<CR>
 onoremap <silent> ^ :<C-U>call GotoBeginningOfLine()<CR>
+onoremap <silent> - $
 onoremap <silent> <BS> $
 
 " Some terminal shortcuts
@@ -299,7 +309,8 @@ tnoremap <C-w>  <C-\><C-n><C-w>
 tnoremap <C-w>[ <C-\><C-n>
 tnoremap <C-w><C-[> <C-\><C-n>
 
-nnoremap <CR>  <nop>
+nnoremap <CR>      <nop>
+nnoremap <CR><CR>  <nop>
 nnoremap <CR>j o<Esc>
 nnoremap <CR>k O<Esc>
 
@@ -553,6 +564,7 @@ function! RedrawTabLineRepeated(timer)
     " echo "Redrawing tab line repeated " . strftime('%H:%M:%S')
     call RedrawTabLine()
 endfunction
+
 function! RedrawTabLineFirst(timer)
     " The first redraw of the tab line so that it updates on the minute
     " echo "Redrawing tab line first " . strftime('%H:%M:%S')
@@ -696,8 +708,8 @@ if has('nvim')
     endif
     augroup NeovimTerm
         autocmd!
-        autocmd TermOpen  * let g:term_statuses[b:terminal_job_id] = 1
-        autocmd TermClose * let g:term_statuses[b:terminal_job_id] = 0
+        " autocmd TermOpen  * let g:term_statuses[b:terminal_job_id] = 1
+        " autocmd TermClose * let g:term_statuses[b:terminal_job_id] = 0
     augroup END
 endif
 
@@ -836,43 +848,48 @@ function! DoCommandsInTerm(shell, commands, parent_dir, message)
     endif
 endfunction
 
-function! SearchAndRun(script_name)
+function! SearchAndRun(script_names)
     " NOTE: I'm separating this out because it seems like it would be handy
     " for running tests as well
     let working_dir = has('win32') ? [] : [""]
     call extend(working_dir, split(getcwd(), g:path_separator))
 
-    let directory_path = join(working_dir, g:path_separator)
-    let file_path = join([directory_path, g:path_separator, a:script_name], "")
+    let directory_path = join(working_dir, g:path_separator) . g:path_separator
+    let completed_message = "Completed Successfully"
 
-    if filereadable(file_path)
-        if !executable(file_path)
-            echoerr a:script_name . " found but is not executable"
-        else
-            " One problem with this is that I can't scroll through the
-            " history to see all the errors from the beginning
-            let script = a:script_name
-            let completed_message = "Compiled Successfully"
+    for script_name in a:script_names
+        let file_path = directory_path . script_name
 
-            if has('win32')
-                " shell-init.bat should contain information to initialize the
-                " terminal environment with the compile path. This usually means
-                " calling vcvarsall.bat in the appropriate directory.
-                let script = 'C:\tools\shell-init.bat && ' . script
-                let completed_message = 0
+        if filereadable(file_path)
+            if !executable(file_path)
+                echoerr script_name . " found but is not executable"
+            else
+                " One problem with this is that I can't scroll through the
+                " history to see all the errors from the beginning
+
+                if has('win32')
+                    " shell-init.bat should contain information to initialize the
+                    " terminal environment with the compile path. This usually means
+                    " calling vcvarsall.bat in the appropriate directory.
+                    let script_name = 'C:\tools\shell-init.bat && ' . script_name
+                    let completed_message = 0
+                endif
+                call DoCommandsInTerm(&shell, script_name, directory_path, completed_message)
             endif
-
-            call DoCommandsInTerm(&shell, script, directory_path, completed_message)
         endif
-    elseif filereadable(join([directory_path, g:path_separator, "Makefile"], ""))
-        call DoCommandsInTerm(&shell, "make", directory_path, "Compiled Successfully")
+    endfor
+
+    if filereadable(join([directory_path, g:path_separator, "Makefile"], ""))
+        call DoCommandsInTerm(&shell, "make", directory_path, completed_message)
+    elseif filereadable(join([directory_path, g:path_separator, "Cargo.toml"], ""))
+        call DoCommandsInTerm(&shell, "cargo build", directory_path, completed_message)
     else
-        echo join(["No file named \"", a:script_name, "\" found in current directory"], "")
+        echo join(["No file named ", a:script_names, " found in current directory"], "")
     endif
 endfunction
 
 function! SearchAndCompile()
-    call SearchAndRun(s:compile_script_name)
+    call SearchAndRun([s:compile_script_name, './run'])
 endfunction
 
 nnoremap <silent> <leader>g :call GotoLineFromTerm()<CR>
