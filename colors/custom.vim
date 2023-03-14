@@ -1,5 +1,5 @@
 
-if !(has('termguicolors') && &termguicolors) && !has('gui_running') && (!exists('&t_Co') || &t_Co < 256)
+if !(has('termguicolors') && &termguicolors) && !has('gui_running') && (!exists('&t_Co') || &t_Co < 256) && getenv('TERM') !~ '.*256.*'
   echoerr 'Your terminal does not support enough colors for this color scheme.'
   finish
 endif
