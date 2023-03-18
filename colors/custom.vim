@@ -16,10 +16,11 @@ set background=dark
 hi Normal          guifg=#d7d7d7    guibg=NONE       ctermfg=251     ctermbg=NONE    gui=none      cterm=none
 hi Comment         guifg=#629755    guibg=NONE       ctermfg=245     ctermbg=NONE    gui=none      cterm=none
 hi Constant        guifg=#d7d7af    guibg=NONE       ctermfg=187     ctermbg=NONE    gui=none      cterm=none
-hi Identifier      guifg=#afd7d7    guibg=NONE       ctermfg=152     ctermbg=NONE    gui=none      cterm=none
+hi Identifier      guifg=NONE       guibg=NONE       ctermfg=NONE    ctermbg=NONE    gui=none      cterm=none
+hi String          guifg=#d76969    guibg=NONE       ctermfg=167     ctermbg=NONE    gui=none      cterm=none
 hi Statement       guifg=#87afd7    guibg=NONE       ctermfg=110     ctermbg=NONE    gui=none      cterm=none
 hi PreProc         guifg=#87afd7    guibg=NONE       ctermfg=110     ctermbg=NONE    gui=none      cterm=none
-hi Type            guifg=#afd7d7    guibg=NONE       ctermfg=152     ctermbg=NONE    gui=none      cterm=none
+hi Type            guifg=NONE       guibg=NONE       ctermfg=NONE    ctermbg=NONE    gui=none      cterm=none
 hi Special         guifg=#d7d7af    guibg=NONE       ctermfg=187     ctermbg=NONE    gui=none      cterm=none
 
 " Text Markup
