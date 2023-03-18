@@ -26,8 +26,11 @@ set showtabline=1         " 0 = never show tabline, 1 = when more than one tab, 
 set laststatus=2          " Whether or not to show the status line. Values same as showtabline
 set clipboard=unnamedplus " Use system clipboard
 set wildmenu              " Display a menu of all completions for commands when pressing tab
-set list                  " Show hidden characters
-set listchars=tab:>-      " Add tabs to list of hidden chars
+
+set list              " Show hidden characters
+set listchars=tab:>-< " Add tabs and spaces to list of hidden chars
+" set listchars=tab:>-<,leadmultispace:---\| " Add tabs and spaces to list of hidden chars
+	
 
 set nowrap linebreak breakindent " Don't wrap long lines
 set breakindentopt=shift:0,min:20
