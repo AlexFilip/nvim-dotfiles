@@ -30,7 +30,7 @@ set wildmenu              " Display a menu of all completions for commands when 
 set list              " Show hidden characters
 set listchars=tab:>-< " Add tabs and spaces to list of hidden chars
 " set listchars=tab:>-<,leadmultispace:---\| " Add tabs and spaces to list of hidden chars
-	
+	 " <-- there is a tab here
 
 set nowrap linebreak breakindent " Don't wrap long lines
 set breakindentopt=shift:0,min:20
@@ -65,10 +65,9 @@ function! AddToPath(...)
     endfor
     " Previously the filter used 'val !~# $PATH' but that didn't work
     " for some reason
-    let new_components = filter(copy(a:000),
-                              \ { idx, val ->
-                              \     (val !=# '' && !has_key(paths, val))
-                              \ })
+    let new_components = filter(copy(a:000), { idx, val ->
+                \     (val !=# '' && !has_key(paths, val))
+                \ })
     call extend(new_components, [$PATH])
     let $PATH = join(new_components, s:search_path_separator)
 endfunction
@@ -146,7 +145,7 @@ packadd termdebug
 filetype plugin indent on
 colorscheme custom
 
-augroup encrypted_org
+augroup encrypted_file
   au!
   autocmd BufNewFile,BufRead *.org.gpg set ft=org | set formatoptions-=cro
   autocmd User GnuPG setlocal noundofile
@@ -155,6 +154,11 @@ augroup END
 augroup CommentHighlighting
     autocmd!
     autocmd FileType json syntax match Comment +\/\/.\+$+
+augroup END
+
+augroup TabOnlyFiles
+    autocmd!
+    autocmd BufNewFile,BufRead Makefile,makefile setlocal noexpandtab
 augroup END
 
 
@@ -1075,7 +1079,9 @@ let g:rfc_download_location = $HOME . '/RFC-downloads'
 
 " Abbreviations in insert mode (should these be commands?)
 iabbrev <silent> :Now:     <Esc>:let @x = strftime("%X")<CR>"xpa
+iabbrev <silent> :Date:     <Esc>:let @x = strftime("%X")<CR>"xpa
 iabbrev <silent> :Today:   <Esc>:let @x = strftime("%d %b %Y")<CR>"xpa
+iabbrev <silent> :Time:   <Esc>:let @x = strftime("%d %b %Y")<CR>"xpa
 iabbrev <silent> :Random:  <Esc>:let @x = rand()<CR>"xpa
 
 " Re-source gvimrc when vimrc is reloaded
@@ -1086,9 +1092,7 @@ endif
 
 " I put this at the end because it messes up syntax coloring
 lua << EOF
-
 require('orgmode').setup_ts_grammar()
-
 EOF
 
 if exists('*g:LocalVimRCEnd')
