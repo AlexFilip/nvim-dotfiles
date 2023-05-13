@@ -30,7 +30,7 @@ set wildmenu              " Display a menu of all completions for commands when 
 set list              " Show hidden characters
 set listchars=tab:>-< " Add tabs and spaces to list of hidden chars
 " set listchars=tab:>-<,leadmultispace:---\| " Add tabs and spaces to list of hidden chars
-	 " <-- there is a tab here
+"   	 " <-- there is a tab here
 
 set nowrap linebreak breakindent " Don't wrap long lines
 set breakindentopt=shift:0,min:20
@@ -86,11 +86,9 @@ endif
 let s:dot_vim_path = fnamemodify(expand("$MYVIMRC"), ":p:h")
 let g:path_separator = has('win32') ? '\' : '/'
 
-" For machine specific additions changes
-let s:local_vimrc_path = join([$HOME, '.local', 'neovimrc'], g:path_separator)
-if filereadable(s:local_vimrc_path)
-    execute "source " . s:local_vimrc_path
-endif
+let $PINENTRY_USER_DATA="qt"
+let $GPG_TTY=''
+let g:GPGDefaultRecipients=[]
 
 " To activate python bindings, create one or both of these 2 environments and
 " run pip install neovim from within them.
@@ -105,6 +103,13 @@ let g:UltiSnipsSnippetDirectories = [s:dot_vim_path . "/UltiSnips"]
 
 let g:fzf_history_dir = "$HOME/.local/fzf-history"
 let g:fzf_command_prefix = 'Fzf'
+
+" For machine specific additions changes
+let s:local_vimrc_path = join([$HOME, '.local', 'neovimrc'], g:path_separator)
+if filereadable(s:local_vimrc_path)
+    execute "source " . s:local_vimrc_path
+endif
+
 if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     call plug#begin(s:dot_vim_path . '/plugins')
 
@@ -113,7 +118,8 @@ if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     Plug 'tpope/vim-repeat'
     Plug 'vim-airline/vim-airline'
     Plug 'vim-airline/vim-airline-themes'
-    Plug 'SirVer/ultisnips'
+    "Plug 'SirVer/ultisnips'
+    Plug 'mbbill/undotree'
 
     Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
     Plug 'junegunn/fzf.vim'
@@ -169,8 +175,6 @@ augroup END
 
 " Start in current file's path
 " nnoremap <silent> <leader>f :NnnPicker %:p:h<CR>
-
-" let $PATH="/usr/local/homebrew/bin:".$PATH
 
 set rtp+=/usr/local/opt/fzf
 
@@ -236,8 +240,6 @@ nnoremap <leader>gl :diffget //3<CR>
 " let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 let g:airline_theme='apprentice'
-
-" lua require("org_init")
 
 " Make help window show up on right, not above
 augroup MiscFile
@@ -409,7 +411,7 @@ function! s:normRemoveCommentsAndJoinLines()
     execute join(["normal! ", (v:count+1), "J"], "")
     silent! call repeat#set("\<Plug>JoinLines", v:count - 1)
 endfunction
-nnoremap <Plug>JoinLines :<C-U>call <SID>normRemoveCommentsAndJoinLines()<CR>
+nnoremap <Plug>JoinLines mz:<C-U>call <SID>normRemoveCommentsAndJoinLines()<CR>`z
 nmap J <Plug>JoinLines
 
 function! RemoveCommentLeadersVisual() range
@@ -1091,9 +1093,10 @@ if has('gui') && filereadable(s:gvim_path)
 endif
 
 " I put this at the end because it messes up syntax coloring
-lua << EOF
-require('orgmode').setup_ts_grammar()
-EOF
+lua require('orgmode').setup_ts_grammar()
+" lua << EOF
+" require('orgmode').setup_ts_grammar()
+" EOF
 
 if exists('*g:LocalVimRCEnd')
     call g:LocalVimRCEnd()
