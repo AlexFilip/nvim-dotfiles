@@ -323,6 +323,28 @@ onoremap <silent> ^ :<C-U>call GotoBeginningOfLine()<CR>
 onoremap <silent> - $
 onoremap <silent> <BS> $
 
+" Editing shortcuts
+" Delete into null buffer
+nnoremap <leader>d "_d
+nnoremap <leader>c "_c
+nnoremap <leader>y "_y
+nnoremap <leader>p "_p
+
+" Replace word you are currently on
+nnoremap <leader>s :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left>
+
+" Make current file executable
+
+function! ToggleExecutable()
+    if executable("./" .. expand("%"))
+        !chmod -x %
+    else
+        !chmod +x %
+    endif
+endfunction
+
+nnoremap <silent> <leader>x :call ToggleExecutable()<CR>
+
 " Some terminal shortcuts
 nnoremap <silent> ght :vertical terminal<CR>
 nnoremap <silent> gct :tabnew \| terminal<CR>
@@ -916,6 +938,8 @@ endfunction
 
 nnoremap <silent> <leader>g :call GotoLineFromTerm()<CR>
 nnoremap <silent> <leader>c :call SearchAndCompile()<CR>
+
+
 
 " =======================================
 
