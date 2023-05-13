@@ -40,6 +40,12 @@ set virtualedit=block " Visual block mode is not limited to the character locati
 set nofixendofline    " Don't insert an end of line at the end of the file
 set noeol             " Give it a mean look so it understands
 
+" Folding
+" set foldenable
+set foldmethod=indent
+set foldlevel=99 " Don't open a file fully folded
+" zc to close fold, zo to open, zM to close all folds, zR to open all
+
 " Indenting
 set tabstop=4 shiftwidth=0 softtabstop=-1 expandtab
 set cindent cinoptions=l1,=4,:4,(0,{0,+2,w1,W4,t0,j1,J1
@@ -81,6 +87,9 @@ else
         set shell=/bin/zsh " Shell to launch in terminal
     endif
     call AddToPath('/usr/local/sbin', $HOME . '/bin', '/usr/local/bin')
+    if has('mac')
+        call AddToPath('/sbin', '/usr/sbin')
+    endif
 endif
 
 let s:dot_vim_path = fnamemodify(expand("$MYVIMRC"), ":p:h")
@@ -92,8 +101,9 @@ let g:GPGDefaultRecipients=[]
 
 " To activate python bindings, create one or both of these 2 environments and
 " run pip install neovim from within them.
-let g:python_host_prog  = s:dot_vim_path . "/python2-env/bin/python"
-let g:python3_host_prog = s:dot_vim_path . "/python3-env/bin/python"
+" TODO: Create python virtual environments for ultisnips
+" let g:python_host_prog  = ''
+" let g:python3_host_prog = s:dot_vim_path . "/python3-env/bin/python"
 
 let g:UltiSnipsExpandTrigger = "<c-b>"
 " let g:UltiSnipsListSnippets = "<c-tab>"
@@ -101,7 +111,7 @@ let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-tab>"
 let g:UltiSnipsSnippetDirectories = [s:dot_vim_path . "/UltiSnips"]
 
-let g:fzf_history_dir = "$HOME/.local/fzf-history"
+let g:fzf_history_dir = $HOME . "/.local/fzf-history"
 let g:fzf_command_prefix = 'Fzf'
 
 " For machine specific additions changes
@@ -126,6 +136,7 @@ if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     Plug 'jremmen/vim-ripgrep'
 
     " Languages
+    Plug 'vim-scripts/awk.vim'
     Plug 'rust-lang/rust.vim'
     Plug 'fatih/vim-go'
     Plug 'keith/swift.vim'
@@ -138,6 +149,13 @@ if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     Plug 'jamessan/vim-gnupg'
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     Plug 'nvim-orgmode/orgmode'
+
+    " Themes
+    Plug 'morhetz/gruvbox'
+    Plug 'catppuccin/nvim'
+    Plug 'sainnhe/edge'
+    Plug 'folke/tokyonight.nvim'
+    Plug 'preservim/vim-colors-pencil'
 
     if exists('*g:LocalVimRCPlugins')
         call g:LocalVimRCPlugins()
@@ -239,7 +257,8 @@ nnoremap <leader>gl :diffget //3<CR>
 
 " let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-let g:airline_theme='apprentice'
+" let g:airline_theme='apprentice'
+let g:airline_theme='pencil'
 
 " Make help window show up on right, not above
 augroup MiscFile
@@ -256,12 +275,10 @@ augroup WrapLines
     autocmd FileType {txt,org,tex} setlocal wrap linebreak nolist
 augroup END
 
-nnoremap Y y$
-
-" Tab shortcuts
-nnoremap <silent> ghe :vnew<CR>
-nnoremap <silent> gce :tabnew<CR>
-nnoremap <silent> ge  :vnew \| wincmd H<CR>
+augroup Terraform
+    autocmd!
+    autocmd BufWritePost *.tf silent !terraform fmt %
+augroup END
 
 function! MoveTab(multiplier, count)
     let amount  = a:count ? a:count : 1
@@ -323,7 +340,17 @@ onoremap <silent> ^ :<C-U>call GotoBeginningOfLine()<CR>
 onoremap <silent> - $
 onoremap <silent> <BS> $
 
-" Editing shortcuts
+" Navigation
+
+" Tab shortcuts
+nnoremap <silent> ghe :vnew<CR>
+nnoremap <silent> gce :tabnew<CR>
+nnoremap <silent> ge  :vnew \| wincmd H<CR>
+
+" Editing
+
+nnoremap Y y$
+
 " Delete into null buffer
 nnoremap <leader>d "_d
 nnoremap <leader>c "_c
@@ -334,16 +361,14 @@ nnoremap <leader>p "_p
 nnoremap <leader>s :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left>
 
 " Make current file executable
-
 function! ToggleExecutable()
-    if executable("./" .. expand("%"))
-        !chmod -x %
-    else
-        !chmod +x %
-    endif
+    let sign = executable("./" .. expand("%")) ? "-" : "+"
+    exec "!chmod " . sign . "x %"
 endfunction
-
 nnoremap <silent> <leader>x :call ToggleExecutable()<CR>
+
+" Open vim explore
+nnoremap <leader>pv :Ex<CR>
 
 " Some terminal shortcuts
 nnoremap <silent> ght :vertical terminal<CR>
@@ -433,8 +458,8 @@ function! s:normRemoveCommentsAndJoinLines()
     execute join(["normal! ", (v:count+1), "J"], "")
     silent! call repeat#set("\<Plug>JoinLines", v:count - 1)
 endfunction
-nnoremap <Plug>JoinLines mz:<C-U>call <SID>normRemoveCommentsAndJoinLines()<CR>`z
-nmap J <Plug>JoinLines
+nnoremap <silent> <Plug>JoinLines mz:<C-U>call <SID>normRemoveCommentsAndJoinLines()<CR>`z
+nmap <silent> J <Plug>JoinLines
 
 function! RemoveCommentLeadersVisual() range
     if has_key(s:comment_leaders, &filetype)
@@ -619,6 +644,11 @@ endfunction
 
 let s:seconds_until_next_minute = 60 - str2nr(strftime('%S'))
 call timer_start(s:seconds_until_next_minute * 1000, 'RedrawTabLineFirst')
+
+function! RemoveColorOutputFn()
+    " TODO: Save existing search, replace after performing current search then noh
+    %s/[[0-9;]*[mK]//g
+endfunction
 
 " ============================================
 " Color Additions
@@ -939,8 +969,6 @@ endfunction
 nnoremap <silent> <leader>g :call GotoLineFromTerm()<CR>
 nnoremap <silent> <leader>c :call SearchAndCompile()<CR>
 
-
-
 " =======================================
 
 function! RenameFiles()
@@ -951,8 +979,8 @@ function! RenameFiles()
 
     if len(lines) != len(file_list)
         echoerr join(["Number of lines in buffer (", len(lines),
-                    \ ") does not match number of files in current directory (", 
-                    \ len(file_list), ")"], "")
+                    \ ") does not match number of files in current directory (", \ len(file_list),
+                    \ ")"], "")
         return
     endif
 
@@ -962,7 +990,10 @@ function! RenameFiles()
         let commands[index] = join(["mv \"", file_list[index], "\" \"", lines[index], "\""], "")
     endfor
 
-    normal ggdG
+    normal gg"_dG
+    " Write value of `commands` to the buffer
+    "   `put` writes value of register to file
+    "   =<expr> treats an expression as a register
     put =commands
 
     " I would still have to make sure that all of the appropriate characters
