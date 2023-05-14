@@ -210,7 +210,7 @@ command! -bang -nargs=? -complete=dir Files
     \ 'window': {'width': 0.9, 'height': 0.9},
     \ 'options': [
     \   '--delimiter', '/',
-    \   '--with-nth', '-1',
+    \   '--with-nth', '-2,-1',
     \   '--info=inline',
     \   '--preview',
     \   'cat {}',
@@ -233,7 +233,7 @@ function! RipgrepFzf()
               \ 'window': {'width': 0.8, 'height': 0.9},
               \ 'options': [
               \     '--delimiter', '/',
-              \     '--with-nth', '-1',
+              \     '--with-nth', '-2,-1',
               \     '--info=inline',
               \     '--phony',
               \     '--bind',
