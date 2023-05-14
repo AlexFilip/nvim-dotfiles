@@ -212,11 +212,10 @@ command! -bang -nargs=? -complete=dir Files
     \   '--delimiter', '/',
     \   '--with-nth', '-2,-1',
     \   '--info=inline',
-    \   '--preview',
-    \   'cat {}',
+    \   '--preview', 'cat {}',
     \ ]}, <bang>0)
 
-nnoremap <silent> <C-p> :Files<CR>
+nnoremap <silent> <leader>ff :Files<CR>
 
 let g:fzf_preview_window = [
     \   'right:50%',
@@ -224,9 +223,9 @@ let g:fzf_preview_window = [
     \ ]
 
 " rg --no-heading --smart-case --no-messages --ignore-file ~/.config/rgignore --column --line-number --color=never -- '' | fzf --delimiter / --with-nth -1 --info=inline --phony --bind 'change:reload:rg --no-heading --smart-case --no-messages --ignore-file ~/.config/rgignore --column --line-number --color=never -- {q}'
-function! RipgrepFzf()
+function! RipgrepFzf(start)
   let command_fmt = s:rg_command_basis . "--column --line-number --color=always -- "
-  let initial_command = command_fmt . "''"
+  let initial_command = command_fmt . "'" . a:start . "'"
   let  reload_command = command_fmt . "{q}"
 
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview({
@@ -236,13 +235,15 @@ function! RipgrepFzf()
               \     '--with-nth', '-2,-1',
               \     '--info=inline',
               \     '--phony',
-              \     '--bind',
-              \     'change:reload:' . reload_command
+              \     '-1',
+              \     '--query=' . a:start,
+              \     '--bind', 'change:reload:' . reload_command
               \ ]}), 0)
 endfunction
 
 " command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-nnoremap <silent> <C-f> :call RipgrepFzf()<CR>
+nnoremap <silent> <leader>fc :call RipgrepFzf("")<CR>
+nnoremap <silent> <leader>fw :call RipgrepFzf("<C-r><C-w>")<CR>
 
 " command! -nargs=* -bang RG 'rg --column --line-number --no-heading --color=always --smart-case "" || true'
 " nnoremap <C-f> :Rg<CR>
