@@ -57,9 +57,6 @@ set viminfo=
 set display=lastline " For writing prose
 set noswapfile
 
-" Leader mappings
-let mapleader = " "
-
 function! AddToPath(...)
     " NOTE: Apparently regexp matching doesn't do its job here so I had to
     " take matters into my own hands.
@@ -77,6 +74,9 @@ function! AddToPath(...)
     call extend(new_components, [$PATH])
     let $PATH = join(new_components, s:search_path_separator)
 endfunction
+
+" Lua translations of this file
+lua require('remap')
 
 if has('win32')
     let s:search_path_separator = ';'
@@ -111,8 +111,8 @@ let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-tab>"
 let g:UltiSnipsSnippetDirectories = [s:dot_vim_path . "/UltiSnips"]
 
-let g:fzf_history_dir = $HOME . "/.local/fzf-history"
-let g:fzf_command_prefix = 'Fzf'
+" let g:fzf_history_dir = $HOME . "/.local/fzf-history"
+" let g:fzf_command_prefix = 'Fzf'
 
 " For machine specific additions changes
 let s:local_vimrc_path = join([$HOME, '.local', 'neovimrc'], g:path_separator)
@@ -131,9 +131,8 @@ if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     "Plug 'SirVer/ultisnips'
     Plug 'mbbill/undotree'
 
-    Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-    Plug 'junegunn/fzf.vim'
-    Plug 'jremmen/vim-ripgrep'
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 
     " Languages
     Plug 'vim-scripts/awk.vim'
@@ -186,18 +185,8 @@ augroup TabOnlyFiles
 augroup END
 
 
-" let g:nnn#command = expand('~/projects/Forks/nnn/nnn') . ' -d'
-" let g:nnn#layout = { 'window': { 'width': 0.9, 'height': 0.6, 'highlight': 'Comment' } }
-" let g:nnn#layout = { 'left': '10%' }
-" nnoremap <silent> <leader>f :NnnPicker<CR>
-
-" Start in current file's path
-" nnoremap <silent> <leader>f :NnnPicker %:p:h<CR>
-
-set rtp+=/usr/local/opt/fzf
-
-let s:rg_command_basis = "rg --no-heading --smart-case --no-messages --ignore-file ~/.config/rgignore"
-let $FZF_DEFAULT_COMMAND=s:rg_command_basis . "--color=never --files"
+" let s:rg_command_basis = "rg --no-heading --smart-case --no-messages --ignore-file ~/.config/rgignore"
+" let $FZF_DEFAULT_COMMAND=s:rg_command_basis . "--color=never --files"
 
 " Use FZF for files and tags if available, otherwise fall back onto CtrlP
 " <leader>j will search for tag using word under cursor
@@ -205,51 +194,51 @@ let $FZF_DEFAULT_COMMAND=s:rg_command_basis . "--color=never --files"
 " nnoremap <leader>u :FzfTags<CR>
 " nnoremap <leader>j :call fzf#vim#tags("'".expand('<cword>'))<CR>
 
-command! -bang -nargs=? -complete=dir Files
-    \ call fzf#vim#files(<q-args>, {
-    \ 'window': {'width': 0.9, 'height': 0.9},
-    \ 'options': [
-    \   '--delimiter', '/',
-    \   '--with-nth', '-2,-1',
-    \   '--info=inline',
-    \   '--preview', 'cat {}',
-    \ ]}, <bang>0)
+" command! -bang -nargs=? -complete=dir Files
+"     \ call fzf#vim#files(<q-args>, {
+"     \ 'window': {'width': 0.9, 'height': 0.9},
+"     \ 'options': [
+"     \   '--delimiter', '/',
+"     \   '--with-nth', '-2,-1',
+"     \   '--info=inline',
+"     \   '--preview', 'cat {}',
+"     \ ]}, <bang>0)
 
-nnoremap <silent> <leader>ff :Files<CR>
+" nnoremap <silent> <leader>ff :Files<CR>
 
-let g:fzf_preview_window = [
-    \   'right:50%',
-    \   'ctrl-/',
-    \ ]
+" let g:fzf_preview_window = [
+"     \   'right:50%',
+"     \   'ctrl-/',
+"     \ ]
 
 " rg --no-heading --smart-case --no-messages --ignore-file ~/.config/rgignore --column --line-number --color=never -- '' | fzf --delimiter / --with-nth -1 --info=inline --phony --bind 'change:reload:rg --no-heading --smart-case --no-messages --ignore-file ~/.config/rgignore --column --line-number --color=never -- {q}'
-function! RipgrepFzf(start)
-  let command_fmt = s:rg_command_basis . "--column --line-number --color=always -- "
-  let initial_command = command_fmt . "'" . a:start . "'"
-  let  reload_command = command_fmt . "{q}"
-
-  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview({
-              \ 'window': {'width': 0.8, 'height': 0.9},
-              \ 'options': [
-              \     '--delimiter', '/',
-              \     '--with-nth', '-2,-1',
-              \     '--info=inline',
-              \     '--phony',
-              \     '-1',
-              \     '--query=' . a:start,
-              \     '--bind', 'change:reload:' . reload_command
-              \ ]}), 0)
-endfunction
-
-" command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-nnoremap <silent> <leader>fc :call RipgrepFzf("")<CR>
-nnoremap <silent> <leader>fw :call RipgrepFzf("<C-r><C-w>")<CR>
+" function! RipgrepFzf(start)
+"   let command_fmt = s:rg_command_basis . "--column --line-number --color=always -- "
+"   let initial_command = command_fmt . "'" . a:start . "'"
+"   let  reload_command = command_fmt . "{q}"
+" 
+"   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview({
+"               \ 'window': {'width': 0.8, 'height': 0.9},
+"               \ 'options': [
+"               \     '--delimiter', '/',
+"               \     '--with-nth', '-2,-1',
+"               \     '--info=inline',
+"               \     '--phony',
+"               \     '-1',
+"               \     '--query=' . a:start,
+"               \     '--bind', 'change:reload:' . reload_command
+"               \ ]}), 0)
+" endfunction
+" 
+" " command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+" nnoremap <silent> <leader>fc :call RipgrepFzf("")<CR>
+" nnoremap <silent> <leader>fw :call RipgrepFzf("<C-r><C-w>")<CR>
 
 " command! -nargs=* -bang RG 'rg --column --line-number --no-heading --color=always --smart-case "" || true'
 " nnoremap <C-f> :Rg<CR>
 
 " Diff files
-nnoremap <leader>d :if &diff \| diffoff \| else \| diffthis \| endif<CR>
+" nnoremap <leader>di :if &diff \| diffoff \| else \| diffthis \| endif<CR>
 
 " Git merge conflicts
 nnoremap <leader>gd :vert Gdiffsplit!<CR>
@@ -348,18 +337,8 @@ nnoremap <silent> ghe :vnew<CR>
 nnoremap <silent> gce :tabnew<CR>
 nnoremap <silent> ge  :vnew \| wincmd H<CR>
 
-" Editing
-
-nnoremap Y y$
-
-" Delete into null buffer
-nnoremap <leader>d "_d
-nnoremap <leader>c "_c
-nnoremap <leader>y "_y
-nnoremap <leader>p "_p
-
 " Replace word you are currently on
-nnoremap <leader>s :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left>
+" nnoremap <leader>s :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left>
 
 " Make current file executable
 function! ToggleExecutable()
@@ -368,7 +347,6 @@ function! ToggleExecutable()
 endfunction
 nnoremap <silent> <leader>x :call ToggleExecutable()<CR>
 
-" Open vim explore
 nnoremap <leader>pv :Ex<CR>
 
 " Some terminal shortcuts
