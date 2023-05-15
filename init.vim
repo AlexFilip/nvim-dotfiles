@@ -77,6 +77,9 @@ endfunction
 
 " Lua translations of this file
 lua require('remap')
+lua require('groups')
+lua require('git')
+lua require('tabs')
 
 if has('win32')
     let s:search_path_separator = ';'
@@ -110,9 +113,6 @@ let g:UltiSnipsExpandTrigger = "<c-b>"
 let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-tab>"
 let g:UltiSnipsSnippetDirectories = [s:dot_vim_path . "/UltiSnips"]
-
-" let g:fzf_history_dir = $HOME . "/.local/fzf-history"
-" let g:fzf_command_prefix = 'Fzf'
 
 " For machine specific additions changes
 let s:local_vimrc_path = join([$HOME, '.local', 'neovimrc'], g:path_separator)
@@ -184,91 +184,30 @@ augroup TabOnlyFiles
     autocmd BufNewFile,BufRead Makefile,makefile setlocal noexpandtab
 augroup END
 
-
-" let s:rg_command_basis = "rg --no-heading --smart-case --no-messages --ignore-file ~/.config/rgignore"
-" let $FZF_DEFAULT_COMMAND=s:rg_command_basis . "--color=never --files"
-
-" Use FZF for files and tags if available, otherwise fall back onto CtrlP
-" <leader>j will search for tag using word under cursor
-" nnoremap <leader>v :FzfFiles<CR>
-" nnoremap <leader>u :FzfTags<CR>
-" nnoremap <leader>j :call fzf#vim#tags("'".expand('<cword>'))<CR>
-
-" command! -bang -nargs=? -complete=dir Files
-"     \ call fzf#vim#files(<q-args>, {
-"     \ 'window': {'width': 0.9, 'height': 0.9},
-"     \ 'options': [
-"     \   '--delimiter', '/',
-"     \   '--with-nth', '-2,-1',
-"     \   '--info=inline',
-"     \   '--preview', 'cat {}',
-"     \ ]}, <bang>0)
-
-" nnoremap <silent> <leader>ff :Files<CR>
-
-" let g:fzf_preview_window = [
-"     \   'right:50%',
-"     \   'ctrl-/',
-"     \ ]
-
-" rg --no-heading --smart-case --no-messages --ignore-file ~/.config/rgignore --column --line-number --color=never -- '' | fzf --delimiter / --with-nth -1 --info=inline --phony --bind 'change:reload:rg --no-heading --smart-case --no-messages --ignore-file ~/.config/rgignore --column --line-number --color=never -- {q}'
-" function! RipgrepFzf(start)
-"   let command_fmt = s:rg_command_basis . "--column --line-number --color=always -- "
-"   let initial_command = command_fmt . "'" . a:start . "'"
-"   let  reload_command = command_fmt . "{q}"
-" 
-"   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview({
-"               \ 'window': {'width': 0.8, 'height': 0.9},
-"               \ 'options': [
-"               \     '--delimiter', '/',
-"               \     '--with-nth', '-2,-1',
-"               \     '--info=inline',
-"               \     '--phony',
-"               \     '-1',
-"               \     '--query=' . a:start,
-"               \     '--bind', 'change:reload:' . reload_command
-"               \ ]}), 0)
-" endfunction
-" 
-" " command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-" nnoremap <silent> <leader>fc :call RipgrepFzf("")<CR>
-" nnoremap <silent> <leader>fw :call RipgrepFzf("<C-r><C-w>")<CR>
-
-" command! -nargs=* -bang RG 'rg --column --line-number --no-heading --color=always --smart-case "" || true'
-" nnoremap <C-f> :Rg<CR>
-
-" Diff files
-" nnoremap <leader>di :if &diff \| diffoff \| else \| diffthis \| endif<CR>
-
-" Git merge conflicts
-nnoremap <leader>gd :vert Gdiffsplit!<CR>
-nnoremap <leader>gh :diffget //2<CR>
-nnoremap <leader>gl :diffget //3<CR>
-
 " let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 " let g:airline_theme='apprentice'
 let g:airline_theme='pencil'
 
 " Make help window show up on right, not above
-augroup MiscFile
-    autocmd!
-    autocmd FileType help wincmd L
-    " Reload vimrc on write
-    " Neither of these work
-    autocmd BufWritePost $MYVIMRC  source $MYVIMRC
-    autocmd BufWritePost $MYGVIMRC source $MYGVIMRC
-augroup END
-
-augroup WrapLines
-    autocmd!
-    autocmd FileType {txt,org,tex} setlocal wrap linebreak nolist
-augroup END
-
-augroup Terraform
-    autocmd!
-    autocmd BufWritePost *.tf silent !terraform fmt %
-augroup END
+" augroup MiscFile
+"     autocmd!
+"     autocmd FileType help wincmd L
+"     " Reload vimrc on write
+"     " Neither of these work
+"     autocmd BufWritePost $MYVIMRC  source $MYVIMRC
+"     autocmd BufWritePost $MYGVIMRC source $MYGVIMRC
+" augroup END
+" 
+" augroup WrapLines
+"     autocmd!
+"     autocmd FileType {txt,org,tex} setlocal wrap linebreak nolist
+" augroup END
+" 
+" augroup Terraform
+"     autocmd!
+"     autocmd BufWritePost *.tf silent !terraform fmt %
+" augroup END
 
 function! MoveTab(multiplier, count)
     let amount  = a:count ? a:count : 1
@@ -333,9 +272,9 @@ onoremap <silent> <BS> $
 " Navigation
 
 " Tab shortcuts
-nnoremap <silent> ghe :vnew<CR>
-nnoremap <silent> gce :tabnew<CR>
-nnoremap <silent> ge  :vnew \| wincmd H<CR>
+" nnoremap <silent> ghe :vnew<CR>
+" nnoremap <silent> gce :tabnew<CR>
+" nnoremap <silent> ge  :vnew \| wincmd H<CR>
 
 " Replace word you are currently on
 " nnoremap <leader>s :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left>
@@ -346,52 +285,6 @@ function! ToggleExecutable()
     exec "!chmod " . sign . "x %"
 endfunction
 nnoremap <silent> <leader>x :call ToggleExecutable()<CR>
-
-nnoremap <leader>pv :Ex<CR>
-
-" Some terminal shortcuts
-nnoremap <silent> ght :vertical terminal<CR>
-nnoremap <silent> gct :tabnew \| terminal<CR>
-
-" Enter normal mode without getting emacs pinky
-tnoremap <C-w>  <C-\><C-n><C-w>
-tnoremap <C-w>[ <C-\><C-n>
-tnoremap <C-w><C-[> <C-\><C-n>
-
-nnoremap <CR>      <nop>
-nnoremap <CR><CR>  <nop>
-nnoremap <CR>j o<Esc>
-nnoremap <CR>k O<Esc>
-
-" Useless Keys
-nnoremap <Del>   <nop>
-nnoremap <Space> <nop>
-
-vnoremap <Del>   <nop>
-vnoremap <Space> <nop>
-
-onoremap <Del>   <nop>
-onoremap <Space> <nop>
-
-" Who needs Ex-mode these days?
-nnoremap Q <nop>
-
-" Terminal movement in command line mode
-cnoremap <C-f> <Right>
-cnoremap <C-b> <Left>
-cnoremap <C-a> <C-b>
-" cnoremap <C-e> <C-e> " already exists
-cnoremap <C-d> <Del>
-
-cnoremap <C-W> \<\><Left><Left>
-
-" Move selected lines up and down
-vnoremap <C-J> :m '>+1<CR>gv=gv
-vnoremap <C-K> :m '<-2<CR>gv=gv
-
-" Horizontal scrolling. Only useful when wrap is turned off.
-nnoremap <C-J> zl
-nnoremap <C-H> zh
 
 " Commands for convenience
 command! -bang Q q<bang>
