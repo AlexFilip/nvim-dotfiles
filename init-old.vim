@@ -79,13 +79,14 @@ if has('win32')
     let s:search_path_separator = ';'
     call AddToPath('C:\tools', 'C:\Program Files\Git\bin', '')
 else
-    let s:search_path_separator = ':'
     if executable('/bin/zsh')
         set shell=/bin/zsh " Shell to launch in terminal
     endif
+
+    let s:search_path_separator = ':'
     call AddToPath('/usr/local/sbin', $HOME . '/bin', '/usr/local/bin')
     if has('mac')
-        call AddToPath('/sbin', '/usr/sbin')
+        call AddToPath('/opt/homebrew/bin', '/sbin', '/usr/sbin')
     endif
 endif
 
