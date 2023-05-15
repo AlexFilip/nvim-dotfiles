@@ -1,7 +1,6 @@
 .DS_Store
 .netrwhist
 plugins
-lua/
 pythonx/
 spell/
 python*-env/

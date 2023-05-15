@@ -75,12 +75,6 @@ function! AddToPath(...)
     let $PATH = join(new_components, s:search_path_separator)
 endfunction
 
-" Lua translations of this file
-lua require('remap')
-lua require('groups')
-lua require('git')
-lua require('tabs')
-
 if has('win32')
     let s:search_path_separator = ';'
     call AddToPath('C:\tools', 'C:\Program Files\Git\bin', '')
@@ -188,26 +182,6 @@ augroup END
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 " let g:airline_theme='apprentice'
 let g:airline_theme='pencil'
-
-" Make help window show up on right, not above
-" augroup MiscFile
-"     autocmd!
-"     autocmd FileType help wincmd L
-"     " Reload vimrc on write
-"     " Neither of these work
-"     autocmd BufWritePost $MYVIMRC  source $MYVIMRC
-"     autocmd BufWritePost $MYGVIMRC source $MYGVIMRC
-" augroup END
-" 
-" augroup WrapLines
-"     autocmd!
-"     autocmd FileType {txt,org,tex} setlocal wrap linebreak nolist
-" augroup END
-" 
-" augroup Terraform
-"     autocmd!
-"     autocmd BufWritePost *.tf silent !terraform fmt %
-" augroup END
 
 function! MoveTab(multiplier, count)
     let amount  = a:count ? a:count : 1
@@ -1018,12 +992,6 @@ let s:gvim_path = join([s:dot_vim_path, 'gvimrc'], g:path_separator)
 if has('gui') && filereadable(s:gvim_path)
     execute "source " . s:gvim_path
 endif
-
-" I put this at the end because it messes up syntax coloring
-lua require('orgmode').setup_ts_grammar()
-" lua << EOF
-" require('orgmode').setup_ts_grammar()
-" EOF
 
 if exists('*g:LocalVimRCEnd')
     call g:LocalVimRCEnd()
