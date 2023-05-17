@@ -76,7 +76,6 @@ vim.keymap.set("n", "<leader>ex", function()
     end
 
     local command = { "chmod", sign .. "x", filename }
-    print(is_executable, sign, filename)
     vim.fn.system(command)
 end)
 
