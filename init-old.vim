@@ -1,62 +1,3 @@
-syntax on
-
-" Autoreload file
-set autoread " automatically reload file when changed on disk
-
-" Persistent Undo
-set undofile                  " Save undos after file closes
-set undolevels=1000           " How many undos
-set undoreload=10000          " number of lines to save for undo
-set undodir=$HOME/.local/nvim-undos " where to save undo histories
-
-let s:undo_dir = expand("~/.local/nvim-undos/")
-if !isdirectory(s:undo_dir)
-    call mkdir(s:undo_dir)
-endif
-
-" Miscellaneous
-set splitright            " Vertical split goes right, not left
-set showcmd               " Show the current command in operator pending mode
-set cursorline            " Make the cursor line a visible color
-set noshowmode            " Don't show -- INSERT --
-set mouse=a               " Allow mouse input
-set sidescroll=1          " Number of columns to scroll left and right
-set backspace=indent      " allow backspacing only over automatic indenting (:help 'backspace')
-set showtabline=1         " 0 = never show tabline, 1 = when more than one tab, 2 = always
-set laststatus=2          " Whether or not to show the status line. Values same as showtabline
-set clipboard=unnamedplus " Use system clipboard
-set wildmenu              " Display a menu of all completions for commands when pressing tab
-
-set list              " Show hidden characters
-set listchars=tab:>-< " Add tabs and spaces to list of hidden chars
-" set listchars=tab:>-<,leadmultispace:---\| " Add tabs and spaces to list of hidden chars
-"   	 " <-- there is a tab here
-
-set nowrap linebreak breakindent " Don't wrap long lines
-set breakindentopt=shift:0,min:20
-set formatoptions+=n
-set virtualedit=block " Visual block mode is not limited to the character locations
-
-set nofixendofline    " Don't insert an end of line at the end of the file
-set noeol             " Give it a mean look so it understands
-
-" Folding
-" set foldenable
-set foldmethod=indent
-set foldlevel=99 " Don't open a file fully folded
-" zc to close fold, zo to open, zM to close all folds, zR to open all
-
-" Indenting
-set tabstop=4 shiftwidth=0 softtabstop=-1 expandtab
-set cindent cinoptions=l1,=4,:4,(0,{0,+2,w1,W4,t0,j1,J1
-set shortmess=filnxtToOIs
-
-" set viminfo+=n~/.local/nviminfo " Out of sight, out of mind
-set viminfo=
-
-set display=lastline " For writing prose
-set noswapfile
-
 function! AddToPath(...)
     " NOTE: Apparently regexp matching doesn't do its job here so I had to
     " take matters into my own hands.
@@ -163,21 +104,21 @@ packadd termdebug
 filetype plugin indent on
 colorscheme custom
 
-augroup encrypted_file
-  au!
-  autocmd BufNewFile,BufRead *.org.gpg set ft=org | set formatoptions-=cro
-  autocmd User GnuPG setlocal noundofile
-augroup END
-
-augroup CommentHighlighting
-    autocmd!
-    autocmd FileType json syntax match Comment +\/\/.\+$+
-augroup END
-
-augroup TabOnlyFiles
-    autocmd!
-    autocmd BufNewFile,BufRead Makefile,makefile setlocal noexpandtab
-augroup END
+" augroup encrypted_file
+"   au!
+"   autocmd BufNewFile,BufRead *.org.gpg set ft=org | set formatoptions-=cro
+"   autocmd User GnuPG setlocal noundofile
+" augroup END
+" 
+" augroup CommentHighlighting
+"     autocmd!
+"     autocmd FileType json syntax match Comment +\/\/.\+$+
+" augroup END
+" 
+" augroup TabOnlyFiles
+"     autocmd!
+"     autocmd BufNewFile,BufRead Makefile,makefile setlocal noexpandtab
+" augroup END
 
 " let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
@@ -254,25 +195,12 @@ onoremap <silent> <BS> $
 " Replace word you are currently on
 " nnoremap <leader>s :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left>
 
-" Make current file executable
-function! ToggleExecutable()
-    let sign = executable("./" .. expand("%")) ? "-" : "+"
-    exec "!chmod " . sign . "x %"
-endfunction
-nnoremap <silent> <leader>x :call ToggleExecutable()<CR>
-
 " Commands for convenience
 command! -bang Q q<bang>
 command! -bang Qa qa<bang>
 command! -bang QA qa<bang>
 command! -bang -nargs=? -complete=file W w<bang> <args>
 command! -bang -nargs=? -complete=file E e<bang> <args>
-
-function! ToggleLineNumbers()
-    set norelativenumber!
-    set nonumber!
-endfunction
-nnoremap <leader>n :set norelativenumber! \| set nonumber!<CR>
 
 let s:comment_leaders = {
     \ 'c' : '//',
@@ -335,29 +263,29 @@ else
     endfunction
 endif
 
-augroup EnterAndLeave
-    " Enable and disable cursor line in other buffers
-    " | call RedrawTabLine()
-
-    autocmd!
-    autocmd     WinEnter * set   cursorline
-    autocmd     WinLeave * set nocursorline
-    autocmd  InsertEnter * set nocursorline
-    autocmd  InsertLeave * set   cursorline
-
-    " autocmd CmdlineEnter *                    call RedrawTabLine()
-    " autocmd CmdlineLeave *                    call RedrawTabLine()
-
-    " autocmd CmdlineEnter / call OverrideModeName("Search") | call RedrawTabLine()
-    " autocmd CmdlineLeave / call OverrideModeName(0) | call RedrawTabLine()
-
-    " autocmd CmdlineEnter ? call OverrideModeName("Reverse Search") | call RedrawTabLine()
-    " autocmd CmdlineLeave ? call OverrideModeName(0) | call RedrawTabLine()
-
-    " I created these but they don't work as intended yet
-    " autocmd  VisualEnter *                    call RedrawTabLine()
-    " autocmd  VisualLeave *                    call RedrawTabLine()
-augroup END
+" augroup EnterAndLeave
+"     " Enable and disable cursor line in other buffers
+"     " | call RedrawTabLine()
+" 
+"     autocmd!
+"     autocmd     WinEnter * set   cursorline
+"     autocmd     WinLeave * set nocursorline
+"     autocmd  InsertEnter * set nocursorline
+"     autocmd  InsertLeave * set   cursorline
+" 
+"     " autocmd CmdlineEnter *                    call RedrawTabLine()
+"     " autocmd CmdlineLeave *                    call RedrawTabLine()
+" 
+"     " autocmd CmdlineEnter / call OverrideModeName("Search") | call RedrawTabLine()
+"     " autocmd CmdlineLeave / call OverrideModeName(0) | call RedrawTabLine()
+" 
+"     " autocmd CmdlineEnter ? call OverrideModeName("Reverse Search") | call RedrawTabLine()
+"     " autocmd CmdlineLeave ? call OverrideModeName(0) | call RedrawTabLine()
+" 
+"     " I created these but they don't work as intended yet
+"     " autocmd  VisualEnter *                    call RedrawTabLine()
+"     " autocmd  VisualLeave *                    call RedrawTabLine()
+" augroup END
 
 " =============================================
 " Style changes
@@ -607,17 +535,16 @@ function! CreateSourceHeader()
     endif
 endfunction
 
-augroup FileHeaders
-    autocmd!
-    autocmd BufNewFile *.c,*.cpp,*.h,*.hpp call CreateSourceHeader()
-augroup END
+" augroup FileHeaders
+"     autocmd!
+"     autocmd BufNewFile *.c,*.cpp,*.h,*.hpp call CreateSourceHeader()
+" augroup END
 
 " = Terminal commands ========================
 
 " Search for a script named "build.bat" or "compile" moving up from the current path and run it.
 " TODO: fix this for neovim
 let s:compile_script_name = has('win32') ? 'build.bat' : './compile'
-
 function! IsTerm()
     return get(getwininfo(bufwinid(bufnr()))[0], 'terminal', 0)
 endfunction
@@ -627,11 +554,11 @@ if has('nvim')
         " Don't remove terminal statuses if I'm working on this init file
         let g:term_statuses = {}
     endif
-    augroup NeovimTerm
-        autocmd!
-        " autocmd TermOpen  * let g:term_statuses[b:terminal_job_id] = 1
-        " autocmd TermClose * let g:term_statuses[b:terminal_job_id] = 0
-    augroup END
+    " augroup NeovimTerm
+    "     autocmd!
+    "     " autocmd TermOpen  * let g:term_statuses[b:terminal_job_id] = 1
+    "     " autocmd TermClose * let g:term_statuses[b:terminal_job_id] = 0
+    " augroup END
 endif
 
 " function! s:TermExit(job_id, data, event) dict

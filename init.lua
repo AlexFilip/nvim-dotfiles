@@ -3,6 +3,7 @@ require('remap')
 require('groups')
 require('git')
 require('tabs')
+require('settings')
 
 vim.cmd('source ~/.config/nvim/init-old.vim')
 

@@ -11,6 +11,12 @@ vim.keymap.set("n", "Y", "y$")
 vim.keymap.set("n", "<leader>d", "\"_d")
 vim.keymap.set("n", "<leader>c", "\"_c")
 vim.keymap.set("v", "<leader>p", "\"_p")
+vim.keymap.set("n", "<leader>x", "\"_x")
+
+vim.keymap.set("n", "<leader>n", function()
+    vim.o.relativenumber = not vim.o.relativenumber
+    vim.o.number = not vim.o.number
+end)
 
 vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left>")
 
@@ -58,4 +64,19 @@ vim.keymap.set("v", "<C-K>", ":m '<-2<CR>gv=gv")
 -- Horizontal scrolling. Only useful when wrap is turned off.
 vim.keymap.set("n", "<C-J>", "zl")
 vim.keymap.set("n", "<C-H>", "zh")
+
+-- Make current file executable
+vim.keymap.set("n", "<leader>ex", function()
+    local filename = vim.fn.expand("%")
+    local sign = "+"
+    local is_executable = vim.fn.executable("./" .. filename)
+
+    if is_executable ~= 0 then
+        sign = "-" 
+    end
+
+    local command = { "chmod", sign .. "x", filename }
+    print(is_executable, sign, filename)
+    vim.fn.system(command)
+end)
 
