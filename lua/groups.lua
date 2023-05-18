@@ -1,45 +1,83 @@
 
-local MiscFileGroup  = vim.api.nvim_create_augroup("MiscFile", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "help",
-    group = MiscFileGroup,
-    callback = function() 
-        vim.cmd.wincmd("L")
-    end
-})
--- augroup MiscFile
---     autocmd!
---     autocmd FileType help wincmd L
---     " Reload vimrc on write
---     " Neither of these work
---     autocmd BufWritePost $MYVIMRC  source $MYVIMRC
---     autocmd BufWritePost $MYGVIMRC source $MYGVIMRC
--- augroup END
+local groups = {}
 
-local WrapLinesGroup = vim.api.nvim_create_augroup("WrapLines", { clear = true })
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "txt", "org", "tex" },
-    group = WrapLinesGroup,
-    callback = function()
-        local bufnr = vim.api.nvim_get_current_buf()
-        local buffer_options = vim.bo[bufnr]
-        buffer_options.wrap = true
-        buffer_options.linebreak = true
-        buffer_options.list = false
-    end
-})
+local M = {}
+function M:makeGroup(name)
+    local result = groups[name]
+    if not result then
+        result = {
+            group = vim.api.nvim_create_augroup(name, { clear = true }),
+            autoCmd = function(self, event, pattern, action)
+                local opts = {
+                    pattern = pattern,
+                    group   = self.group,
+                }
 
-local TerraformGroup = vim.api.nvim_create_augroup("Terraform", { clear = true })
-vim.api.nvim_create_autocmd("BufWritePost", {
-    pattern = "*.tf",
-    group = TerraformGroup,
-    callback = function() 
-        -- In lua anything that is not `false`, including 0, is true
-        if vim.fn.executable("terraform") ~= 0 then
-            io.popen("terraform fmt " .. vim.fn.expand("%"))
-        end
+                local action_type = type(action)
+                if action_type == "function" then
+                    opts.callback = action
+                elseif action_type == "string" then
+                    opts.command = action
+                else
+                    -- vim.cmd.echoerr('action in autoCmd was set to value of unsupported type ' .. action_type)
+                    return
+                end
+
+                return vim.api.nvim_create_autocmd(event, opts)
+            end
+        }
+
+        groups[name] = result
     end
-})
+
+    return result
+end
+
+local HelpFileGroup = M:makeGroup("HelpFile")
+HelpFileGroup:autoCmd("FileType", "help", function() 
+    vim.cmd.wincmd("T")
+end)
+
+local WrapLinesGroup = M:makeGroup("WrapLines")
+WrapLinesGroup:autoCmd("FileType", { "txt", "org", "tex", "plaintex", "mkd" }, function()
+    local bufnr = vim.api.nvim_get_current_buf()
+
+    vim.api.nvim_set_option_value('wrap', true, { buf = bufnr })
+    vim.api.nvim_set_option_value('linebreak', true, { buf = bufnr })
+    vim.api.nvim_set_option_value('list', false, { buf = bufnr })
+end)
+
+-- local WrapLinesGroup = vim.api.nvim_create_augroup("WrapLines", { clear = true })
+-- vim.api.nvim_create_autocmd("FileType", {
+--     pattern = { "txt", "org", "tex" },
+--     group = WrapLinesGroup,
+--     callback = function()
+--         local bufnr = vim.api.nvim_get_current_buf()
+--         local buffer_options = vim.bo[bufnr]
+-- 
+--         buffer_options.wrap      = true
+--         buffer_options.linebreak = true
+--         buffer_options.list      = false
+--     end
+-- })
+
+local TerraformGroup = M:makeGroup("Terraform")
+TerraformGroup:autoCmd("BufWritePost",  "*.tf", function() 
+    -- In lua anything that is not `false`, including 0, is true
+    if vim.fn.executable("terraform") ~= 0 then
+        io.popen("terraform fmt " .. vim.fn.expand("%"))
+    end
+end)
+
+
+local EncryptedFileGroup  = M:makeGroup("EncryptedFile")
+EncryptedFileGroup:autoCmd({ "BufNewFile", "BufRead" }, "*.gpg", function() 
+    -- print("Hello")
+    -- TODO: Get file name and split it up by dots. If it is something like abc.org.gpg. Make it have the same filetype as if abc.org was opened
+end)
+
+EncryptedFileGroup:autoCmd({ "BufNewFile", "BufRead" }, "*.gpg", function()
+end)
 
 -- augroup encrypted_file
 --   au!
@@ -91,3 +129,5 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 --     autocmd!
 --     autocmd BufNewFile *.c,*.cpp,*.h,*.hpp call CreateSourceHeader()
 -- augroup END
+
+return M
