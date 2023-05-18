@@ -28,8 +28,8 @@ vim.keymap.set("n", "<leader>di", function()
     end
 end)
 
-vim.keymap.set("n", "ght", function () vim.cmd "vertical terminal" end)
-vim.keymap.set("n", "gct", function () vim.cmd "tabnew | terminal" end)
+-- vim.keymap.set("n", "ght", function () vim.cmd "vertical terminal" end)
+-- vim.keymap.set("n", "gct", function () vim.cmd "tabnew | terminal" end)
 
 vim.keymap.set("t", "<C-w>",  "<C-\\><C-n><C-w>")
 vim.keymap.set("t", "<C-w>[", "<C-\\><C-n>")
