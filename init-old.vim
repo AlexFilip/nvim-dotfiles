@@ -1,35 +1,3 @@
-function! AddToPath(...)
-    " NOTE: Apparently regexp matching doesn't do its job here so I had to
-    " take matters into my own hands.
-    let paths = {} " As far as I know, vim doesn't have sets
-    for path in split($PATH, s:search_path_separator)
-        if path !=# '' && !has_key(paths, path)
-            let paths[path] = ''
-        endif
-    endfor
-    " Previously the filter used 'val !~# $PATH' but that didn't work
-    " for some reason
-    let new_components = filter(copy(a:000), { idx, val ->
-                \     (val !=# '' && !has_key(paths, val))
-                \ })
-    call extend(new_components, [$PATH])
-    let $PATH = join(new_components, s:search_path_separator)
-endfunction
-
-if has('win32')
-    let s:search_path_separator = ';'
-    call AddToPath('C:\tools', 'C:\Program Files\Git\bin', '')
-else
-    if executable('/bin/zsh')
-        set shell=/bin/zsh " Shell to launch in terminal
-    endif
-
-    let s:search_path_separator = ':'
-    call AddToPath('/usr/local/sbin', $HOME . '/bin', '/usr/local/bin')
-    if has('mac')
-        call AddToPath('/opt/homebrew/bin', '/sbin', '/usr/sbin')
-    endif
-endif
 
 let s:dot_vim_path = fnamemodify(expand("$MYVIMRC"), ":p:h")
 let g:path_separator = has('win32') ? '\' : '/'
