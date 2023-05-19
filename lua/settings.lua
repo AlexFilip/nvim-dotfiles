@@ -1,5 +1,8 @@
 
+local exports = {}
+
 local homeDirectory = os.getenv('HOME')
+exports.homeDirectory = homeDirectory
 
 local undo_dir = homeDirectory .. "/.local/nvim-undos"
 
@@ -66,3 +69,5 @@ vim.o.viminfo = ""
 vim.o.display = "lastline" -- For writing prose
 vim.o.swapfile = false
 vim.o.updatetime = 50
+
+return exports
