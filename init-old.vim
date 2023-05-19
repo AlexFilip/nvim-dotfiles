@@ -1,49 +1,6 @@
 
 let s:dot_vim_path = fnamemodify(expand("$MYVIMRC"), ":p:h")
 
-if filereadable(s:dot_vim_path . '/autoload/plug.vim')
-    call plug#begin(s:dot_vim_path . '/plugins')
-
-    " Utilities
-    Plug 'tpope/vim-surround'
-    Plug 'tpope/vim-repeat'
-    Plug 'vim-airline/vim-airline'
-    Plug 'vim-airline/vim-airline-themes'
-    "Plug 'SirVer/ultisnips'
-    Plug 'mbbill/undotree'
-
-    Plug 'nvim-lua/plenary.nvim'
-    Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
-
-    " Languages
-    Plug 'vim-scripts/awk.vim'
-    Plug 'rust-lang/rust.vim'
-    Plug 'fatih/vim-go'
-    Plug 'keith/swift.vim'
-    Plug 'hashivim/vim-terraform'
-
-    " Git support
-    Plug 'tpope/vim-fugitive'
-
-    " GnuPG support (buggy, doesn't work with GPG_TTY, have to use qt)
-    Plug 'jamessan/vim-gnupg'
-    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-    Plug 'nvim-orgmode/orgmode'
-
-    " Themes
-    Plug 'morhetz/gruvbox'
-    Plug 'catppuccin/nvim'
-    Plug 'sainnhe/edge'
-    Plug 'folke/tokyonight.nvim'
-    Plug 'preservim/vim-colors-pencil'
-
-    if exists('*g:LocalVimRCPlugins')
-        call g:LocalVimRCPlugins()
-    endif
-
-    call plug#end()
-endif
-
 packadd termdebug
 
 filetype plugin indent on
