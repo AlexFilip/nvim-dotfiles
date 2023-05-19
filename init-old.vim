@@ -1,28 +1,5 @@
 
 let s:dot_vim_path = fnamemodify(expand("$MYVIMRC"), ":p:h")
-let g:path_separator = has('win32') ? '\' : '/'
-
-let $PINENTRY_USER_DATA="qt"
-let $GPG_TTY=''
-let g:GPGDefaultRecipients=[]
-
-" To activate python bindings, create one or both of these 2 environments and
-" run pip install neovim from within them.
-" TODO: Create python virtual environments for ultisnips
-" let g:python_host_prog  = ''
-" let g:python3_host_prog = s:dot_vim_path . "/python3-env/bin/python"
-
-let g:UltiSnipsExpandTrigger = "<c-b>"
-" let g:UltiSnipsListSnippets = "<c-tab>"
-let g:UltiSnipsJumpForwardTrigger = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<c-tab>"
-let g:UltiSnipsSnippetDirectories = [s:dot_vim_path . "/UltiSnips"]
-
-" For machine specific additions changes
-let s:local_vimrc_path = join([$HOME, '.local', 'neovimrc'], g:path_separator)
-if filereadable(s:local_vimrc_path)
-    execute "source " . s:local_vimrc_path
-endif
 
 if filereadable(s:dot_vim_path . '/autoload/plug.vim')
     call plug#begin(s:dot_vim_path . '/plugins')
@@ -72,22 +49,6 @@ packadd termdebug
 filetype plugin indent on
 colorscheme custom
 
-" augroup encrypted_file
-"   au!
-"   autocmd BufNewFile,BufRead *.org.gpg set ft=org | set formatoptions-=cro
-"   autocmd User GnuPG setlocal noundofile
-" augroup END
-" 
-" augroup CommentHighlighting
-"     autocmd!
-"     autocmd FileType json syntax match Comment +\/\/.\+$+
-" augroup END
-" 
-" augroup TabOnlyFiles
-"     autocmd!
-"     autocmd BufNewFile,BufRead Makefile,makefile setlocal noexpandtab
-" augroup END
-
 " let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
 " let g:airline_theme='apprentice'
@@ -117,8 +78,8 @@ function! MoveTab(multiplier, count)
     endif
 endfunction
 
-nnoremap <silent> g{ :<C-U>call MoveTab(-1, v:count)<CR>
-nnoremap <silent> g} :<C-U>call MoveTab(+1, v:count)<CR>
+nnoremap <silent> <leader>{ :<C-U>call MoveTab(-1, v:count)<CR>
+nnoremap <silent> <leader>} :<C-U>call MoveTab(+1, v:count)<CR>
 
 " I don't know if I really want this...Like, I don't know
 " if it inspires joy, ya-know, man??
@@ -512,7 +473,6 @@ endfunction
 
 " Search for a script named "build.bat" or "compile" moving up from the current path and run it.
 " TODO: fix this for neovim
-let s:compile_script_name = has('win32') ? 'build.bat' : './compile'
 function! IsTerm()
     return get(getwininfo(bufwinid(bufnr()))[0], 'terminal', 0)
 endfunction
@@ -705,7 +665,8 @@ function! SearchAndRun(script_names)
 endfunction
 
 function! SearchAndCompile()
-    call SearchAndRun([s:compile_script_name, './run'])
+    let compile_script_name = has('win32') ? 'build.bat' : './compile'
+    call SearchAndRun([compile_script_name, './run'])
 endfunction
 
 nnoremap <silent> <leader>g :call GotoLineFromTerm()<CR>
@@ -889,6 +850,6 @@ if has('gui') && filereadable(s:gvim_path)
     execute "source " . s:gvim_path
 endif
 
-if exists('*g:LocalVimRCEnd')
-    call g:LocalVimRCEnd()
-endif
+" if exists('*g:LocalVimRCEnd')
+"     call g:LocalVimRCEnd()
+" endif
