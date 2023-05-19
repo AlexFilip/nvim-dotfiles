@@ -38,6 +38,11 @@ HelpFileGroup:autoCmd("FileType", "help", function()
     vim.cmd.wincmd("T")
 end)
 
+local ManGroup = M:makeGroup("Man")
+ManGroup:autoCmd("FileType", "man", function() 
+    vim.cmd.wincmd("T")
+end)
+
 local WrapLinesGroup = M:makeGroup("WrapLines")
 WrapLinesGroup:autoCmd("FileType", { "txt", "org", "tex", "plaintex", "mkd" }, function()
     local bufnr = vim.api.nvim_get_current_buf()
