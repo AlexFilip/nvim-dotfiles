@@ -1,8 +1,6 @@
 
 let s:dot_vim_path = fnamemodify(expand("$MYVIMRC"), ":p:h")
 
-packadd termdebug
-
 filetype plugin indent on
 colorscheme custom
 

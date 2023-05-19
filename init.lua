@@ -82,8 +82,6 @@ local local_vimrc_path = table.concat({ settings.homeDirectory, '.local', 'neovi
 local user_vimrc = loadfile(local_vimrc_path) or function() return {} end
 user_vimrc = user_vimrc() or {}
 
-
-
 vim.cmd("source ~/.config/nvim/init-old.vim")
 
 require("orgmode").setup_ts_grammar()
