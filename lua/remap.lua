@@ -86,3 +86,28 @@ vim.keymap.set("n", "<leader>ex", function()
     vim.fn.system(command)
 end)
 
+-- I don't know if I really want this...Like, I don't know if it inspires joy, ya-know, man??
+-- vim.keymap.set("n", "v", "<C-V>")
+-- vim.keymap.set("v", "v", "<C-V>")
+-- vim.keymap.set("n", "<C-v>", "v")
+-- vim.keymap.set("v", "<C-v>", "v")
+
+function GotoBeginningOfLine()
+    local command = "0"
+    if vim.fn.indent(".") + 1 ~= vim.fn.col(".") then
+        command = "^"
+    end
+    vim.cmd { cmd = "normal", args = {command}, bang = true }
+end
+
+vim.keymap.set("n", "0", GotoBeginningOfLine)
+vim.keymap.set("n", "^", GotoBeginningOfLine)
+vim.keymap.set("n", "-", "$")
+
+vim.keymap.set("v", "0", GotoBeginningOfLine)
+vim.keymap.set("v", "^", GotoBeginningOfLine)
+vim.keymap.set("v", "-", "$")
+
+vim.keymap.set("o", "0", GotoBeginningOfLine)
+vim.keymap.set("o", "^", GotoBeginningOfLine)
+vim.keymap.set("o", "-", "$")

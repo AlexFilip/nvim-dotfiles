@@ -36,48 +36,6 @@ endfunction
 nnoremap <silent> <leader>{ :<C-U>call MoveTab(-1, v:count)<CR>
 nnoremap <silent> <leader>} :<C-U>call MoveTab(+1, v:count)<CR>
 
-" I don't know if I really want this...Like, I don't know
-" if it inspires joy, ya-know, man??
-" nnoremap v <C-V>
-" vnoremap v <C-V>
-
-function! ReenterVisual()
-    normal! gv
-endfunction
-
-" This is probably the greatest thing I've ever made in vim.
-function! GotoBeginningOfLine()
-    if indent(".") + 1 == col(".")
-        normal! 0
-    else
-        normal! ^
-    endif
-endfunction
-
-nnoremap <silent> 0 :<C-U>call GotoBeginningOfLine()<CR>
-nnoremap <silent> ^ :<C-U>call GotoBeginningOfLine()<CR>
-nnoremap <silent> - $
-nnoremap <silent> <BS> $
-
-vnoremap <silent> 0 :<C-U>call ReenterVisual() \| call GotoBeginningOfLine()<CR>
-vnoremap <silent> ^ :<C-U>call ReenterVisual() \| call GotoBeginningOfLine()<CR>
-vnoremap <silent> - $
-vnoremap <silent> <BS> $
-
-onoremap <silent> 0 :<C-U>call GotoBeginningOfLine()<CR>
-onoremap <silent> ^ :<C-U>call GotoBeginningOfLine()<CR>
-onoremap <silent> - $
-onoremap <silent> <BS> $
-
-" Navigation
-
-" Tab shortcuts
-" nnoremap <silent> ghe :vnew<CR>
-" nnoremap <silent> gce :tabnew<CR>
-" nnoremap <silent> ge  :vnew \| wincmd H<CR>
-
-" Replace word you are currently on
-" nnoremap <leader>s :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left>
 
 " Commands for convenience
 command! -bang Q q<bang>
