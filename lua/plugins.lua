@@ -10,8 +10,12 @@ return require("packer").startup(function(use) -- Packer can manage itself
 
     use("tpope/vim-surround")
     use("tpope/vim-repeat")
-    use("vim-airline/vim-airline")
-    use("vim-airline/vim-airline-themes")
+    -- use("vim-airline/vim-airline")
+    -- use("vim-airline/vim-airline-themes")
+    use {
+      'nvim-lualine/lualine.nvim',
+      requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+    }
     use("SirVer/ultisnips")
     use("mbbill/undotree")
 

@@ -94,6 +94,11 @@ _G.packer_plugins = {
     path = "/home/alex/.local/share/nvim/site/pack/packer/start/gruvbox",
     url = "https://github.com/morhetz/gruvbox"
   },
+  ["lualine.nvim"] = {
+    loaded = true,
+    path = "/home/alex/.local/share/nvim/site/pack/packer/start/lualine.nvim",
+    url = "https://github.com/nvim-lualine/lualine.nvim"
+  },
   neovim = {
     loaded = true,
     path = "/home/alex/.local/share/nvim/site/pack/packer/start/neovim",
@@ -113,6 +118,12 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/alex/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
     url = "https://github.com/nvim-treesitter/nvim-treesitter"
+  },
+  ["nvim-web-devicons"] = {
+    loaded = false,
+    needs_bufread = false,
+    path = "/home/alex/.local/share/nvim/site/pack/packer/opt/nvim-web-devicons",
+    url = "https://github.com/nvim-tree/nvim-web-devicons"
   },
   orgmode = {
     loaded = true,
@@ -158,16 +169,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/alex/.local/share/nvim/site/pack/packer/start/undotree",
     url = "https://github.com/mbbill/undotree"
-  },
-  ["vim-airline"] = {
-    loaded = true,
-    path = "/home/alex/.local/share/nvim/site/pack/packer/start/vim-airline",
-    url = "https://github.com/vim-airline/vim-airline"
-  },
-  ["vim-airline-themes"] = {
-    loaded = true,
-    path = "/home/alex/.local/share/nvim/site/pack/packer/start/vim-airline-themes",
-    url = "https://github.com/vim-airline/vim-airline-themes"
   },
   ["vim-colors-pencil"] = {
     loaded = true,
