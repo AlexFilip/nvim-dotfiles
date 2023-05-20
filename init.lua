@@ -5,6 +5,7 @@ require('groups')
 require('git')
 require('tabs')
 require('packer')
+require('colorscheme')
 
 local PATH_separator = ""
 local function AddToPath(...)

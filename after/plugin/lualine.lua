@@ -1,9 +1,4 @@
 
--- Is it really ok to puth these in an `after` file? It will always be executed, regardless of whether or not I require it.
-vim.o.showtabline = 1
-vim.o.laststatus  = 3
-vim.o.winbar      = "%f %m"
-
 require('lualine').setup {
   options = {
     icons_enabled = true,

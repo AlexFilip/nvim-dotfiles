@@ -27,6 +27,12 @@ vim.o.backspace   = "indent"      -- allow backspacing only over automatic inden
 -- vim.o.clipboard   = "unnamedplus" -- Use system clipboard
 vim.o.wildmenu    = true          -- Display a menu of all completions for commands when pressing tab
 
+-- Tab and status line
+vim.o.showtabline = 1
+vim.o.laststatus  = 3
+vim.o.winbar      = "%f %m"
+
+-- Leading tabs (trailing spaces coming soon)
 vim.o.list      = true      -- Show hidden characters
 vim.o.listchars = "tab:>-<" -- Add tabs and spaces to list of hidden chars
 
