@@ -1,10 +1,10 @@
 
-local settings = require('modules.settings')
-require('modules.remap')
-require('modules.groups')
-require('modules.git')
-require('modules.tabs')
-require('modules.packer')
+local settings = require('settings')
+require('remap')
+require('groups')
+require('git')
+require('tabs')
+require('packer')
 
 local PATH_separator = ""
 local function AddToPath(...)
