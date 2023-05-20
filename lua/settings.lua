@@ -24,8 +24,6 @@ vim.o.showmode    = false         -- Don't show -- INSERT --
 vim.o.mouse       = "a"           -- Allow mouse input
 vim.o.sidescroll  = 1             -- Number of columns to scroll left and right
 vim.o.backspace   = "indent"      -- allow backspacing only over automatic indenting (:help 'backspace')
-vim.o.showtabline = 1             -- 0 = never show tabline, 1 = when more than one tab, 2 = always
-vim.o.laststatus  = 3             -- Whether or not to show the status line. Values same as showtabline
 -- vim.o.clipboard   = "unnamedplus" -- Use system clipboard
 vim.o.wildmenu    = true          -- Display a menu of all completions for commands when pressing tab
 
