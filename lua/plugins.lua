@@ -16,7 +16,7 @@ return require("packer").startup(function(use) -- Packer can manage itself
       'nvim-lualine/lualine.nvim',
       requires = { 'nvim-tree/nvim-web-devicons', opt = true }
     }
-    use("SirVer/ultisnips")
+    --use("SirVer/ultisnips")
     use("mbbill/undotree")
 
     use ({

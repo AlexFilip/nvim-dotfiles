@@ -4,7 +4,7 @@ require('remap')
 require('groups')
 require('git')
 require('tabs')
-require('packer')
+require('plugins')
 require('colorscheme')
 
 local PATH_separator = ""
