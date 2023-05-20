@@ -10,8 +10,12 @@ vim.keymap.set("n", "Y", "y$")
 -- Copy input null buffer
 vim.keymap.set("n", "<leader>d", "\"_d")
 vim.keymap.set("n", "<leader>c", "\"_c")
-vim.keymap.set("v", "<leader>p", "\"_p")
 vim.keymap.set("n", "<leader>x", "\"_x")
+
+vim.keymap.set("n", "<leader>p", "\"+p")
+vim.keymap.set("n", "<leader>y", "\"+y")
+
+vim.keymap.set("v", "<leader>p", "\"_p")
 
 vim.keymap.set("n", "<leader>n", function()
     vim.o.relativenumber = not vim.o.relativenumber
@@ -27,6 +31,9 @@ vim.keymap.set("n", "<leader>di", function()
         vim.cmd.diffthis()
     end
 end)
+
+-- Use a nicer commandline
+vim.api.nvim_set_keymap('n', ':', '<cmd>FineCmdline<CR>', {noremap = true})
 
 -- vim.keymap.set("n", "ght", function () vim.cmd "vertical terminal" end)
 -- vim.keymap.set("n", "gct", function () vim.cmd "tabnew | terminal" end)
