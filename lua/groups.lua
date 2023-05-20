@@ -44,13 +44,20 @@ ManGroup:autoCmd("FileType", "man", function()
 end)
 
 local WrapLinesGroup = M:makeGroup("WrapLines")
-WrapLinesGroup:autoCmd("FileType", { "txt", "org", "tex", "plaintex", "mkd" }, function()
+WrapLinesGroup:autoCmd("FileType", { "txt", "markdown", "md", "notes", "org", "tex", "plaintex" }, function()
     local bufnr = vim.api.nvim_get_current_buf()
 
     vim.api.nvim_set_option_value('wrap', true, { buf = bufnr })
     vim.api.nvim_set_option_value('linebreak', true, { buf = bufnr })
     vim.api.nvim_set_option_value('list', false, { buf = bufnr })
 end)
+
+local PythonGroup = M:makeGroup("Python")
+WrapLinesGroup:autoCmd("FileType", { "py" }, function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    vim.api.nvim_set_option_value('tabstop', 4, { buf = bufnr })
+end)
+
 
 -- local WrapLinesGroup = vim.api.nvim_create_augroup("WrapLines", { clear = true })
 -- vim.api.nvim_create_autocmd("FileType", {
