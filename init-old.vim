@@ -2,7 +2,7 @@
 let s:dot_vim_path = fnamemodify(expand("$MYVIMRC"), ":p:h")
 
 filetype plugin indent on
-colorscheme custom
+" colorscheme custom
 
 " let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
