@@ -94,6 +94,11 @@ _G.packer_plugins = {
     path = "/home/alex/.local/share/nvim/site/pack/packer/start/gruvbox",
     url = "https://github.com/morhetz/gruvbox"
   },
+  neovim = {
+    loaded = true,
+    path = "/home/alex/.local/share/nvim/site/pack/packer/start/neovim",
+    url = "https://github.com/rose-pine/neovim"
+  },
   ["nui.nvim"] = {
     loaded = true,
     path = "/home/alex/.local/share/nvim/site/pack/packer/start/nui.nvim",
