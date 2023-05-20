@@ -23,7 +23,6 @@ vim.keymap.set("n", "<leader>n", function()
 end)
 
 vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left>")
-
 vim.keymap.set("n", "<leader>di", function()
     if vim.o.diff then
         vim.cmd.diffoff()
@@ -33,7 +32,8 @@ vim.keymap.set("n", "<leader>di", function()
 end)
 
 -- Use a nicer commandline
-vim.api.nvim_set_keymap('n', ':', '<cmd>FineCmdline<CR>', {noremap = true})
+vim.api.nvim_set_keymap("n", ":", "<cmd>FineCmdline<CR>", {noremap = true})
+vim.api.nvim_set_keymap("n", "<leader>:", ":", {noremap = true})
 
 -- vim.keymap.set("n", "ght", function () vim.cmd "vertical terminal" end)
 -- vim.keymap.set("n", "gct", function () vim.cmd "tabnew | terminal" end)
