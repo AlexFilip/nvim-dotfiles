@@ -14,6 +14,12 @@ return require("packer").startup(function(use) -- Packer can manage itself
     use "vim-airline/vim-airline-themes"
     use "SirVer/ultisnips"
     use "mbbill/undotree"
+    use {
+        "VonHeikemen/fine-cmdline.nvim",
+        requires = {
+            { "MunifTanjim/nui.nvim" }
+        }
+    }
 
     use {
         'nvim-telescope/telescope.nvim', branch = '0.1.x',
