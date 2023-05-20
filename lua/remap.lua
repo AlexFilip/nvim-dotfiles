@@ -3,8 +3,9 @@
 vim.g.mapleader = " "
 
 -- Open vim explore
-vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
+vim.keymap.set("n", "<leader>ef", vim.cmd.Ex)
 
+-- Consistency is key
 vim.keymap.set("n", "Y", "y$")
 
 -- Copy input null buffer
