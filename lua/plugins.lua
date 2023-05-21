@@ -4,7 +4,6 @@
 vim.cmd [[packadd packer.nvim]]
 vim.cmd [[packadd termdebug]]
 
-
 return require("packer").startup(function(use) -- Packer can manage itself
     use("wbthomason/packer.nvim")
 
@@ -43,10 +42,8 @@ return require("packer").startup(function(use) -- Packer can manage itself
 
     -- GnuPG support (buggy, doesn't work with GPG_TTY, have to use qt)
     use("jamessan/vim-gnupg")
-    use({
-        'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate'
-    })
+    use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
+    use('nvim-treesitter/playground')
     use("nvim-orgmode/orgmode")
 
     -- Themes
