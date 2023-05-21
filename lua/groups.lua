@@ -108,4 +108,12 @@ FileHeaders:autoCmd("BufNewFile", { "*.c", "*.cpp", "*.h", "*.hpp" }, function()
     -- CreateSourceHeader()
 end)
 
+local Recording = M:makeGroup("Recording")
+Recording:autoCmd("RecordingEnter", "*", function()
+    vim.o.cmdheight = 1
+end)
+Recording:autoCmd("RecordingLeave", "*", function()
+    vim.o.cmdheight = 0
+end)
+
 return M
