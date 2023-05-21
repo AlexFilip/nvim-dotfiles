@@ -79,11 +79,6 @@ _G.packer_plugins = {
     path = "/home/alex/.local/share/nvim/site/pack/packer/start/LuaSnip",
     url = "https://github.com/L3MON4D3/LuaSnip"
   },
-  ["awk.vim"] = {
-    loaded = true,
-    path = "/home/alex/.local/share/nvim/site/pack/packer/start/awk.vim",
-    url = "https://github.com/vim-scripts/awk.vim"
-  },
   ["cmp-nvim-lsp"] = {
     loaded = true,
     path = "/home/alex/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",
@@ -180,16 +175,6 @@ _G.packer_plugins = {
     path = "/home/alex/.local/share/nvim/site/pack/packer/start/plenary.nvim",
     url = "https://github.com/nvim-lua/plenary.nvim"
   },
-  ["rust.vim"] = {
-    loaded = true,
-    path = "/home/alex/.local/share/nvim/site/pack/packer/start/rust.vim",
-    url = "https://github.com/rust-lang/rust.vim"
-  },
-  ["swift.vim"] = {
-    loaded = true,
-    path = "/home/alex/.local/share/nvim/site/pack/packer/start/swift.vim",
-    url = "https://github.com/keith/swift.vim"
-  },
   ["telescope.nvim"] = {
     loaded = true,
     path = "/home/alex/.local/share/nvim/site/pack/packer/start/telescope.nvim",
@@ -220,11 +205,6 @@ _G.packer_plugins = {
     path = "/home/alex/.local/share/nvim/site/pack/packer/start/vim-gnupg",
     url = "https://github.com/jamessan/vim-gnupg"
   },
-  ["vim-go"] = {
-    loaded = true,
-    path = "/home/alex/.local/share/nvim/site/pack/packer/start/vim-go",
-    url = "https://github.com/fatih/vim-go"
-  },
   ["vim-repeat"] = {
     loaded = true,
     path = "/home/alex/.local/share/nvim/site/pack/packer/start/vim-repeat",
@@ -234,11 +214,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/home/alex/.local/share/nvim/site/pack/packer/start/vim-surround",
     url = "https://github.com/tpope/vim-surround"
-  },
-  ["vim-terraform"] = {
-    loaded = true,
-    path = "/home/alex/.local/share/nvim/site/pack/packer/start/vim-terraform",
-    url = "https://github.com/hashivim/vim-terraform"
   }
 }
 

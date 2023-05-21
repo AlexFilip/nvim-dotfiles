@@ -30,21 +30,16 @@ return require("packer").startup(function(use) -- Packer can manage itself
         requires = { {'nvim-lua/plenary.nvim'} }
     })
 
-    -- Languages
-    use("vim-scripts/awk.vim")
-    use("rust-lang/rust.vim")
-    use("fatih/vim-go")
-    use("keith/swift.vim")
-    use("hashivim/vim-terraform")
+    -- Languages via treesitter
+    use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
+    use('nvim-treesitter/playground')
+    use("nvim-orgmode/orgmode")
 
     -- Git support
     use("tpope/vim-fugitive")
 
     -- GnuPG support (buggy, doesn't work with GPG_TTY, have to use qt)
     use("jamessan/vim-gnupg")
-    use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
-    use('nvim-treesitter/playground')
-    use("nvim-orgmode/orgmode")
 
     -- Themes
     use("rose-pine/neovim")
