@@ -33,13 +33,8 @@ function M:makeGroup(name)
     return result
 end
 
-local HelpFileGroup = M:makeGroup("HelpFile")
-HelpFileGroup:autoCmd("FileType", "help", function() 
-    vim.cmd.wincmd("T")
-end)
-
-local ManGroup = M:makeGroup("Man")
-ManGroup:autoCmd("FileType", "man", function() 
+local OpenInNewTab = M:makeGroup("OpenInNewTab")
+OpenInNewTab:autoCmd("FileType", { "help", "man" }, function() 
     vim.cmd.wincmd("T")
 end)
 
@@ -59,20 +54,6 @@ WrapLinesGroup:autoCmd("FileType", { "py" }, function()
 end)
 
 
--- local WrapLinesGroup = vim.api.nvim_create_augroup("WrapLines", { clear = true })
--- vim.api.nvim_create_autocmd("FileType", {
---     pattern = { "txt", "org", "tex" },
---     group = WrapLinesGroup,
---     callback = function()
---         local bufnr = vim.api.nvim_get_current_buf()
---         local buffer_options = vim.bo[bufnr]
--- 
---         buffer_options.wrap      = true
---         buffer_options.linebreak = true
---         buffer_options.list      = false
---     end
--- })
-
 local TerraformGroup = M:makeGroup("Terraform")
 TerraformGroup:autoCmd("BufWritePost",  "*.tf", function() 
     -- In lua anything that is not `false`, including 0, is true
@@ -86,9 +67,10 @@ local EncryptedFileGroup  = M:makeGroup("EncryptedFile")
 EncryptedFileGroup:autoCmd({ "BufNewFile", "BufRead" }, "*.gpg", function() 
     -- print("Hello")
     -- TODO: Get file name and split it up by dots. If it is something like abc.org.gpg. Make it have the same filetype as if abc.org was opened
+    local filename = vim.fn.expand("%")
 end)
-
-EncryptedFileGroup:autoCmd({ "BufNewFile", "BufRead" }, "*.gpg", function()
+EncryptedFileGroup:autoCmd("User", "GnuPG", function() 
+    vim.o.undofile = false
 end)
 
 -- augroup encrypted_file
@@ -97,49 +79,40 @@ end)
 --   autocmd User GnuPG setlocal noundofile
 -- augroup END
 
--- augroup CommentHighlighting
---     autocmd!
---     autocmd FileType json syntax match Comment +\/\/.\+$+
--- augroup END
+local JSONComments = M:makeGroup("JSONComments")
+JSONComments:autoCmd("FileType", "json", function()
+    vim.cmd.syntax([[match Comment +\/\/.\+$+]])
+end)
 
--- augroup TabOnlyFiles
---     autocmd!
---     autocmd BufNewFile,BufRead Makefile,makefile setlocal noexpandtab
--- augroup END
+local TabOnlyFiles = M:makeGroup("TabOnlyFiles")
+TabOnlyFiles:autoCmd({ "BufNewFile", "BufRead" }, { "Makefile", "makefile" }, function()
+    vim.o.expandtab = false
+end)
 
--- augroup EnterAndLeave
---     " Enable and disable cursor line in other buffers
---     " | call RedrawTabLine()
--- 
---     autocmd!
---     autocmd     WinEnter * set   cursorline
---     autocmd     WinLeave * set nocursorline
---     autocmd  InsertEnter * set nocursorline
---     autocmd  InsertLeave * set   cursorline
--- 
---     " autocmd CmdlineEnter *                    call RedrawTabLine()
---     " autocmd CmdlineLeave *                    call RedrawTabLine()
--- 
---     " autocmd CmdlineEnter / call OverrideModeName("Search") | call RedrawTabLine()
---     " autocmd CmdlineLeave / call OverrideModeName(0) | call RedrawTabLine()
--- 
---     " autocmd CmdlineEnter ? call OverrideModeName("Reverse Search") | call RedrawTabLine()
---     " autocmd CmdlineLeave ? call OverrideModeName(0) | call RedrawTabLine()
--- 
---     " I created these but they don't work as intended yet
---     " autocmd  VisualEnter *                    call RedrawTabLine()
---     " autocmd  VisualLeave *                    call RedrawTabLine()
--- augroup END
+local EnterAndLeave = M:makeGroup("EnterAndLeave")
+EnterAndLeave:autoCmd("WinEnter",    "*", function() vim.o.cursorline = true  end)
+EnterAndLeave:autoCmd("WinLeave",    "*", function() vim.o.cursorline = false end)
+EnterAndLeave:autoCmd("InsertEnter", "*", function() vim.o.cursorline = false end)
+EnterAndLeave:autoCmd("InsertLeave", "*", function() vim.o.cursorline = true  end)
 
--- augroup NeovimTerm
---     autocmd!
---     " autocmd TermOpen  * let g:term_statuses[b:terminal_job_id] = 1
---     " autocmd TermClose * let g:term_statuses[b:terminal_job_id] = 0
--- augroup END
+-- TODO: I may be able to do this differently so that I don't have to use
+-- a terminal but I also need to make sure that the buffer is deleted when
+-- it's closed. Maybe I should reuse existing ones and allow the number of
+-- buffers to be adjustable.
+local NeovimTerm = M:makeGroup("NeovimTerm")
+NeovimTerm:autoCmd("TermOpen", "*", function() 
+    -- TODO:
+    -- let g:term_statuses[b:terminal_job_id] = 1
+end)
+NeovimTerm:autoCmd("TermClose", "*", function() 
+    -- TODO:
+    -- let g:term_statuses[b:terminal_job_id] = 0
+end)
 
--- augroup FileHeaders
---     autocmd!
---     autocmd BufNewFile *.c,*.cpp,*.h,*.hpp call CreateSourceHeader()
--- augroup END
+local FileHeadersGroup = M:makeGroup("FileHeaders")
+FileHeadersGroup:autoCmd("BufNewFile", { "*.c", "*.cpp", "*.h", "*.hpp" }, function() 
+    -- TODO:
+    -- CreateSourceHeader()
+end)
 
 return M

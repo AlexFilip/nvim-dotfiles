@@ -105,30 +105,6 @@ else
     endfunction
 endif
 
-" augroup EnterAndLeave
-"     " Enable and disable cursor line in other buffers
-"     " | call RedrawTabLine()
-" 
-"     autocmd!
-"     autocmd     WinEnter * set   cursorline
-"     autocmd     WinLeave * set nocursorline
-"     autocmd  InsertEnter * set nocursorline
-"     autocmd  InsertLeave * set   cursorline
-" 
-"     " autocmd CmdlineEnter *                    call RedrawTabLine()
-"     " autocmd CmdlineLeave *                    call RedrawTabLine()
-" 
-"     " autocmd CmdlineEnter / call OverrideModeName("Search") | call RedrawTabLine()
-"     " autocmd CmdlineLeave / call OverrideModeName(0) | call RedrawTabLine()
-" 
-"     " autocmd CmdlineEnter ? call OverrideModeName("Reverse Search") | call RedrawTabLine()
-"     " autocmd CmdlineLeave ? call OverrideModeName(0) | call RedrawTabLine()
-" 
-"     " I created these but they don't work as intended yet
-"     " autocmd  VisualEnter *                    call RedrawTabLine()
-"     " autocmd  VisualLeave *                    call RedrawTabLine()
-" augroup END
-
 " =============================================
 " Style changes
 
@@ -217,32 +193,6 @@ endfunction
 " Can type unicode codepoints with C-V u <codepoint> (ex. 2002)
 " Maybe put the tabs in the status bar or vice-versa (probably better in the
 " tab bar so that information is not duplicated
-function! StatusLine() abort
-    let winnum = winnr() " tabpagebuflist(n)[tabpagewinnr(n) - 1]
-    let bufnum = winbufnr(winnum)
-    let name   =  bufname(bufnum)
-
-    let result  = ""
-
-    if bufnum == bufnr("%")
-        let result .= " " . GetCurrentMode()
-    endif
-
-    " let result .= " " . winnum 
-    let result .= " > " . name
-    let filetype = getbufvar(bufnum, "&filetype")
-    if len(filetype) != 0
-        let result .= " " . l:filetype
-    endif
-
-    let modifiable = getbufvar(bufnum, "&modifiable")
-    let modified   = getbufvar(bufnum, "&modified")
-    let result .= !modifiable ? " -" : modified ? " +" : ""
-
-    return result . " "
-endfunction
-
-" set statusline=%!StatusLine()
 set tabline=%!Tabs()
 
 call timer_stopall()
@@ -298,89 +248,6 @@ hi CustomPurple      guifg=#950087 guibg=NONE ctermfg=90  ctermbg=NONE gui=none 
 
 " ============================================
 " Common variables that may be needed by other functions
-
-let g:header = ['/*',
-            \ '  File: {file_name}',
-            \ '  Date: {date}',
-            \ '  Creator: {creator}',
-            \ '  Notice: (C) Copyright %Y by {copyright_holder}. All rights reserved.',
-            \ '*/',
-            \ ]
-
-let g:header_sub_options = {
-            \    'date_format' : "%d %B %Y",
-            \    'creator'     : 'Alexandru Filip',
-            \    'copyright_holder' : 'Alexandru Filip'
-            \ }
-
-" TODO: Make the headers project specific
-function! CreateSourceHeader()
-    let file_name = expand('%:t')
-    let file_extension = split(file_name, '\.')[1]
-    let date = strftime(g:header_sub_options['date_format'])
-    let year = strftime("%Y")
-
-    let l:header = []
-    for str in g:header
-        let start_idx = 0
-        while 1
-            let option_idx =  match(str, '{[A-Za-z_]\+}', start_idx)
-
-            if option_idx == -1
-                break
-            endif
-
-            let end_idx = match(str, '}', option_idx)
-            let length = end_idx - option_idx - 1
-
-            let key = str[option_idx:end_idx]
-
-            if key == '{file_name}'
-                let value = file_name
-            elseif key == '{date}'
-                let value = date
-            elseif has_key(g:header_sub_options, key[1:-2])
-                let value = get(g:header_sub_options, key[1:-2])
-            else
-                let value = 0
-                let start_idx = end_idx + 1
-            endif
-
-            if value isnot 0
-                let str = substitute(str, key, value, 'g')
-                let start_idx = option_idx + len(value)
-            endif
-        endwhile
-
-        let str = strftime(str)
-        call add(l:header, str)
-    endfor
-
-    call append(0, l:header)
-
-    if file_extension =~ '^[hH]\(pp\|PP\)\?$'
-        let modified_filename = substitute(toupper(file_name), '[^A-Z]', '_', 'g')
-
-        let guard = [
-                    \ '#ifndef ' . modified_filename,
-                    \ '#define ' . modified_filename,
-                    \ '',
-                    \ '',
-                    \ '',
-                    \ '#endif',
-                    \ ]
-        call append(line("$"), guard)
-
-        let pos = getpos("$")
-        let pos[1] -= 2
-        call setpos(".", pos)
-    endif
-endfunction
-
-" augroup FileHeaders
-"     autocmd!
-"     autocmd BufNewFile *.c,*.cpp,*.h,*.hpp call CreateSourceHeader()
-" augroup END
 
 " = Terminal commands ========================
 
@@ -657,11 +524,6 @@ function! ProjectsCompletionList(ArgLead, CmdLine, CursorPos)
         return sort(result, 'i')
     endif
 endfunction
-
-let s:default_project_file = {
-    \ 'header' : g:header,
-    \ 'header_sub_options' : g:header_sub_options
-\ }
 
 function! GoToProjectOrMake(bang, command_line)
     let path_start = 0
