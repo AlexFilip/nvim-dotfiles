@@ -28,7 +28,7 @@ vim.o.backspace   = "indent"      -- allow backspacing only over automatic inden
 vim.o.wildmenu    = true          -- Display a menu of all completions for commands when pressing tab
 
 -- Tab and status line
-vim.o.showtabline = 1
+vim.o.showtabline = 0
 vim.o.laststatus  = 3
 vim.o.winbar      = "%f %m"
 
