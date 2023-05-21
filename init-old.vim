@@ -1,13 +1,4 @@
-
-let s:dot_vim_path = fnamemodify(expand("$MYVIMRC"), ":p:h")
-
 filetype plugin indent on
-" colorscheme custom
-
-" let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-" let g:airline_theme='apprentice'
-let g:airline_theme='pencil'
 
 function! MoveTab(multiplier, count)
     let amount  = a:count ? a:count : 1
@@ -36,7 +27,6 @@ endfunction
 nnoremap <silent> <leader>{ :<C-U>call MoveTab(-1, v:count)<CR>
 nnoremap <silent> <leader>} :<C-U>call MoveTab(+1, v:count)<CR>
 
-
 " Commands for convenience
 command! -bang Q q<bang>
 command! -bang Qa qa<bang>
@@ -57,7 +47,6 @@ let s:comment_leaders = {
 function! s:normRemoveCommentsAndJoinLines()
     if has_key(s:comment_leaders, &filetype)
         let leader = substitute(s:comment_leaders[&filetype], '\/', '\\/', 'g')
-
         let cur_pos = getpos(".")
         let current_line = cur_pos[1]
 
@@ -81,7 +70,6 @@ nmap <silent> J <Plug>JoinLines
 function! RemoveCommentLeadersVisual() range
     if has_key(s:comment_leaders, &filetype)
         let leader = substitute(s:comment_leaders[&filetype], '\/', '\\/', 'g')
-
         if getline(a:firstline) =~ '^\s*' . leader
             let command = join([(a:firstline + 1), ",", a:lastline, 's/^\s*', leader, '\s*//e'], "")
             execute command
@@ -93,17 +81,6 @@ function! RemoveCommentLeadersVisual() range
     silent! call repeat#set("\<Plug>JoinLines", count)
 endfunction
 vnoremap <silent> J :call RemoveCommentLeadersVisual()<CR>
-
-" NOTE: redrawtabline doesn't exist on all vim compiles so I have to check for
-" it. Use this function instead so that the check isn't done every time
-if exists(":redrawtabline")
-    function! RedrawTabLine()
-        redrawtabline
-    endfunction
-else
-    function! RedrawTabLine()
-    endfunction
-endif
 
 " =============================================
 " Style changes
@@ -127,90 +104,6 @@ let g:netrw_keepdir = 1
 
 " Docs: http://vimhelp.appspot.com/eval.txt.html
 set fillchars=stlnc:\|,vert:\|,fold:.,diff:.
-
-" Hours (24-hour clock) followed by minutes
-let s:timeformat = has('win32') ? '%H:%M' : '%k:%M'
-
-" Custom tabs
-function! Tabs() abort
-    " NOTE: getbufinfo() gets all variables of all buffers
-    " Colours
-    let cur_tab_page = tabpagenr()
-    let n_tabs = tabpagenr("$")
-    let max_file_name_length = 30
-
-    " NOTE: Repeat is used to pre-allocate space, make sure that this is the
-    " correct number of characters, otherwise you'll get an error
-
-    let prefixes = []
-    " %= is the separator between left and right side of tabline
-    " %T specifies the end of the last tab
-    let suffixes = ["%T%#TabLineFill#%=%#TabLineSel# ", strftime(s:timeformat), " "]
-
-    let num_prefixes = len(prefixes)
-    let num_suffixes = len(suffixes)
-
-    let strings_per_tab = 7
-    let s = repeat(['EMPTY!!!'], num_prefixes + n_tabs * strings_per_tab + num_suffixes)
-
-    " TODO: Make this a different colour
-    for i in range(num_prefixes)
-        let s[i] = prefixes[i]
-    endfor
-
-    for i in range(num_suffixes)
-        let s[i - num_suffixes] = suffixes[i]
-    endfor
-
-    for i in range(n_tabs)
-        let n = i + 1
-        let bufnum = tabpagebuflist(n)[tabpagewinnr(n) - 1]
-
-        " %<num>T specifies the beginning of a tab
-        let first_index = num_prefixes + i * strings_per_tab
-        let s[first_index + 0] = "%"
-        let s[first_index + 1] = n
-        let s[first_index + 2] = n == cur_tab_page ? "T%#TabLineSel# " : "T%#TabLine# "
-        let s[first_index + 3] = n
-
-        " '-' for non-modifiable buffer, '+' for modified, ':' otherwise
-        let modifiable = getbufvar(bufnum, "&modifiable")
-        let modified   = getbufvar(bufnum, "&modified")
-        let s[first_index + 4] = !modifiable ?  "- " : modified ? "* " : ": "
-
-        let name = bufname(bufnum)
-        let s[first_index + 5] = name == "" ?
-                    \ "[New file]" : 
-                    \ (len(name) >= max_file_name_length ?
-                        \ "<" . name[-max_file_name_length:] :
-                        \ name)
-        let s[first_index + 6] = " "
-    endfor
-
-    return join(s, "")
-endfunction
-
-" Can type unicode codepoints with C-V u <codepoint> (ex. 2002)
-" Maybe put the tabs in the status bar or vice-versa (probably better in the
-" tab bar so that information is not duplicated
-set tabline=%!Tabs()
-
-call timer_stopall()
-function! RedrawTabLineRepeated(timer)
-    " Periodically redraw the tabline so that the current time is correct
-    " echo "Redrawing tab line repeated " . strftime('%H:%M:%S')
-    call RedrawTabLine()
-endfunction
-
-function! RedrawTabLineFirst(timer)
-    " The first redraw of the tab line so that it updates on the minute
-    " echo "Redrawing tab line first " . strftime('%H:%M:%S')
-    call RedrawTabLine()
-    call timer_start(1 * 1000 * 60, 'RedrawTabLineRepeated', {'repeat':-1})
-endfunction
-
-let s:seconds_until_next_minute = 60 - str2nr(strftime('%S'))
-call timer_start(s:seconds_until_next_minute * 1000, 'RedrawTabLineFirst')
 
 function! RemoveColorOutputFn()
     " TODO: Save existing search, replace after performing current search then noh
@@ -256,23 +149,6 @@ hi CustomPurple      guifg=#950087 guibg=NONE ctermfg=90  ctermbg=NONE gui=none 
 function! IsTerm()
     return get(getwininfo(bufwinid(bufnr()))[0], 'terminal', 0)
 endfunction
-
-if has('nvim')
-    if !exists('g:term_statuses')
-        " Don't remove terminal statuses if I'm working on this init file
-        let g:term_statuses = {}
-    endif
-    " augroup NeovimTerm
-    "     autocmd!
-    "     " autocmd TermOpen  * let g:term_statuses[b:terminal_job_id] = 1
-    "     " autocmd TermClose * let g:term_statuses[b:terminal_job_id] = 0
-    " augroup END
-endif
-
-" function! s:TermExit(job_id, data, event) dict
-"     let g:term_statuses[job_id] = 0
-"     echo "Terminal exited"
-" endfunction
 
 function! IsTermAlive()
     if has('nvim') 
@@ -618,13 +494,3 @@ iabbrev <silent> :Date:     <Esc>:let @x = strftime("%X")<CR>"xpa
 iabbrev <silent> :Today:   <Esc>:let @x = strftime("%d %b %Y")<CR>"xpa
 iabbrev <silent> :Time:   <Esc>:let @x = strftime("%d %b %Y")<CR>"xpa
 iabbrev <silent> :Random:  <Esc>:let @x = rand()<CR>"xpa
-
-" Re-source gvimrc when vimrc is reloaded
-let s:gvim_path = join([s:dot_vim_path, 'gvimrc'], g:path_separator)
-if has('gui') && filereadable(s:gvim_path)
-    execute "source " . s:gvim_path
-endif
-
-" if exists('*g:LocalVimRCEnd')
-"     call g:LocalVimRCEnd()
-" endif
