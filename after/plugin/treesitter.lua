@@ -5,12 +5,15 @@ require'nvim-treesitter.configs'.setup {
       "c", "cpp",
       "java", "scala", 
       "lua", "vim", "vimdoc", "query",
-      "python",
+      "python", "r", "julia",
       "org", "bash", "awk",
+      "make", "cmake",
       -- "javascript", "typescript",
       "rust", "go", "swift",
       "html", "css",
-      "hcl" -- terraform
+      "json", "json5",
+      "hcl", -- terraform
+      "markdown",
   },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
