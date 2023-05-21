@@ -69,9 +69,12 @@ vim.o.shortmess       = "filnxtToOIs"
 -- set viminfo+=n~/.local/nviminfo -- Out of sight, out of mind
 vim.o.viminfo = ""
 
-
 vim.o.display = "lastline" -- For writing prose
 vim.o.swapfile = false
+vim.o.hlsearch = false
+vim.o.incsearch = true
+vim.o.colorcolumn = 80
+vim.o.scrolloff = 5
 vim.o.updatetime = 50
 
 return exports

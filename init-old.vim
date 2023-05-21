@@ -75,7 +75,7 @@ function! s:normRemoveCommentsAndJoinLines()
     execute join(["normal! ", (v:count+1), "J"], "")
     silent! call repeat#set("\<Plug>JoinLines", v:count - 1)
 endfunction
-nnoremap <silent> <Plug>JoinLines mz:<C-U>call <SID>normRemoveCommentsAndJoinLines()<CR>`z
+nnoremap <silent> <Plug>JoinLines :<C-U>call <SID>normRemoveCommentsAndJoinLines()<CR>
 nmap <silent> J <Plug>JoinLines
 
 function! RemoveCommentLeadersVisual() range

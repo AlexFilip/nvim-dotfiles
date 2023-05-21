@@ -14,16 +14,20 @@ vim.keymap.set("n", "<leader>c", "\"_c")
 vim.keymap.set("n", "<leader>x", "\"_x")
 
 vim.keymap.set("n", "<leader>p", "\"+p")
-vim.keymap.set("n", "<leader>y", "\"+y")
 
-vim.keymap.set("v", "<leader>p", "\"_p")
+vim.keymap.set("n", "<leader>y", "\"+y")
+vim.keymap.set("v", "<leader>y", "\"+y")
+vim.keymap.set("n", "<leader>Y", "\"+y$")
+
+vim.keymap.set("v", "<leader>d", "\"_d")
+vim.keymap.set("v", "<leader>p", "\"_dP")
 
 vim.keymap.set("n", "<leader>n", function()
     vim.o.relativenumber = not vim.o.relativenumber
     vim.o.number = not vim.o.number
 end)
 
-vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left>")
+vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>")
 vim.keymap.set("n", "<leader>di", function()
     if vim.o.diff then
         vim.cmd.diffoff()
