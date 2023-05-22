@@ -110,10 +110,10 @@ end)
 
 local Recording = M:makeGroup("Recording")
 Recording:autoCmd("RecordingEnter", "*", function()
-    vim.o.cmdheight = 1
+    -- vim.o.cmdheight = 1
 end)
 Recording:autoCmd("RecordingLeave", "*", function()
-    vim.o.cmdheight = 0
+    -- vim.o.cmdheight = 0
 end)
 
 return M
