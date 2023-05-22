@@ -90,11 +90,6 @@ let &t_SI.="\e[6 q" " Insert mode
 let &t_SR.="\e[4 q" " Replace mode
 let &t_EI.="\e[2 q" " Normal mode
 
-" Directory tree listing options
-let g:netrw_liststyle = 0
-let g:netrw_banner = 0
-let g:netrw_keepdir = 1
-
 " Docs: http://vimhelp.appspot.com/eval.txt.html
 set fillchars=stlnc:\|,vert:\|,fold:.,diff:.
 

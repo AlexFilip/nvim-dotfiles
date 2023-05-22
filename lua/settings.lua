@@ -69,4 +69,11 @@ vim.o.colorcolumn = 80
 vim.o.scrolloff   = 5
 vim.o.updatetime  = 50
 
+vim.g.netrw_liststyle = 0
+vim.g.netrw_banner    = 0
+vim.g.netrw_keepdir   = 1
+
+" Docs: http://vimhelp.appspot.com/eval.txt.html
+set fillchars=stlnc:\|,vert:\|,fold:.,diff:.
+
 return exports
