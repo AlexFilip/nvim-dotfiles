@@ -1,5 +1,5 @@
 
-vim.o.cmdheight = 0
+-- vim.o.cmdheight = 0
 
 require('fine-cmdline').setup({
   cmdline = {
