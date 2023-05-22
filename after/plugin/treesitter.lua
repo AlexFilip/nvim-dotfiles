@@ -13,7 +13,7 @@ require'nvim-treesitter.configs'.setup {
       "html", "css",
       "json", "json5",
       "hcl", -- terraform
-      "markdown",
+      "markdown", "comment",
   },
 
   -- Install parsers synchronously (only applied to `ensure_installed`)
