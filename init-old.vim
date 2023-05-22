@@ -78,26 +78,6 @@ vnoremap <silent> J :call RemoveCommentLeadersVisual()<CR>
 " =============================================
 " Style changes
 
-" Change cursor shape in different mode (macOS default terminal)
-" For all cursor shapes visit
-" http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes
-"                 Blink   Static
-"         block ¦   1   ¦   2   ¦
-"     underline ¦   3   ¦   4   ¦
-" vertical line ¦   5   ¦   6   ¦
-
-let &t_SI.="\e[6 q" " Insert mode
-let &t_SR.="\e[4 q" " Replace mode
-let &t_EI.="\e[2 q" " Normal mode
-
-" Docs: http://vimhelp.appspot.com/eval.txt.html
-set fillchars=stlnc:\|,vert:\|,fold:.,diff:.
-
-function! RemoveColorOutputFn()
-    " TODO: Save existing search, replace after performing current search then noh
-    %s/[[0-9;]*[mK]//g
-endfunction
-
 " = Terminal commands ========================
 
 " Search for a script named "build.bat" or "compile" moving up from the current path and run it.

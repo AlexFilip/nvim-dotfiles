@@ -37,8 +37,8 @@ vim.keymap.set("n", "<leader>di", function()
 end)
 
 -- Use a nicer commandline
-vim.api.nvim_set_keymap("n", ":", "<cmd>FineCmdline<CR>", {noremap = true})
-vim.api.nvim_set_keymap("n", "<leader>:", ":", {noremap = true})
+-- vim.api.nvim_set_keymap("n", ":", "<cmd>FineCmdline<CR>", {noremap = true})
+-- vim.api.nvim_set_keymap("n", "<leader>:", ":", {noremap = true})
 
 -- vim.keymap.set("n", "ght", function () vim.cmd "vertical terminal" end)
 -- vim.keymap.set("n", "gct", function () vim.cmd "tabnew | terminal" end)

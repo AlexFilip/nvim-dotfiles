@@ -73,7 +73,24 @@ vim.g.netrw_liststyle = 0
 vim.g.netrw_banner    = 0
 vim.g.netrw_keepdir   = 1
 
-" Docs: http://vimhelp.appspot.com/eval.txt.html
-set fillchars=stlnc:\|,vert:\|,fold:.,diff:.
+-- Docs: http://vimhelp.appspot.com/eval.txt.html
+vim.o.fillchars="stlnc:|,vert:|,fold:.,diff:."
+
+local function appendOption(opt, newOpt)
+    local currentVal = vim.api.nvim_get_option_value(opt, {}) or ""
+    vim.api.nvim_set_option_value(opt, currentVal .. [[ \e[6 q ]], {})
+end
+
+-- Change cursor shape in different mode (macOS default terminal)
+-- For all cursor shapes visit
+-- http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes
+--                 Blink   Static
+--         block ¦   1   ¦   2   ¦
+--     underline ¦   3   ¦   4   ¦
+-- vertical line ¦   5   ¦   6   ¦
+
+appendOption('t_SI', [[ \e[6 q ]])
+appendOption('t_SR', [[ \e[4 q ]])
+appendOption('t_EI', [[ \e[2 q ]])
 
 return exports

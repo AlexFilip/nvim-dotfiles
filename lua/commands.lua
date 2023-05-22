@@ -23,3 +23,8 @@ end)
 createCommand("W", { bang = true, nargs = "?", complete = "file" }, function(tbl)
     vim.cmd { cmd = "w", bang = tbl.bang, args = tbl.args }
 end)
+
+createCommand("RmColor", {}, function(tbl)
+    -- TODO: Save existing search, replace after performing current search then noh
+    vim.cmd [[ %s/[[0-9;]*[mK]//g ]]
+end)
