@@ -53,19 +53,30 @@ return require("packer").startup(function(use) -- Packer can manage itself
         branch = 'v2.x',
         requires = {
             -- LSP Support
-            {'neovim/nvim-lspconfig'},             -- Required
-            {                                      -- Optional
-            'williamboman/mason.nvim',
-            run = function()
-                pcall(vim.cmd, 'MasonUpdate')
-            end,
-        },
-        {'williamboman/mason-lspconfig.nvim'}, -- Optional
+            -- Required
+            {'neovim/nvim-lspconfig'},
+            -- Optional
+            {
+                'williamboman/mason.nvim',
+                run = function()
+                    pcall(vim.cmd, 'MasonUpdate')
+                end,
+            },
+            {'williamboman/mason-lspconfig.nvim'}, -- Optional
 
-        -- Autocompletion
-        {'hrsh7th/nvim-cmp'},     -- Required
-        {'hrsh7th/cmp-nvim-lsp'}, -- Required
-        {'L3MON4D3/LuaSnip'},     -- Required
+            -- Autocompletion
+            {'hrsh7th/nvim-cmp'},     -- Required
+            {'hrsh7th/cmp-nvim-lsp'}, -- Required
+            {'L3MON4D3/LuaSnip'},     -- Required
+        }
+
     }
-}
+
+    -- use("mfussenegger/nvim-dap")
+    -- -- use("leoluz/nvim-dap-go")
+    -- use("rcarriga/nvim-dap-ui")
+    -- use("theHamsta/nvim-dap-virtual-text")
+    -- use("nvim-telescope/telescope-dap.nvim")
+
+    -- use("")
 end)
