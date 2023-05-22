@@ -27,13 +27,6 @@ endfunction
 nnoremap <silent> <leader>{ :<C-U>call MoveTab(-1, v:count)<CR>
 nnoremap <silent> <leader>} :<C-U>call MoveTab(+1, v:count)<CR>
 
-" Commands for convenience
-command! -bang Q q<bang>
-command! -bang Qa qa<bang>
-command! -bang QA qa<bang>
-command! -bang -nargs=? -complete=file W w<bang> <args>
-command! -bang -nargs=? -complete=file E e<bang> <args>
-
 let s:comment_leaders = {
     \ 'c' : '//',
     \ 'cpp' : '//',
