@@ -14,6 +14,7 @@ vim.keymap.set("n", "<leader>c", "\"_c")
 vim.keymap.set("n", "<leader>x", "\"_x")
 
 vim.keymap.set("n", "<leader>p", "\"+p")
+vim.keymap.set("n", "<leader>P", "\"+P")
 
 vim.keymap.set("n", "<leader>y", "\"+y")
 vim.keymap.set("v", "<leader>y", "\"+y")
