@@ -18,13 +18,6 @@ return require("packer").startup(function(use) -- Packer can manage itself
     --use("SirVer/ultisnips")
     use("mbbill/undotree")
 
-    use ({
-        "VonHeikemen/fine-cmdline.nvim",
-        requires = {
-            { "MunifTanjim/nui.nvim" }
-        }
-    })
-
     use({
         'nvim-telescope/telescope.nvim', branch = '0.1.x',
         requires = { {'nvim-lua/plenary.nvim'} }
@@ -48,7 +41,7 @@ return require("packer").startup(function(use) -- Packer can manage itself
     use("sainnhe/edge")
     use("folke/tokyonight.nvim")
     use("preservim/vim-colors-pencil")
-    use {
+    use({
         'VonHeikemen/lsp-zero.nvim',
         branch = 'v2.x',
         requires = {
@@ -70,7 +63,7 @@ return require("packer").startup(function(use) -- Packer can manage itself
             {'L3MON4D3/LuaSnip'},     -- Required
         }
 
-    }
+    })
 
     -- use("mfussenegger/nvim-dap")
     -- -- use("leoluz/nvim-dap-go")
@@ -78,5 +71,4 @@ return require("packer").startup(function(use) -- Packer can manage itself
     -- use("theHamsta/nvim-dap-virtual-text")
     -- use("nvim-telescope/telescope-dap.nvim")
 
-    -- use("")
 end)

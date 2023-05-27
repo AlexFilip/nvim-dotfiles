@@ -87,13 +87,8 @@ function! IsTerm()
 endfunction
 
 function! IsTermAlive()
-    if has('nvim') 
-        let name = getbufvar("%", "terminal_job_id")
-        return get(g:term_statuses, name, 0)
-    else
-        let job = term_getjob(bufnr())
-        return job != v:null && job_status(job) != "dead"
-    endif
+    let name = getbufvar("%", "terminal_job_id")
+    return 0
 endfunction
 
 function! SwitchToOtherPaneOrCreate()
@@ -102,21 +97,11 @@ function! SwitchToOtherPaneOrCreate()
 
     if layout[0] == 'leaf'
         " Create new vertical pane and go to left one
-        let is_window_vertical = str2float(&lines) * 2 > str2float(&columns)
-        if has('nvim')
-            if (is_window_vertical)
-                new
-            else
-                vnew
-            endif
+        let is_window_vertical = str2float(&lines) * 1.5 > str2float(&columns)
+        if (is_window_vertical)
+            new
         else
-            if (is_window_vertical) 
-                wincmd s
-                wincmd j
-            else
-                wincmd v
-                wincmd l
-            endif
+            vnew
         endif
     elseif layout[0] == 'row'
         " Buffers layed out side by side
@@ -194,25 +179,12 @@ function! DoCommandsInTerm(shell, commands, parent_dir, message)
         let all_commands .= ' && echo ' . a:message
     endif
 
-    if has('nvim')
-        if IsTermAlive()
-            call chansend(b:terminal_job_id, all_commands . "\n")
-        else
-            let cmd = join(["terminal ", a:shell, "-c", '"' . all_commands . '"'], " ")
-            execute cmd
-            " call termopen(['zsh', '-c', all_commands]) ", { 'on_exit': 's:TermExit' })
-        endif
+    if IsTermAlive()
+        call chansend(b:terminal_job_id, all_commands . "\n")
     else
-        if IsTermAlive()
-            if get(job_info(term_getjob(bufnr())), 'cmd', [''])[0] =~ 'zsh'
-                let all_commands = join(["\<Esc>cc", all_commands, "\r\n"], "")
-            endif
-
-            call term_sendkeys(bufnr(), all_commands)
-        else
-            let cmd = join(["terminal", a:shell, all_commands], " ")
-            execute cmd
-        endif
+        let cmd = join(["terminal ", a:shell, "-c", '"' . all_commands . '"'], " ")
+        execute cmd
+        " call termopen(['zsh', '-c', all_commands]) ", { 'on_exit': 's:TermExit' })
     endif
 endfunction
 
