@@ -45,6 +45,10 @@ WrapLines:autoCmd("FileType", { "txt", "markdown", "md", "notes", "org", "tex", 
     vim.api.nvim_set_option_value('wrap', true, { buf = bufnr })
     vim.api.nvim_set_option_value('linebreak', true, { buf = bufnr })
     vim.api.nvim_set_option_value('list', false, { buf = bufnr })
+
+    vim.keymap.set("n", "j", "gj", { buffer = bufnr })
+    vim.keymap.set("n", "k", "gk", { buffer = bufnr })
+
 end)
 
 local Python = exports:makeGroup("Python")
