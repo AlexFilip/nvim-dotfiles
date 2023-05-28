@@ -68,18 +68,6 @@ vim.env.PINENTRY_USER_DATA="qt"
 vim.env.GPG_TTY=''
 vim.g.GPGDefaultRecipients = {}
 
--- To activate python bindings, create one or both of these 2 environments and
--- run pip install neovim from within them.
--- TODO: Create python virtual environments for ultisnips
--- vim.g.python_host_prog  = ''
--- vim.g.python3_host_prog = dot_vim_path .. "/python3-env/bin/python"
-
-vim.g.UltiSnipsExpandTrigger = "<c-b>"
--- let g:UltiSnipsListSnippets = "<c-tab>"
-vim.g.UltiSnipsJumpForwardTrigger = "<tab>"
-vim.g.UltiSnipsJumpBackwardTrigger = "<c-tab>"
-vim.g.UltiSnipsSnippetDirectories = { dot_vim_path .. "/UltiSnips" }
-
 local local_vimrc_path = table.concat({ settings.homeDirectory, '.local', 'neovimrc.lua' }, path_separator)
 local user_vimrc = loadfile(local_vimrc_path) or function() return {} end
 user_vimrc = user_vimrc() or {}

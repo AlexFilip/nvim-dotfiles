@@ -15,7 +15,6 @@ return require("packer").startup(function(use) -- Packer can manage itself
       'nvim-lualine/lualine.nvim',
       requires = { 'nvim-tree/nvim-web-devicons', opt = true }
     }
-    --use("SirVer/ultisnips")
     use("mbbill/undotree")
 
     use({
@@ -41,29 +40,34 @@ return require("packer").startup(function(use) -- Packer can manage itself
     use("sainnhe/edge")
     use("folke/tokyonight.nvim")
     use("preservim/vim-colors-pencil")
+
     use({
-        'VonHeikemen/lsp-zero.nvim',
-        branch = 'v2.x',
+        "VonHeikemen/lsp-zero.nvim",
+        branch = "v2.x",
         requires = {
             -- LSP Support
             -- Required
-            {'neovim/nvim-lspconfig'},
+            {"neovim/nvim-lspconfig"},
             -- Optional
             {
-                'williamboman/mason.nvim',
+                "williamboman/mason.nvim",
                 run = function()
-                    pcall(vim.cmd, 'MasonUpdate')
+                    pcall(vim.cmd, "MasonUpdate")
                 end,
             },
-            {'williamboman/mason-lspconfig.nvim'}, -- Optional
+            {"williamboman/mason-lspconfig.nvim"}, -- Optional
 
             -- Autocompletion
-            {'hrsh7th/nvim-cmp'},     -- Required
-            {'hrsh7th/cmp-nvim-lsp'}, -- Required
-            {'L3MON4D3/LuaSnip'},     -- Required
+            {"hrsh7th/nvim-cmp"},     -- Required
+            {"hrsh7th/cmp-nvim-lsp"}, -- Required
+            {"L3MON4D3/LuaSnip"},     -- Required
         }
 
     })
+
+    -- TODO:
+    --  Add luasnip
+    --  Get debuggers working
 
     -- use("mfussenegger/nvim-dap")
     -- -- use("leoluz/nvim-dap-go")
