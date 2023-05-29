@@ -58,6 +58,7 @@ vim.o.expandtab   = true
 vim.o.cindent     = true
 vim.o.cinoptions  = "l1,=4,:4,(0,{0,+2,w1,W4,t0,j1,J1"
 vim.o.shortmess   = "filnxtToOIs"
+vim.o.cinkeys     = vim.o.cinkeys:gsub(",0#", "")
 
 -- set viminfo+=n~/.local/nviminfo -- Out of sight, out of mind
 vim.o.viminfo     = ""
