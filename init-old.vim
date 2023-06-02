@@ -1,32 +1,5 @@
 filetype plugin indent on
 
-function! MoveTab(multiplier, count)
-    let amount  = a:count ? a:count : 1
-    let cur_tab = tabpagenr()
-    let n_tabs  = tabpagenr("$")
-    let new_place = cur_tab + a:multiplier * amount
-
-    if new_place <= 0
-        let amount = cur_tab - 1
-    elseif new_place > n_tabs
-        let amount = n_tabs - cur_tab
-    endif
-
-    if amount != 0
-        let cmd = ['tabmove ', '', a:multiplier * amount]
-
-        if a:multiplier > 0
-            let cmd[1] = '+'
-        endif
-
-        let cmd = join(cmd, "")
-        execute cmd
-    endif
-endfunction
-
-nnoremap <silent> <leader>{ :<C-U>call MoveTab(-1, v:count)<CR>
-nnoremap <silent> <leader>} :<C-U>call MoveTab(+1, v:count)<CR>
-
 let s:comment_leaders = {
     \ 'c' : '//',
     \ 'cpp' : '//',
