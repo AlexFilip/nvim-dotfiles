@@ -8,6 +8,8 @@ require('plugins')
 require('colorscheme')
 require('commands')
 
+vim.cmd [[ filetype plugin indent on ]]
+
 local PATH_separator = ""
 local function AddToPath(...)
     local arg = {...}
