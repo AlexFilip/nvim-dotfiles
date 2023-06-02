@@ -9,7 +9,9 @@ require'nvim-treesitter.configs'.setup {
       "org", "bash", "awk",
       "make", "cmake",
       "javascript", "typescript",
-      "rust", "go", "swift",
+      -- "rust",
+      -- "swift",
+      "go",
       "html", "css",
       "json", "json5",
       "hcl", -- terraform
@@ -24,7 +26,7 @@ require'nvim-treesitter.configs'.setup {
   auto_install = true,
 
   highlight = {
-    enable = true,
+    enable = false,
 
     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
