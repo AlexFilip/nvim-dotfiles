@@ -64,7 +64,6 @@ local path_separator = '/'
 if vim.fn.has('win32') ~= 0 then
     path_separator = '\\'
 end
-vim.g.path_separator = path_separator -- temporary
 
 vim.env.PINENTRY_USER_DATA="qt"
 vim.env.GPG_TTY=''
