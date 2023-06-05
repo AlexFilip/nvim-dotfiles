@@ -27,34 +27,42 @@ createCommand("RmColor", {}, function(tbl)
 end)
 
 
+--[[
+    Usage:
+        1. cd to directory you want to use
+            :cd directory
+        2. Read add files from current directory
+            :r !ls
+        3. Edit file list. Do NOT:
+            - Reorder names
+            - Remove names
+        4. Call the RenameFiles command
+            :RenameFiles
+        5. Run commands from buffer in your favorite shell
+            :w !zsh
+]]
 createCommand("RenameFiles", {}, function()
-    -- local lines = filter(getline(1, '$'), {idx, val -> len(val) > 0})
-    -- local file_list = split(system("ls"), '\n')
+    local lines = vim.fn.filter(vim.fn.getline(1, '$'), function(index, value)
+        return value:len() > 0
+    end)
 
-    -- if len(lines) != len(file_list) then
-    --     echoerr join(["Number of lines in buffer (", len(lines),
-    --                 \ ") does not match number of files in current directory (", \ len(file_list),
-    --                 \ ")"], "")
-    --     return
-    -- end
+    local file_list = vim.fn.split(vim.fn.system("ls"), '\n')
 
-    -- local commands = repeat([''], len(file_list))
-    -- for index in range(len(file_list)) do
-    --     -- TODO: replace characters that need escaping with \char
-    --     commands[index] = join(["mv \"", file_list[index], "\" \"", lines[index], "\""], "")
-    -- end
+    if #lines ~= #file_list then
+        vim.cmd("echoerr " .. vim.fn.join({
+            "\"",
+            "Number of lines in buffer (", #lines,
+            ") does not match number of files in current directory (", #file_list,
+            ")",
+            "\""
+        }, ""))
+        return
+    end
 
-    -- vim.cmd.normal "gg\"_dG"
+    vim.fn.deletebufline(vim.fn.bufnr(), 1, "$")
 
-    -- Write value of `commands` to the buffer
-    --   `put` writes value of register to file
-    --   =<expr> treats an expression as a register
-    -- vim.cmd.put "=commands"
-
-    -- I would still have to make sure that all of the appropriate characters
-    -- in the filename, like quotes, are escaped.
-    --
-    -- Start by running :r !ls
-    -- Change names within the document
-    -- Run :w !zsh after this (use your shell of choice. Can get this with &shell)
+    local commands = vim.fn.map(vim.fn.range(#file_list), function(index, value)
+        return vim.fn.join({ "mv \"", file_list[index + 1], "\" \"", lines[index + 1], "\"" }, "")
+    end)
+    vim.fn.append(0, commands)
 end)
