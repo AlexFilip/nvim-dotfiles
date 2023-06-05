@@ -67,13 +67,12 @@ Terraform:autoCmd("BufWritePost",  "*.tf", function()
 end)
 
 local EncryptedFile  = exports:makeGroup("EncryptedFile")
-EncryptedFile:autoCmd({ "BufNewFile", "BufRead" }, "*.gpg", function() 
-    -- local filename = vim.fn.expand("%")
-    -- filename = string.sub(filename, 1, #filename - #".gpg")
-    -- vim.o.filetype = vim.filetype.match { filename = filename }
-end)
 EncryptedFile:autoCmd("User", "GnuPG", function() 
     vim.o.undofile = false
+
+    local filename = vim.fn.expand("%")
+    filename = string.sub(filename, 1, #filename - #".gpg")
+    vim.o.filetype = vim.filetype.match { filename = filename }
 end)
 
 local JSONComments = exports:makeGroup("JSONComments")

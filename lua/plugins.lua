@@ -4,8 +4,8 @@
 vim.cmd [[packadd packer.nvim]]
 vim.cmd [[packadd termdebug]]
 
-return require("packer").startup(function(use) -- Packer can manage itself
-    use("wbthomason/packer.nvim")
+return require("packer").startup(function(use)
+    use("wbthomason/packer.nvim") -- Packer can manage itself
 
     use("tpope/vim-surround")
     use("tpope/vim-repeat")
@@ -15,6 +15,8 @@ return require("packer").startup(function(use) -- Packer can manage itself
       'nvim-lualine/lualine.nvim',
       requires = { 'nvim-tree/nvim-web-devicons', opt = true }
     }
+
+    use("junegunn/goyo.vim")
     use("mbbill/undotree")
 
     use({
