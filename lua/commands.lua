@@ -50,20 +50,21 @@ createCommand("RenameFiles", {}, function()
     local file_list = vim.fn.split(vim.fn.system("ls"), '\n')
 
     if #lines ~= #file_list then
-        vim.cmd("echoerr " .. vim.fn.join({
-            "\"",
-            "Number of lines in buffer (", #lines,
-            ") does not match number of files in current directory (", #file_list,
-            ")",
-            "\""
-        }, ""))
+        vim.cmd(
+            "echoerr \"Number of lines in buffer (" .. #lines ..
+            ") does not match number of files in current directory (" .. #file_list .. ")\"")
         return
     end
 
     vim.fn.deletebufline(vim.fn.bufnr(), 1, "$")
 
     local commands = vim.fn.map(vim.fn.range(#file_list), function(index, value)
-        return vim.fn.join({ "mv \"", file_list[index + 1], "\" \"", lines[index + 1], "\"" }, "")
+        -- NOTE: Not an exhaustive list of characters that need to be escaped in bash
+        local sub_pattern = "([\"\'\\$!`&])"
+        local replacement = "\\%1"
+        local old_file_name = file_list[index + 1]:gsub(sub_pattern, replacement)
+        local new_file_name = lines[index + 1]:gsub(sub_pattern, replacement)
+        return "mv \"" .. old_file_name .. "\" \"" .. new_file_name .. "\""
     end)
     vim.fn.append(0, commands)
 end)
