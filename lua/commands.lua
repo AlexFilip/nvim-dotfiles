@@ -6,7 +6,7 @@ local function createCommand(customCommand, opts, handler)
     end, opts)
 end
 
-function QWE_fn(str)
+local function QWE_fn(str)
     return function(tbl)
         vim.cmd { cmd = str, bang = tbl.bang, args = tbl.args }
     end
@@ -22,8 +22,9 @@ createCommand("Wq", { bang = true, nargs = "?", complete = "file" }, QWE_fn("wq"
 createCommand("WQ", { bang = true, nargs = "?", complete = "file" }, QWE_fn("wq"))
 
 createCommand("RmColor", {}, function(tbl)
-    -- TODO: Save existing search, replace after performing current search then noh
+    local lastSearch = vim.fn.getreg("/", 1)
     vim.cmd [[ %s/[[0-9;]*[mK]//g ]]
+    vim.fn.setreg("/", lastSearch)
 end)
 
 
