@@ -1,3 +1,11 @@
+vim.cmd.colorscheme(
+    --[[
+    "tokyonight"
+    "rose-pine"
+    "catppuccin"
+    "pencil"
+    ]]
+    "edge"
+)
 
--- TODO: Move custom colors here
-vim.cmd.colorscheme('custom')
+
