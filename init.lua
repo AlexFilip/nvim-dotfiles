@@ -5,7 +5,6 @@ require('groups')
 require('git')
 require('tabs')
 require('plugins')
-require('colorscheme')
 require('commands')
 
 vim.cmd [[ filetype plugin indent on ]]
