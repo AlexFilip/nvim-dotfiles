@@ -5,8 +5,10 @@ vim.cmd [[packadd packer.nvim]]
 vim.cmd [[packadd termdebug]]
 
 return require("packer").startup(function(use)
-    use("wbthomason/packer.nvim") -- Packer can manage itself
+    -- Let Packer manage itself
+    use("wbthomason/packer.nvim")
 
+    -- Theming
     use("tpope/vim-surround")
     use("tpope/vim-repeat")
     -- use("vim-airline/vim-airline")
@@ -32,7 +34,7 @@ return require("packer").startup(function(use)
     -- Git support
     use("tpope/vim-fugitive")
 
-    -- GnuPG support (buggy, doesn't work with GPG_TTY, have to use qt)
+    -- GnuPG support (buggy, doesn't work with GPG_TTY, have to use qt, gnome or gtk)
     use("jamessan/vim-gnupg")
 
     -- Themes
@@ -43,6 +45,7 @@ return require("packer").startup(function(use)
     use("folke/tokyonight.nvim")
     use("preservim/vim-colors-pencil")
 
+    -- Language Server
     use({
         "VonHeikemen/lsp-zero.nvim",
         branch = "v2.x",
@@ -50,6 +53,7 @@ return require("packer").startup(function(use)
             -- LSP Support
             -- Required
             {"neovim/nvim-lspconfig"},
+
             -- Optional
             {
                 "williamboman/mason.nvim",
@@ -67,8 +71,16 @@ return require("packer").startup(function(use)
 
     })
 
+    -- Snippets
+    use({
+        "L3MON4D3/LuaSnip",
+        -- follow latest release.
+        tag = "v1.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+        -- install jsregexp (optional!:).
+        run = "make install_jsregexp"
+    })
+
     -- TODO:
-    --  Add luasnip
     --  Get debuggers working
 
     -- use("mfussenegger/nvim-dap")
