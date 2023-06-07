@@ -41,6 +41,7 @@ return require("packer").startup(function(use)
     use("rose-pine/neovim")
     use("morhetz/gruvbox")
     use("catppuccin/nvim")
+
     use("sainnhe/edge")
     use("folke/tokyonight.nvim")
     use("preservim/vim-colors-pencil")
