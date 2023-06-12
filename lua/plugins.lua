@@ -14,8 +14,8 @@ return require("packer").startup(function(use)
     -- use("vim-airline/vim-airline")
     -- use("vim-airline/vim-airline-themes")
     use {
-      'nvim-lualine/lualine.nvim',
-      requires = { 'nvim-tree/nvim-web-devicons', opt = true }
+        'nvim-lualine/lualine.nvim',
+        requires = { 'nvim-tree/nvim-web-devicons', opt = true }
     }
 
     use("junegunn/goyo.vim")
@@ -74,11 +74,35 @@ return require("packer").startup(function(use)
 
     -- Snippets
     use({
+        "hrsh7th/nvim-cmp",
+        config = function ()
+            require("cmp").setup {
+                snippet = {
+                    expand = function(args)
+                        require("luasnip").lsp_expand(args.body)
+                    end
+                },
+
+                sources = {
+                    { name = "luasnip" },
+                    -- more sources
+                },
+            }
+        end
+    })
+    use("saadparwaiz1/cmp_luasnip")
+    use({
         "L3MON4D3/LuaSnip",
         -- follow latest release.
         tag = "v1.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
         -- install jsregexp (optional!:).
-        run = "make install_jsregexp"
+        run = "make install_jsregexp",
+        requires = { "rafamadriz/friendly-snippets" },
+    })
+    use("rafamadriz/friendly-snippets")
+    use({
+        "benfowler/telescope-luasnip.nvim",
+        module = "telescope._extensions.luasnip",  -- if you wish to lazy-load
     })
 
     -- TODO:
