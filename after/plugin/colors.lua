@@ -1,16 +1,4 @@
 
-local function SetTransparentBackground(color)
-    color = color or "catppuccin"
-    vim.cmd.colorscheme(color)
-
-    vim.api.nvim_set_hl(0, "Normal",       { ctermbg = "none", bg = "none" })
-    vim.api.nvim_set_hl(0, "NormalFloat",  { ctermbg = "none", bg = "none" })
-    vim.api.nvim_set_hl(0, "CursorLineNR", { ctermbg = "none", bg = "none" })
-    vim.api.nvim_set_hl(0, "CursorLine",   { ctermbg = "none", bg = "none" })
-    vim.api.nvim_set_hl(0, "NonText",      { ctermbg = "none", bg = "none", fg = "none" })
-    vim.api.nvim_set_hl(0, "EndOfBuffer",  { ctermbg = "none", bg = "none" })
-end
-
 require("catppuccin").setup({
     flavour = "mocha", -- latte, frappe, macchiato, mocha
     background = { -- :h background
@@ -54,6 +42,19 @@ require("catppuccin").setup({
         -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
     },
 })
+
+local function SetTransparentBackground(color)
+    color = color or "catppuccin"
+    vim.cmd.colorscheme(color)
+
+    vim.api.nvim_set_hl(0, "Normal",       { ctermbg = "none", bg = "none" })
+    vim.api.nvim_set_hl(0, "NormalNC",     { ctermbg = "none", bg = "none" })
+    vim.api.nvim_set_hl(0, "NormalFloat",  { ctermbg = "none", bg = "none" })
+    vim.api.nvim_set_hl(0, "CursorLineNR", { ctermbg = "none", bg = "none" })
+    vim.api.nvim_set_hl(0, "CursorLine",   { ctermbg = "none", bg = "none" })
+    vim.api.nvim_set_hl(0, "NonText",      { ctermbg = "none", bg = "none", fg = "none" })
+    vim.api.nvim_set_hl(0, "EndOfBuffer",  { ctermbg = "none", bg = "none" })
+end
 
 SetTransparentBackground("catppuccin")
 
