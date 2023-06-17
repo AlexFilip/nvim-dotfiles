@@ -37,13 +37,6 @@ vim.keymap.set("n", "<leader>di", function()
     end
 end)
 
--- Use a nicer commandline
--- vim.api.nvim_set_keymap("n", ":", "<cmd>FineCmdline<CR>", {noremap = true})
--- vim.api.nvim_set_keymap("n", "<leader>:", ":", {noremap = true})
-
--- vim.keymap.set("n", "ght", function () vim.cmd "vertical terminal" end)
--- vim.keymap.set("n", "gct", function () vim.cmd "tabnew | terminal" end)
-
 vim.keymap.set("t", "<C-w>",  "<C-\\><C-n><C-w>")
 vim.keymap.set("t", "<C-w>[", "<C-\\><C-n>")
 vim.keymap.set("t", "<C-w><C-[>", "<C-\\><C-n>")
@@ -92,12 +85,6 @@ vim.keymap.set("n", "<leader>ex", function()
     vim.fn.system(command)
 end)
 
--- I don't know if I really want this...Like, I don't know if it inspires joy, ya-know, man??
--- vim.keymap.set("n", "v", "<C-V>")
--- vim.keymap.set("v", "v", "<C-V>")
--- vim.keymap.set("n", "<C-v>", "v")
--- vim.keymap.set("v", "<C-v>", "v")
-
 function GotoBeginningOfLine()
     local command = "0"
     if vim.fn.indent(".") + 1 ~= vim.fn.col(".") then
@@ -117,16 +104,4 @@ vim.keymap.set("v", "-", "$")
 vim.keymap.set("o", "0", GotoBeginningOfLine)
 vim.keymap.set("o", "^", GotoBeginningOfLine)
 vim.keymap.set("o", "-", "$")
-
--- Numbers because why not (Can't do C-# because each of those maps to a different key by the terminal. Ex. C-3 is Esc for some reason)
-vim.keymap.set("n", "<M-1>",  function() end);
-vim.keymap.set("n", "<M-2>",  function() end);
-vim.keymap.set("n", "<M-3>",  function() end);
-vim.keymap.set("n", "<M-4>",  function() end);
-vim.keymap.set("n", "<M-5>",  function() end);
-vim.keymap.set("n", "<M-6>",  function() end);
-vim.keymap.set("n", "<M-7>",  function() end);
-vim.keymap.set("n", "<M-8>",  function() end);
-vim.keymap.set("n", "<M-9>",  function() end);
-vim.keymap.set("n", "<M-10>", function() end);
 
