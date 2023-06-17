@@ -117,3 +117,16 @@ vim.keymap.set("v", "-", "$")
 vim.keymap.set("o", "0", GotoBeginningOfLine)
 vim.keymap.set("o", "^", GotoBeginningOfLine)
 vim.keymap.set("o", "-", "$")
+
+-- Numbers because why not (Can't do C-# because each of those maps to a different key by the terminal. Ex. C-3 is Esc for some reason)
+vim.keymap.set("n", "<M-1>",  function() end);
+vim.keymap.set("n", "<M-2>",  function() end);
+vim.keymap.set("n", "<M-3>",  function() end);
+vim.keymap.set("n", "<M-4>",  function() end);
+vim.keymap.set("n", "<M-5>",  function() end);
+vim.keymap.set("n", "<M-6>",  function() end);
+vim.keymap.set("n", "<M-7>",  function() end);
+vim.keymap.set("n", "<M-8>",  function() end);
+vim.keymap.set("n", "<M-9>",  function() end);
+vim.keymap.set("n", "<M-10>", function() end);
+
