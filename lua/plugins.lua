@@ -8,18 +8,22 @@ return require("packer").startup(function(use)
     -- Let Packer manage itself
     use("wbthomason/packer.nvim")
 
-    -- Theming
+    -- Useful plugins
     use("tpope/vim-surround")
     use("tpope/vim-repeat")
-    -- use("vim-airline/vim-airline")
-    -- use("vim-airline/vim-airline-themes")
+    use("mbbill/undotree")
+
+    -- Theming
     use {
         'nvim-lualine/lualine.nvim',
         requires = { 'nvim-tree/nvim-web-devicons', opt = true }
     }
+    use("morhetz/gruvbox")
+    use("catppuccin/nvim")
+    use("sainnhe/edge")
+    use("folke/tokyonight.nvim")
+    use("preservim/vim-colors-pencil")
 
-    use("junegunn/goyo.vim")
-    use("mbbill/undotree")
 
     use({
         'nvim-telescope/telescope.nvim', branch = '0.1.x',
@@ -36,15 +40,6 @@ return require("packer").startup(function(use)
 
     -- GnuPG support (buggy, doesn't work with GPG_TTY, have to use qt, gnome or gtk)
     use("jamessan/vim-gnupg")
-
-    -- Themes
-    use("rose-pine/neovim")
-    use("morhetz/gruvbox")
-    use("catppuccin/nvim")
-
-    use("sainnhe/edge")
-    use("folke/tokyonight.nvim")
-    use("preservim/vim-colors-pencil")
 
     -- Language Server
     use({
