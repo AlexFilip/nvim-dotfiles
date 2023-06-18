@@ -44,13 +44,15 @@ vim.keymap.set("t", "<C-w><C-[>", "<C-\\><C-n>")
 vim.keymap.set("n", "<CR>j", "o<Esc>")
 vim.keymap.set("n", "<CR>k", "O<Esc>")
 
-vim.keymap.set("n", "<CR>",      "")
+vim.keymap.set("n", "<CR>",    "")
 vim.keymap.set("n", "<Del>",   "")
 vim.keymap.set("n", "<Space>", "")
 
+vim.keymap.set("v", "<CR>",    "")
 vim.keymap.set("v", "<Del>",   "")
 vim.keymap.set("v", "<Space>", "")
 
+vim.keymap.set("o", "<CR>",    "")
 vim.keymap.set("o", "<Del>",   "")
 vim.keymap.set("o", "<Space>", "")
 
