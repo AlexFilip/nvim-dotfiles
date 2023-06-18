@@ -76,11 +76,11 @@ vim.keymap.set("n", "<C-H>", "zh")
 -- Make current file executable
 vim.keymap.set("n", "<leader>ex", function()
     local filename = vim.fn.expand("%")
-    local sign = "+"
     local is_executable = vim.fn.executable("./" .. filename)
 
+    local sign = "+"
     if is_executable ~= 0 then
-        sign = "-" 
+        sign = "-"
     end
 
     local command = { "chmod", sign .. "x", filename }
