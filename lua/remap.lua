@@ -23,6 +23,9 @@ vim.keymap.set("n", "<leader>Y", "\"+y$")
 vim.keymap.set("v", "<leader>d", "\"_d")
 vim.keymap.set("v", "<leader>p", "\"_dP")
 
+vim.keymap.set("i", "<Up>", "<C-p>");
+vim.keymap.set("i", "<Down>", "<C-n>");
+
 vim.keymap.set("n", "<leader>n", function()
     vim.o.relativenumber = not vim.o.relativenumber
     vim.o.number = not vim.o.number
