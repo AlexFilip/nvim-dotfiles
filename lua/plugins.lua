@@ -35,4 +35,21 @@ return require("packer").startup(function(use)
 
     -- GnuPG support (buggy, doesn't work with GPG_TTY, have to use qt, gnome or gtk)
     use("jamessan/vim-gnupg")
+
+    -- Cmp
+
+    use("neovim/nvim-lspconfig")
+    use("hrsh7th/cmp-nvim-lsp")
+    use("hrsh7th/cmp-buffer")
+    use("hrsh7th/cmp-path")
+    use("hrsh7th/cmp-cmdline")
+    use("hrsh7th/nvim-cmp")
+
+    -- For vsnip users.
+    -- Plug("hrsh7th/cmp-vsnip")
+    -- Plug("hrsh7th/vim-vsnip")
+
+    --  For luasnip users.
+    use("L3MON4D3/LuaSnip")
+    use("saadparwaiz1/cmp_luasnip")
 end)
