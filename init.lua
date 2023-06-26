@@ -1,3 +1,6 @@
+-- TODO:
+--  debugger (dap)
+--  luasnip snippets
 
 local settings = require('settings')
 require('remap')
@@ -73,8 +76,6 @@ vim.g.GPGDefaultRecipients = {}
 local local_vimrc_path = table.concat({ settings.homeDirectory, '.local', 'neovimrc.lua' }, path_separator)
 local user_vimrc = loadfile(local_vimrc_path) or function() return {} end
 user_vimrc = user_vimrc() or {}
-
-require("orgmode").setup_ts_grammar()
 
 if user_vimrc.file_end and type(user_vimrc.file_end) == 'function' then
     user_vimrc.file_end()

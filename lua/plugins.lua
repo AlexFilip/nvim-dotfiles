@@ -27,8 +27,21 @@ return require("packer").startup(function(use)
 
     -- Languages via treesitter
     use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
-    use('nvim-treesitter/playground')
-    use("nvim-orgmode/orgmode")
+    use({
+        'nvim-treesitter/playground',
+        after = "nvim-treesitter",
+        requires = "nvim-treesitter/nvim-treesitter",
+    })
+    use({
+        "nvim-orgmode/orgmode",
+        after = "nvim-treesitter",
+        requires = "nvim-treesitter/nvim-treesitter",
+    })
+    use({
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        after = "nvim-treesitter",
+        requires = "nvim-treesitter/nvim-treesitter",
+    })
 
     -- Git support
     use("tpope/vim-fugitive")
@@ -37,7 +50,6 @@ return require("packer").startup(function(use)
     use("jamessan/vim-gnupg")
 
     -- Cmp
-
     use("neovim/nvim-lspconfig")
     use("hrsh7th/cmp-nvim-lsp")
     use("hrsh7th/cmp-buffer")
