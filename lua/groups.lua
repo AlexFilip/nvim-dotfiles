@@ -46,8 +46,8 @@ WrapLines:autoCmd("FileType", { "txt", "markdown", "md", "notes", "org", "tex", 
     vim.api.nvim_set_option_value('linebreak', true, { buf = bufnr })
     vim.api.nvim_set_option_value('list', false, { buf = bufnr })
 
-    vim.keymap.set("n", "j", "gj", { buffer = bufnr })
-    vim.keymap.set("n", "k", "gk", { buffer = bufnr })
+    vim.keymap.set("n", "j", "gj", { buffer = bufnr, desc = "Go down one visual line" })
+    vim.keymap.set("n", "k", "gk", { buffer = bufnr, desc = "Go up one visual line" })
 
 end)
 

@@ -1,12 +1,12 @@
 
 -- TODO: Add tab management and drawing functions here
 -- Shortcuts
-vim.keymap.set("n", "<leader>cv", function() vim.cmd 'vnew' end)
-vim.keymap.set("n", "<leader>ct", function() vim.cmd 'tabnew' end)
--- vim.keymap.set("n", "<leader>tv",  vim.cmd 'vnew | wincmd H')
+vim.keymap.set("n", "<leader>cv", function() vim.cmd 'vnew' end, { desc = "Create new vertical split" })
+vim.keymap.set("n", "<leader>ct", function() vim.cmd 'tabnew' end, { desc = "Create new tab" })
+-- vim.keymap.set("n", "<leader>tv",  vim.cmd 'vnew | wincmd H', { desc = "Create new vertial split on left" })
 
-vim.keymap.set("n", "<M-p>", "gt")
-vim.keymap.set("n", "<M-n>", "gT")
+vim.keymap.set("n", "<M-p>", "gt", { desc = "Next tab" })
+vim.keymap.set("n", "<M-n>", "gT", { desc = "Prev tab" })
 
 function MoveTab(multiplier)
     local amount = (vim.v.count ~= 0) and vim.v.count or 1
@@ -27,6 +27,6 @@ function MoveTab(multiplier)
     end
 end
 
-vim.keymap.set("n", "<leader>{", function() MoveTab(-1) end)
-vim.keymap.set("n", "<leader>}", function() MoveTab( 1) end)
+vim.keymap.set("n", "<leader>{", function() MoveTab(-1) end, { desc = "Move current tab to the left" })
+vim.keymap.set("n", "<leader>}", function() MoveTab( 1) end, { desc = "Move current tab to the right" })
 

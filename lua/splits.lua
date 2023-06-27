@@ -10,20 +10,20 @@ vim.keymap.set("n", "<M-s>", function()
         -- TODO: If window is thinner than it is wide, make it use horizontal splits
         vim.cmd.vnew()
     end
-end)
+end, { desc = "Toggle a vertical split" })
 
 vim.keymap.set("n", "<M-k>", function()
     vim.cmd.wincmd("k")
-end)
+end, { desc = "Move one pane up" })
 
 vim.keymap.set("n", "<M-j>", function()
     vim.cmd.wincmd("j")
-end)
+end, { desc = "Move one pane down" })
 
 vim.keymap.set("n", "<M-h>", function()
     vim.cmd.wincmd("h")
-end)
+end, { desc = "Move one pane left" })
 
 vim.keymap.set("n", "<M-l>", function()
     vim.cmd.wincmd("l")
-end)
+end, { desc = "Move one pane right" })
