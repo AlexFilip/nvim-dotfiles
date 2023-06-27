@@ -1,4 +1,18 @@
 
+function searchCount()
+    local search = vim.fn.searchcount({ maxcount = 0 }) -- maxcount = 0 makes the number not be capped at 99
+    local searchCurrent = search.current
+    local searchTotal = search.total
+    local result = ""
+
+    if searchCurrent > 0 then
+        -- result = "/" .. vim.fn.getreg("/") .. " [" .. searchCurrent .. "/" .. searchTotal .. "]"
+        result = "[" .. searchCurrent .. "/" .. searchTotal .. "]"
+    end
+
+    return result
+end
+
 require('lualine').setup {
     options = {
         icons_enabled = true,
@@ -18,6 +32,7 @@ require('lualine').setup {
             winbar = 1000,
         }
     },
+
     sections = {
         lualine_a = {'mode'},
         lualine_b = {'branch', 'diff', 'diagnostics'},
@@ -40,33 +55,35 @@ require('lualine').setup {
                 },
 
                 -- fmt = function(name, context)
-                    --     -- Show + if buffer is modified in tab
-                    --     local buflist = vim.fn.tabpagebuflist(context.tabnr)
-                    --     local winnr = vim.fn.tabpagewinnr(context.tabnr)
-                    --     local bufnr = buflist[winnr]
-                    --     local mod = vim.fn.getbufvar(bufnr, '&mod')
+                --     -- Show + if buffer is modified in tab
+                --     local buflist = vim.fn.tabpagebuflist(context.tabnr)
+                --     local winnr = vim.fn.tabpagewinnr(context.tabnr)
+                --     local bufnr = buflist[winnr]
+                --     local mod = vim.fn.getbufvar(bufnr, '&mod')
 
-                    --     return name .. (mod == 1 and ' +' or '')
-                    -- end
-                }
-            },
-            lualine_x = {'encoding', 'fileformat', 'filetype'},
-            lualine_y = {'progress'},
-            lualine_z = {'location'}
+                --     return name .. (mod == 1 and ' +' or '')
+                -- end
+            }
         },
-        inactive_sections = {
-            lualine_a = {},
-            lualine_b = {},
-            lualine_c = {'filename'},
-            lualine_x = {'location'},
-            lualine_y = {},
-            lualine_z = {}
-        },
-        tabline = {},
-        winbar = {},
-        inactive_winbar = {},
-        extensions = {}
-    }
+        lualine_x = {{ searchCount }, 'encoding', 'fileformat', 'filetype'},
+        lualine_y = {'progress'},
+        lualine_z = {'location'}
+    },
+
+    inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = {'filename'},
+        lualine_x = {'location'},
+        lualine_y = {},
+        lualine_z = {}
+    },
+
+    tabline = {},
+    winbar = {},
+    inactive_winbar = {},
+    extensions = {}
+}
 
 vim.o.showtabline = 0
 vim.o.laststatus  = 3

@@ -57,12 +57,12 @@ vim.o.softtabstop = -1
 vim.o.expandtab   = true
 vim.o.cindent     = true
 vim.o.cinoptions  = "l1,=4,:4,(0,{0,+2,w1,W4,t0,j1,J1"
-vim.o.shortmess   = "filnxtToOIs"
+vim.o.shortmess   = "fFcCtToOsSiIlnxW"
 vim.o.cinkeys     = vim.o.cinkeys:gsub(",0#", "")
 
 -- set viminfo+=n~/.local/nviminfo -- Out of sight, out of mind
 vim.o.viminfo     = ""
-vim.o.display     = "lastline" -- For writing prose
+vim.o.display     = "lastline"
 vim.o.swapfile    = false
 vim.o.hlsearch    = false
 vim.o.incsearch   = true
@@ -85,10 +85,10 @@ end
 -- Change cursor shape in different mode (macOS default terminal)
 -- For all cursor shapes visit
 -- http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes
---                 Blink   Static
---         block ¦   1   ¦   2   ¦
---     underline ¦   3   ¦   4   ¦
--- vertical line ¦   5   ¦   6   ¦
+--               | Blink | Static
+--         block |   1   |   2   |
+--     underline |   3   |   4   |
+-- vertical line |   5   |   6   |
 
 appendOption('t_SI', [[ \e[6 q ]])
 appendOption('t_SR', [[ \e[4 q ]])
