@@ -64,4 +64,12 @@ return require("packer").startup(function(use)
     --  For luasnip users.
     use("L3MON4D3/LuaSnip")
     use("saadparwaiz1/cmp_luasnip")
+
+    -- Debugger
+    use("mfussenegger/nvim-dap")
+    use("leoluz/nvim-dap-go")
+    use("rcarriga/nvim-dap-ui")
+    use("theHamsta/nvim-dap-virtual-text")
+    use("nvim-telescope/telescope-dap.nvim")
+
 end)
