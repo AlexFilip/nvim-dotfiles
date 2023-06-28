@@ -1,16 +1,31 @@
 
 local dap = require("dap")
+local dapui = require("dapui")
 
-vim.keymap.set("n", "<leader>c", function() dap.continue() end, { desc = "Start debugger or continue"})
-vim.keymap.set("n", "<F10>", function() dap.step_over() end , { desc = "Step over" })
-vim.keymap.set("n", "<F11>", function() dap.step_into() end , { desc = "Step into" })
-vim.keymap.set("n", "<F12>", function() dap.step_out()  end , { desc = "Step out"  })
+vim.keymap.set("n", "<F5>", function() dap.continue() end, { desc = "Start debugger or continue"})
+vim.keymap.set("n", "<F1>", function() dap.step_into() end , { desc = "Step into" }, { buffer = 0 })
+vim.keymap.set("n", "<F2>", function() dap.step_over() end , { desc = "Step over" }, { buffer = 0 })
+vim.keymap.set("n", "<F3>", function() dap.step_out()  end , { desc = "Step out"  }, { buffer = 0 })
 vim.keymap.set("n", "<leader>b", function() dap.toggle_breakpoint() end, { desc = "Toggle breakpoint" })
 vim.keymap.set("n", "<leader>B", function() dap.set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, { desc = "Conditional breakpoint" })
 vim.keymap.set("n", "<leader>lp", function() dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: ")) end, { desc = "Logging breakpoint" })
-vim.keymap.set("n", "<leader>dr", function() dap.repl.open() end, { desc = "Open debugger repl" })
+vim.keymap.set("n", "<leader>dr", function() dap.repl.open() end, { desc = "Open debugger repl" }, { buffer = 0 })
 
-require('dap-go').setup {
+require("nvim-dap-virtual-text").setup()
+
+dapui.setup()
+
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
+
+require('dap-go').setup({
     -- Additional dap configurations can be added.
     -- dap_configurations accepts a list of tables where each entry
     -- represents a dap configuration. For more details do:
@@ -39,4 +54,4 @@ require('dap-go').setup {
         -- additional args to pass to dlv
         args = {}
     },
-}
+})
