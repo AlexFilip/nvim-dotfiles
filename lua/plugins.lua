@@ -4,72 +4,81 @@
 vim.cmd [[packadd packer.nvim]]
 vim.cmd [[packadd termdebug]]
 
-return require("packer").startup(function(use)
+local plugins = {
     -- Let Packer manage itself
-    use("wbthomason/packer.nvim")
+    "wbthomason/packer.nvim",
 
     -- Useful plugins
-    use("tpope/vim-surround")
-    use("tpope/vim-repeat")
-    use("mbbill/undotree")
+    "tpope/vim-surround",
+    "tpope/vim-repeat",
+    "mbbill/undotree",
 
     -- Theming
-    use {
+     {
         'nvim-lualine/lualine.nvim',
         requires = { 'nvim-tree/nvim-web-devicons', opt = true }
-    }
-    use("catppuccin/nvim")
+    },
+    "catppuccin/nvim",
 
-    use({
+    {
         'nvim-telescope/telescope.nvim', branch = '0.1.x',
         requires = { {'nvim-lua/plenary.nvim'} }
-    })
+    },
+
+    {
+        "williamboman/mason.nvim",
+        run = ":MasonUpdate" -- :MasonUpdate updates registry contents
+    },
+
+    "williamboman/mason-lspconfig.nvim",
 
     -- Languages via treesitter
-    use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
-    use({
+    { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' },
+    {
         'nvim-treesitter/playground',
         after = "nvim-treesitter",
         requires = "nvim-treesitter/nvim-treesitter",
-    })
-    use({
+    },
+    {
         "nvim-orgmode/orgmode",
         after = "nvim-treesitter",
         requires = "nvim-treesitter/nvim-treesitter",
-    })
-    use({
+    },
+    {
         "nvim-treesitter/nvim-treesitter-textobjects",
         after = "nvim-treesitter",
         requires = "nvim-treesitter/nvim-treesitter",
-    })
+    },
+
+    "simrat39/rust-tools.nvim",
 
     -- Git support
-    use("tpope/vim-fugitive")
+    "tpope/vim-fugitive",
 
-    -- GnuPG support (buggy, doesn't work with GPG_TTY, have to use qt, gnome or gtk)
-    use("jamessan/vim-gnupg")
+    -- GnuPG support buggy, doesn't work with GPG_TTY, have to use qt, gnome or gtk
+    "jamessan/vim-gnupg",
 
     -- Cmp
-    use("neovim/nvim-lspconfig")
-    use("hrsh7th/cmp-nvim-lsp")
-    use("hrsh7th/cmp-buffer")
-    use("hrsh7th/cmp-path")
-    use("hrsh7th/cmp-cmdline")
-    use("hrsh7th/nvim-cmp")
+    "neovim/nvim-lspconfig",
+    "hrsh7th/cmp-nvim-lsp",
+    "hrsh7th/cmp-buffer",
+    "hrsh7th/cmp-path",
+    "hrsh7th/cmp-cmdline",
+    "hrsh7th/nvim-cmp",
 
-    -- For vsnip users.
-    -- Plug("hrsh7th/cmp-vsnip")
-    -- Plug("hrsh7th/vim-vsnip")
-
-    --  For luasnip users.
-    use("L3MON4D3/LuaSnip")
-    use("saadparwaiz1/cmp_luasnip")
+    "L3MON4D3/LuaSnip",
+    "saadparwaiz1/cmp_luasnip",
 
     -- Debugger
-    use("mfussenegger/nvim-dap")
-    use("leoluz/nvim-dap-go")
-    use("rcarriga/nvim-dap-ui")
-    use("theHamsta/nvim-dap-virtual-text")
-    use("nvim-telescope/telescope-dap.nvim")
+    "mfussenegger/nvim-dap",
+    "leoluz/nvim-dap-go",
+    "rcarriga/nvim-dap-ui",
+    "theHamsta/nvim-dap-virtual-text",
+    "nvim-telescope/telescope-dap.nvim",
+}
 
+return require"packer".startup(function(use)
+    for _, plugin in ipairs(plugins) do
+        use(plugin)
+    end
 end)
