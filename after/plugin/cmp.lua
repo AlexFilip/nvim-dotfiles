@@ -90,10 +90,14 @@ lspconfig.clangd.setup {
 lspconfig.gopls.setup { }
 
 lspconfig.rust_analyzer.setup {
+    capabilities = default_capabilities,
+    cmd = {
+        "rustup", "run", "stable", "rust-analyzer"
+    }
     -- Server-specific settings. See `:help lspconfig-setup`
-    settings = {
-        ["rust-analyzer"] = {},
-    },
+    -- settings = {
+    --     ["rust-analyzer"] = {},
+    -- },
 }
 
 -- Global mappings.
