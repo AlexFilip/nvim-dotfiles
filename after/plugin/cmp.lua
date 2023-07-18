@@ -100,6 +100,9 @@ lspconfig.rust_analyzer.setup {
     -- },
 }
 
+lspconfig.terraformls.setup{}
+lspconfig.tflint.setup{}
+
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 -- vim.keymap.set("n", "<space>o", vim.diagnostic.open_float, { desc = "" })
