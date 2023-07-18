@@ -134,7 +134,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.keymap.set("n", "<leader>=", function()
             vim.lsp.buf.format { async = true }
         end, { buffer = ev.buf, desc = "Format code" })
-        vim.keymap.set("n", "<leader>ed", vim.diagnostic.open_float, { buffer = ev.buf, desc = "Expand error message" })
+        vim.keymap.set("n", "<leader>er", vim.diagnostic.open_float, { buffer = ev.buf, desc = "Expand error message" })
     end,
 })
 
