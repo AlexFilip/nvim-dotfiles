@@ -8,22 +8,25 @@ vim.keymap.set("n", "<leader>ef", vim.cmd.Ex, { desc = "Open directory current f
 -- Consistency is key
 vim.keymap.set("n", "Y", "y$", { desc = "Copy to end of line" })
 
--- Copy input null buffer
+-- Copy input to null buffer
 vim.keymap.set("n", "<leader>d", "\"_d", { desc = "Delete to null buffer" })
 vim.keymap.set("n", "<leader>c", "\"_c", { desc = "Change without cutting" })
-vim.keymap.set("n", "<leader>x", "\"_x", { desc = "Delete without cutting" })
+-- vim.keymap.set("n", "<leader>x", "\"_x", { desc = "Delete without cutting" })
 
 vim.keymap.set("n", "<leader>p", "\"+p", { desc = "Paste from system clipboard" })
 vim.keymap.set("n", "<leader>P", "\"+P", { desc = "Paste before from system clipboard" })
 
-vim.keymap.set("n", "<leader>y", "\"+y", { desc = "Copy to system clipboard" })
+vim.keymap.set("n", "<leader>y", "\"+y",  { desc = "Copy to system clipboard" })
 vim.keymap.set("n", "<leader>Y", "\"+y$", { desc = "Copy to end of line with system clipboard" })
 
-vim.keymap.set("v", "<leader>d", "\"_d", { desc = "Delete to system clipboard" })
+vim.keymap.set("v", "<leader>d", "\"_d",  { desc = "Delete to system clipboard"   })
 vim.keymap.set("v", "<leader>p", "\"_dP", { desc = "Replace text without cutting" })
-vim.keymap.set("v", "<leader>c", "\"_c", { desc = "Change without cutting" })
+vim.keymap.set("v", "<leader>c", "\"_c",  { desc = "Change without cutting"       })
 
-vim.keymap.set("i", "<Up>", "<C-p>", { desc = "Previous in completion list" });
+vim.keymap.set("v", "<leader>y", "\"+y",  { desc = "Copy to system clipboard" })
+vim.keymap.set("v", "<leader>Y", "\"+y$", { desc = "Copy to end of line with system clipboard" })
+
+vim.keymap.set("i", "<Up>",   "<C-p>", { desc = "Previous in completion list" });
 vim.keymap.set("i", "<Down>", "<C-n>", { desc = "Next in completion list" });
 
 vim.keymap.set("n", "<leader>n", function()
