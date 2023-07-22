@@ -1,9 +1,3 @@
--- This file can be loaded by calling `lua require("plugins")` from your init.vim
-
--- Only required if you have packer configured as `opt`
-vim.cmd [[packadd packer.nvim]]
-vim.cmd [[packadd termdebug]]
-
 local plugins = {
     -- Let Packer manage itself
     "wbthomason/packer.nvim",
@@ -77,7 +71,10 @@ local plugins = {
     "nvim-telescope/telescope-dap.nvim",
 }
 
-return require"packer".startup(function(use)
+vim.cmd [[packadd packer.nvim]]
+vim.cmd [[packadd termdebug]]
+
+return require("packer").startup(function(use)
     for _, plugin in ipairs(plugins) do
         use(plugin)
     end
