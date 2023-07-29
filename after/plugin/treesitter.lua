@@ -14,7 +14,7 @@ require("nvim-treesitter.configs").setup {
         "go",
         "html", "css",
         "json", "json5",
-        "hcl", -- terraform
+        -- "hcl", -- terraform
         "markdown", "comment",
     },
 
@@ -92,5 +92,18 @@ require("nvim-treesitter.configs").setup {
     },
 }
 
+local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+parser_config.hcl = {
+    install_info = {
+        url = "https://github.com/mitchellh/tree-sitter-hcl", -- local path or git repo
+        files = {"src/parser.c", "src/scanner.cc"}
+    }
+}
+
+require("nvim-treesitter.configs").setup {
+    highlight = {
+        enable = true,
+    }
+}
 -- require("orgmode").setup_ts_grammar()
 
