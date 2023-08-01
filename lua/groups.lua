@@ -59,10 +59,10 @@ end)
 
 
 local Terraform = exports:makeGroup("Terraform")
-Terraform:autoCmd("BufWritePost",  "*.tf", function() 
+Terraform:autoCmd("BufWritePre",  "*.tf", function() 
     -- In lua anything that is not `false`, including 0, is true
     if vim.fn.executable("terraform") ~= 0 then
-        io.popen("terraform fmt " .. vim.fn.expand("%"))
+        vim.lsp.buf.format()
     end
 end)
 
