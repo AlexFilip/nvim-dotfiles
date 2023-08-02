@@ -105,5 +105,6 @@ require("nvim-treesitter.configs").setup {
         enable = true,
     }
 }
--- require("orgmode").setup_ts_grammar()
+
+require("orgmode").setup_ts_grammar()
 
