@@ -3,6 +3,8 @@ local exports = {}
 function exports.stringify(obj)
     if type(obj) == "string" then
         return "\"" .. obj .. "\""
+    elseif type(obj) == "function" then
+        return "<function>"
     elseif type(obj) == "boolean" then
         return obj and "true" or "false"
     elseif type(obj) ~= "table" then
