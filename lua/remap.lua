@@ -8,23 +8,47 @@ vim.keymap.set("n", "<leader>ef", vim.cmd.Ex, { desc = "Open directory current f
 -- Consistency is key
 vim.keymap.set("n", "Y", "y$", { desc = "Copy to end of line" })
 
+local function operatorToRegister(modes, front, register, ops, desc)
+    for _, op in ipairs(ops) do
+        local key = ""
+        local value = ""
+
+        if type(op) == "table" then
+            key = front .. op[1]
+            value = register .. op[2]
+        else
+            key = front .. op
+            value = register .. op
+        end
+
+        -- TODO: Include description as last argument { desc = "..." }
+        for _, mode in ipairs(modes) do
+            vim.keymap.set(mode, key, value)
+        end
+    end
+end
+
+local operators = { "d", "c", "p", "P", "y", { "Y", "y$" } }
+operatorToRegister({ "n", "v" }, "<CR>", "\"_", operators) -- Use null register
+operatorToRegister({ "n", "v" }, "<leader>", "\"+", operators) -- Use system register
+vim.keymap.set("v", "<leader>p", "\"_dP", { desc = "Replace text without cutting" }) -- special case
+
 -- Copy input to null buffer
-vim.keymap.set("n", "<leader>d", "\"_d", { desc = "Delete to null buffer" })
-vim.keymap.set("n", "<leader>c", "\"_c", { desc = "Change without cutting" })
+-- vim.keymap.set("n", "<leader>d", "\"_d", { desc = "Delete to null register" })
+-- vim.keymap.set("n", "<leader>c", "\"_c", { desc = "Change without cutting" })
 -- vim.keymap.set("n", "<leader>x", "\"_x", { desc = "Delete without cutting" })
 
-vim.keymap.set("n", "<leader>p", "\"+p", { desc = "Paste from system clipboard" })
-vim.keymap.set("n", "<leader>P", "\"+P", { desc = "Paste before from system clipboard" })
+-- vim.keymap.set("n", "<leader>p", "\"+p", { desc = "Paste from system clipboard" })
+-- vim.keymap.set("n", "<leader>P", "\"+P", { desc = "Paste before from system clipboard" })
+-- 
+-- vim.keymap.set("n", "<leader>y", "\"+y",  { desc = "Copy to system clipboard" })
+-- vim.keymap.set("n", "<leader>Y", "\"+y$", { desc = "Copy to end of line with system clipboard" })
 
-vim.keymap.set("n", "<leader>y", "\"+y",  { desc = "Copy to system clipboard" })
-vim.keymap.set("n", "<leader>Y", "\"+y$", { desc = "Copy to end of line with system clipboard" })
-
-vim.keymap.set("v", "<leader>d", "\"_d",  { desc = "Delete to system clipboard"   })
-vim.keymap.set("v", "<leader>p", "\"_dP", { desc = "Replace text without cutting" })
-vim.keymap.set("v", "<leader>c", "\"_c",  { desc = "Change without cutting"       })
-
-vim.keymap.set("v", "<leader>y", "\"+y",  { desc = "Copy to system clipboard" })
-vim.keymap.set("v", "<leader>Y", "\"+y$", { desc = "Copy to end of line with system clipboard" })
+-- vim.keymap.set("v", "<leader>d", "\"_d",  { desc = "Delete to system clipboard"   })
+-- vim.keymap.set("v", "<leader>c", "\"_c",  { desc = "Change without cutting"       })
+-- 
+-- vim.keymap.set("v", "<leader>y", "\"+y",  { desc = "Copy to system clipboard" })
+-- vim.keymap.set("v", "<leader>Y", "\"+y$", { desc = "Copy to end of line with system clipboard" })
 
 vim.keymap.set("i", "<Up>",   "<C-p>", { desc = "Previous in completion list" });
 vim.keymap.set("i", "<Down>", "<C-n>", { desc = "Next in completion list" });
@@ -35,7 +59,7 @@ vim.keymap.set("n", "<leader>n", function()
 end, { desc = "Toggle line and relative numbers" })
 
 vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { desc = "Search word under cursor" })
-vim.keymap.set("n", "<leader>di", function()
+vim.keymap.set("n", "<leader>df", function()
     if vim.o.diff then
         vim.cmd.diffoff()
     else
@@ -47,22 +71,18 @@ vim.keymap.set("t", "<C-w>",  "<C-\\><C-n><C-w>", { desc = "Win commands in term
 vim.keymap.set("t", "<C-w>[", "<C-\\><C-n>", { desc = "Change to normal mode in terminal" })
 vim.keymap.set("t", "<C-w><C-[>", "<C-\\><C-n>", { desc = "Change to normal mode in terminal" })
 
+local function doNotRespond(modes, keys)
+    for _, mode in ipairs(modes) do
+        for _, key in ipairs(keys) do
+            vim.keymap.set(mode, key, "", { desc = "Don't respond to " .. key })
+        end
+    end
+end
+
+doNotRespond({ "n", "v", "o" }, { "<CR>", "<Del>", "<Space>", "Q" })
+
 vim.keymap.set("n", "<CR>j", "o<Esc>", { desc = "Make new line below" })
 vim.keymap.set("n", "<CR>k", "O<Esc>", { desc = "Make new line above" })
-
-vim.keymap.set("n", "<CR>",    "", { desc = "Don't respond to <CR>" })
-vim.keymap.set("n", "<Del>",   "", { desc = "Don't respond to <Del>" })
-vim.keymap.set("n", "<Space>", "", { desc = "Don't respond to <Space>" })
-
-vim.keymap.set("v", "<CR>",    "", { desc = "Don't respond to <CR>" })
-vim.keymap.set("v", "<Del>",   "", { desc = "Don't respond to <Del>" })
-vim.keymap.set("v", "<Space>", "", { desc = "Don't respond to <Space>" })
-
-vim.keymap.set("o", "<CR>",    "", { desc = "Don't respond to <CR>" })
-vim.keymap.set("o", "<Del>",   "", { desc = "Don't respond to <Del>" })
-vim.keymap.set("o", "<Space>", "", { desc = "Don't respond to <Space>" })
-
-vim.keymap.set("n", "Q", "", { desc = "Don't respond to Q" })
 
 vim.keymap.set("c", "<C-f>", "<Right>", { desc = "Forward" })
 vim.keymap.set("c", "<C-b>", "<Left>", { desc = "Back" })
@@ -93,7 +113,7 @@ vim.keymap.set("n", "<leader>ex", function()
     vim.fn.system(command)
 end, { desc = "Toggle executable flag on current file" })
 
-function GotoBeginningOfLine()
+local function GotoBeginningOfLine()
     local command = "0"
     if vim.fn.indent(".") + 1 ~= vim.fn.col(".") then
         command = "^"
@@ -101,15 +121,14 @@ function GotoBeginningOfLine()
     vim.cmd { cmd = "normal", args = {command}, bang = true }
 end
 
-vim.keymap.set("n", "0", GotoBeginningOfLine, { desc = "Go to beginning of line" })
-vim.keymap.set("n", "^", GotoBeginningOfLine, { desc = "Go to beginning of line" })
-vim.keymap.set("n", "-", "$", { desc = "Go to end of line" })
+local function mapLineMotions(modes)
+    for _, mode in ipairs(modes) do
+        for _, s in ipairs({ "0", "^" }) do
+            vim.keymap.set(mode, s, GotoBeginningOfLine, { desc = "Go to beginning of line" })
+        end
+        vim.keymap.set(mode, "-", "$", { desc = "Go to end of line" })
+    end
+end
 
-vim.keymap.set("v", "0", GotoBeginningOfLine, { desc = "Go to beginning of line" })
-vim.keymap.set("v", "^", GotoBeginningOfLine, { desc = "Go to beginning of line" })
-vim.keymap.set("v", "-", "$", { desc = "Go to end of line" })
-
-vim.keymap.set("o", "0", GotoBeginningOfLine, { desc = "Go to beginning of line" })
-vim.keymap.set("o", "^", GotoBeginningOfLine, { desc = "Go to beginning of line" })
-vim.keymap.set("o", "-", "$", { desc = "Go to end of line" })
+mapLineMotions({"n", "v", "o"})
 
