@@ -12,12 +12,12 @@ require("nvim-dap-virtual-text").setup()
 -- Install in mason:
 --     codelldb for rust
 
-vim.keymap.set("n", "<F5>", function() dap.continue() end, { desc = "Start debugger or continue"})
-vim.keymap.set("n", "<F1>", function() dap.step_into() end , { desc = "Step into" })
-vim.keymap.set("n", "<F2>", function() dap.step_over() end , { desc = "Step over" })
-vim.keymap.set("n", "<F3>", function() dap.step_out()  end , { desc = "Step out"  })
-vim.keymap.set("n", "<leader>b", function() dap.toggle_breakpoint() end, { desc = "Toggle breakpoint" })
-vim.keymap.set("n", "<leader>B", function() dap.set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, { desc = "Conditional breakpoint" })
+vim.keymap.set("n", "<F5>",       function() dap.continue() end, { desc = "Start debugger or continue"})
+vim.keymap.set("n", "<F1>",       function() dap.step_into() end , { desc = "Step into" })
+vim.keymap.set("n", "<F2>",       function() dap.step_over() end , { desc = "Step over" })
+vim.keymap.set("n", "<F3>",       function() dap.step_out()  end , { desc = "Step out"  })
+vim.keymap.set("n", "<leader>b",  function() dap.toggle_breakpoint() end, { desc = "Toggle breakpoint" })
+vim.keymap.set("n", "<leader>B",  function() dap.set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, { desc = "Conditional breakpoint" })
 vim.keymap.set("n", "<leader>lp", function() dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: ")) end, { desc = "Logging breakpoint" })
 vim.keymap.set("n", "<leader>dr", function() dap.repl.open() end, { desc = "Open debugger repl" })
 
