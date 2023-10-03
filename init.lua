@@ -78,3 +78,4 @@ local user_vimrc = (loadfile(local_vimrc_path) or function() return {} end)() or
 if user_vimrc.file_end and type(user_vimrc.file_end) == 'function' then
     user_vimrc.file_end()
 end
+

@@ -60,10 +60,16 @@ end)
 
 local Terraform = exports:makeGroup("Terraform")
 Terraform:autoCmd("BufWritePre",  "*.tf", function() 
-    -- In lua anything that is not `false`, including 0, is true
-    if vim.fn.executable("terraform") ~= 0 then
-        vim.lsp.buf.format()
-    end
+    vim.lsp.buf.format()
+end)
+
+local Go = exports:makeGroup("Go")
+Go:autoCmd("BufWritePre",  "*.go", function() 
+    vim.lsp.buf.format()
+end)
+
+Go:autoCmd("FileType", { "go" }, function()
+    vim.o.expandtab = false
 end)
 
 local EncryptedFile  = exports:makeGroup("EncryptedFile")
