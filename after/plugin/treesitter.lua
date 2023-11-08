@@ -6,7 +6,8 @@ require("nvim-treesitter.configs").setup {
         "java", -- "scala",
         "lua", "vim", "vimdoc", "query",
         "python", "r", "julia",
-        "org", "bash", "awk",
+        -- "org",
+        "bash", "awk",
         "make", "cmake",
         "javascript", "typescript",
         "rust",
@@ -82,7 +83,7 @@ require("nvim-treesitter.configs").setup {
     auto_install = true,
 
     highlight = {
-        enable = false,
+        enable = true,
 
         -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
         -- Set this to `true` if you depend on "syntax" being enabled (like for indentation).
@@ -95,16 +96,20 @@ require("nvim-treesitter.configs").setup {
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 parser_config.hcl = {
     install_info = {
-        url = "https://github.com/mitchellh/tree-sitter-hcl", -- local path or git repo
-        files = {"src/parser.c", "src/scanner.cc"}
+        url = "https://github.com/MichaHoffmann/tree-sitter-hcl", -- local path or git repo
+        files = {"src/parser.c", "src/scanner.c"}
     }
 }
+vim.treesitter.language.register('hcl', 'tf')
 
-require("nvim-treesitter.configs").setup {
-    highlight = {
-        enable = true,
-    }
+parser_config.templ = {
+  install_info = {
+    url = "https://github.com/vrischmann/tree-sitter-templ.git",
+    files = {"src/parser.c", "src/scanner.c"},
+    branch = "master",
+  },
 }
+vim.treesitter.language.register('templ', 'templ')
 
-require("orgmode").setup_ts_grammar()
+-- require("orgmode").setup_ts_grammar()
 
