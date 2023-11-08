@@ -11,7 +11,7 @@ function exports.stringify(obj)
         return "" .. obj
     end
 
-    local keys=""
+    local keys = ""
     for key,value in pairs(obj) do
         keys = keys .. key .. " = " .. exports.stringify(value) .. ", "
     end
@@ -31,6 +31,17 @@ function exports.tableMerge(t1, t2)
         end
     end
     return t1
+end
+
+function exports.tableFindValue(tab, value)
+    local result = -1
+    for i, v in pairs(tab) do
+        if v == value then
+            result = i
+            break
+        end
+    end
+    return result
 end
 
 function exports.arrayReplace(array, value, newValue)
