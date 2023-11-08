@@ -1,10 +1,7 @@
 
--- TODO: Add tab management and drawing functions here
 -- Shortcuts
-vim.keymap.set("n", "<leader>cv", function() vim.cmd 'vnew' end, { desc = "Create new vertical split" })
-vim.keymap.set("n", "<leader>ct", function() vim.cmd 'tabnew' end, { desc = "Create new tab" })
--- vim.keymap.set("n", "<leader>tv",  vim.cmd 'vnew | wincmd H', { desc = "Create new vertial split on left" })
-
+vim.keymap.set("n", "<leader>mv", function() vim.cmd 'vnew' end, { desc = "Create new vertical split" })
+vim.keymap.set("n", "<leader>mt", function() vim.cmd 'tabnew' end, { desc = "Create new tab" })
 
 vim.keymap.set("n", "<M-1>",  "1gt", { desc = "Navigate to tab 1" })
 vim.keymap.set("n", "<M-2>",  "2gt", { desc = "Navigate to tab 2" })
