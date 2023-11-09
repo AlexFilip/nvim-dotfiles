@@ -1,49 +1,97 @@
 
--- Leader mappings
-vim.g.mapleader = " "
+local util = require("util")
 
--- Open vim explore
-vim.keymap.set("n", "<leader>ef", vim.cmd.Ex, { desc = "Open directory current file is in" })
+local exports = {}
 
--- Consistency is key
-vim.keymap.set("n", "Y", "y$", { desc = "Copy to end of line" })
+local function keymap(mode, keybinding, mapping, extra)
+    -- print(mode .. "noremapping " .. keybinding .. " to " .. util.stringify(mapping))
+    vim.keymap.set(mode, keybinding, mapping, extra)
+end
 
-local function operatorToRegister(modes, front, register, ops)
-    for _, op in ipairs(ops) do
-        local key = ""
-        local value = ""
+exports.keymap = keymap
 
-        if type(op) == "table" then
-            key = front .. op[1]
-            value = register .. op[2]
-        else
-            key = front .. op
-            value = register .. op
+-- Create functions for all of the noremaps
+for _, mode in ipairs({"n", "v", "c", "i", "t"}) do
+    local fnName = mode .. "noremap"
+    local mappingFunction = function(keybinding, mapping, extra)
+        keymap(mode, keybinding, mapping, extra)
+    end
+
+    _G[fnName] = mappingFunction
+    exports[fnName] = mappingFunction
+end
+
+local function operatorToRegister(modes, prefix, register, ops)
+    for k, operator in pairs(ops) do
+        local keyBinding = k
+
+        if type(k) == "number" then
+            keyBinding = operator
         end
 
-        -- TODO: Include description as last argument { desc = "..." }
+        local extraArg = { desc = operator .. " operator on " .. register.name .. " register" }
         for _, mode in ipairs(modes) do
-            vim.keymap.set(mode, key, value)
+            keymap(mode, prefix.on(keyBinding), register.on(operator), extraArg)
         end
     end
 end
 
-local operators = { "d", "c", "p", "P", "y", { "Y", "y$" } }
-operatorToRegister({ "n", "v" }, "<CR>", "\"_", operators) -- Use null register
-operatorToRegister({ "n", "v" }, "<leader>", "\"+", operators) -- Use system register
-vim.keymap.set("v", "<leader>p", "\"_dP", { desc = "Replace text without cutting" }) -- special case
+local function makeOperatorPrefix(name, prefix)
+    local result = {
+        name = name,
+        -- prefix = prefix,
+        on = function(operator)
+            return prefix .. operator
+        end
+    }
+    return result
+end
+
+local         leader = makeOperatorPrefix("Leader",    "<leader>")
+local carriageReturn = makeOperatorPrefix("Return",    "<CR>")
+local         delete = makeOperatorPrefix("Delete",    "<Del>")
+local      backspace = makeOperatorPrefix("Backspace", "<BS>")
+
+local function makeRegister(name, prefix)
+    local result = {
+        name = name,
+        -- prefix = prefix,
+        on = function(operator)
+            return "\"" .. prefix .. operator
+        end
+    }
+
+    return result
+end
+
+local systemRegister = makeRegister("system", "+")
+local nullRegister = makeRegister("null", "_")
+
+-- Leader mappings
+vim.g.mapleader = " "
+
+-- Open vim explore
+nnoremap(leader.on("ef"), vim.cmd.Ex, { desc = "Open directory current file is in" })
+
+-- Consistency is key
+nnoremap("Y", "y$", { desc = "Copy to end of line" })
+
+local operators = { "d", "c", "p", "P", "y", Y = "y$" }
+operatorToRegister({ "n", "v" }, carriageReturn, nullRegister, operators) -- Use null register
+operatorToRegister({ "n", "v" }, leader,       systemRegister, operators) -- Use system register
+vnoremap(carriageReturn.on("p"), nullRegister.on("dP"), { desc = "Replace text without cutting" }) -- special case
 
 --
-vim.keymap.set("i", "<Up>",   "<C-p>", { desc = "Previous in completion list" });
-vim.keymap.set("i", "<Down>", "<C-n>", { desc = "Next in completion list" });
+inoremap("<Up>",   "<C-p>", { desc = "Previous in completion list" });
+inoremap("<Down>", "<C-n>", { desc = "Next in completion list" });
 
-vim.keymap.set("n", "<leader>n", function()
+nnoremap(leader.on("n"), function()
     vim.o.relativenumber = not vim.o.relativenumber
     vim.o.number = not vim.o.number
 end, { desc = "Toggle line and relative numbers" })
 
-vim.keymap.set("n", "<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { desc = "Search word under cursor" })
-vim.keymap.set("n", "<leader>df", function()
+nnoremap("<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { desc = "Search word under cursor" })
+nnoremap("<leader>df", function()
     if vim.o.diff then
         vim.cmd.diffoff()
     else
@@ -51,40 +99,40 @@ vim.keymap.set("n", "<leader>df", function()
     end
 end, { desc = "Toggle diff" })
 
-vim.keymap.set("t", "<C-w>",  "<C-\\><C-n><C-w>", { desc = "Win commands in terminal" })
-vim.keymap.set("t", "<C-w>[", "<C-\\><C-n>", { desc = "Change to normal mode in terminal" })
-vim.keymap.set("t", "<C-w><C-[>", "<C-\\><C-n>", { desc = "Change to normal mode in terminal" })
+tnoremap("<C-w>",  "<C-\\><C-n><C-w>", { desc = "Win commands in terminal" })
+tnoremap("<C-w>[", "<C-\\><C-n>",      { desc = "Change to normal mode in terminal" })
+tnoremap("<C-w><C-[>", "<C-\\><C-n>",  { desc = "Change to normal mode in terminal" })
 
 local function doNotRespond(modes, keys)
     for _, mode in ipairs(modes) do
         for _, key in ipairs(keys) do
-            vim.keymap.set(mode, key, "", { desc = "Don't respond to " .. key })
+            keymap(mode, key, "", { desc = "Don't respond to " .. key })
         end
     end
 end
 
-doNotRespond({ "n", "v", "o" }, { "<CR>", "<Del>", "<Space>", "Q" })
+doNotRespond({ "n", "v", "o" }, { "<CR>", "<Del>", "<BS>", "<Space>", "Q" })
 
-vim.keymap.set("n", "<CR>j", "o<Esc>", { desc = "Make new line below" })
-vim.keymap.set("n", "<CR>k", "O<Esc>", { desc = "Make new line above" })
+nnoremap("<CR>j", "o<Esc>", { desc = "Make new line below" })
+nnoremap("<CR>k", "O<Esc>", { desc = "Make new line above" })
 
-vim.keymap.set("c", "<C-f>", "<Right>", { desc = "Forward" })
-vim.keymap.set("c", "<C-b>", "<Left>", { desc = "Back" })
-vim.keymap.set("c", "<C-a>", "<C-b>", { desc = "Beginning" })
-vim.keymap.set("c", "<C-d>", "<Del>", { desc = "Delete" })
+cnoremap("<C-f>", "<Right>", { desc = "Forward" })
+cnoremap("<C-b>", "<Left>", { desc = "Back" })
+cnoremap("<C-a>", "<C-b>", { desc = "Beginning" })
+cnoremap("<C-d>", "<Del>", { desc = "Delete" })
 
-vim.keymap.set("c", "<C-W>", "\\<\\><Left><Left>", { desc = "Search for word" })
+cnoremap("<C-W>", "\\<\\><Left><Left>", { desc = "Search for word" })
 
 -- Move selected lines up and down
-vim.keymap.set("v", "<C-J>", ":m '>+1<CR>gv=gv", { desc = "Move lines down and match indent" })
-vim.keymap.set("v", "<C-K>", ":m '<-2<CR>gv=gv", { desc = "Move lines up and match indent" })
+vnoremap("<C-J>", ":m '>+1<CR>gv=gv", { desc = "Move lines down and match indent" })
+vnoremap("<C-K>", ":m '<-2<CR>gv=gv", { desc = "Move lines up and match indent" })
 
 -- Horizontal scrolling. Only useful when wrap is turned off.
-vim.keymap.set("n", "<C-J>", "zl", { desc = "Scroll right" })
-vim.keymap.set("n", "<C-H>", "zh", { desc = "Scroll left" })
+nnoremap("<C-J>", "zl", { desc = "Scroll right" })
+nnoremap("<C-H>", "zh", { desc = "Scroll left" })
 
 -- Make current file executable
-vim.keymap.set("n", "<leader>ex", function()
+nnoremap("<leader>ex", function()
     local filename = vim.fn.expand("%")
     local is_executable = vim.fn.executable("./" .. filename)
 
@@ -108,11 +156,13 @@ end
 local function mapLineMotions(modes)
     for _, mode in ipairs(modes) do
         for _, s in ipairs({ "0", "^" }) do
-            vim.keymap.set(mode, s, GotoBeginningOfLine, { desc = "Go to beginning of line" })
+            keymap(mode, s, GotoBeginningOfLine, { desc = "Go to beginning of line" })
         end
-        vim.keymap.set(mode, "-", "$", { desc = "Go to end of line" })
+        keymap(mode, "-", "$", { desc = "Go to end of line" })
     end
 end
 
 mapLineMotions({"n", "v", "o"})
+
+return exports
 
