@@ -11,7 +11,7 @@ function exports:getPath()
     if filetype == "json" then
         return json.get()
     elseif filetype == "yaml" then
-        return yaml.get_yaml_key_and_value()
+        return yaml.get_yaml_key()
     end
 
     return ''
