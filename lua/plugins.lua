@@ -7,11 +7,20 @@ local plugins = {
     "tpope/vim-repeat",
     "mbbill/undotree",
 
+    -- Prime
+    'ThePrimeagen/git-worktree.nvim',
+    {
+        'ThePrimeagen/harpoon',
+        requires = {
+            'nvim-lua/plenary.nvim',
+        }
+    },
+
     -- Explore config files
     'phelipetls/jsonpath.nvim',
     {
       "cuducos/yaml.nvim",
-      -- ft = { "yaml" }, -- optional
+      ft = { "yaml" }, -- optional
       requires = {
         "nvim-treesitter/nvim-treesitter",
         "nvim-telescope/telescope.nvim" -- optional
