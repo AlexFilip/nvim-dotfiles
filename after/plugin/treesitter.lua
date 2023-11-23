@@ -10,7 +10,7 @@ require("nvim-treesitter.configs").setup {
         "bash", "awk",
         "make", "cmake",
         "javascript", "typescript",
-        "rust",
+        "rust", "json", "yaml",
         -- "swift",
         "go",
         "html", "css",

@@ -1,15 +1,17 @@
 -- TODO:
 --  luasnip snippets
 
+require('plugins')
+
 local settings = require('settings')
 require('remap')
 require('groups')
 require('git')
 require('tabs')
-require('plugins')
 require('commands')
 require('splits')
 require('default_files')
+local config_file_functions = require('config_files')
 
 vim.cmd [[ filetype plugin indent on ]]
 

@@ -7,15 +7,28 @@ local plugins = {
     "tpope/vim-repeat",
     "mbbill/undotree",
 
+    -- Explore config files
+    'phelipetls/jsonpath.nvim',
+    {
+      "cuducos/yaml.nvim",
+      -- ft = { "yaml" }, -- optional
+      requires = {
+        "nvim-treesitter/nvim-treesitter",
+        "nvim-telescope/telescope.nvim" -- optional
+      }
+    },
+
     -- Theming
      {
         'nvim-lualine/lualine.nvim',
         requires = { 'nvim-tree/nvim-web-devicons', opt = true }
     },
+
     "catppuccin/nvim",
 
     {
-        'nvim-telescope/telescope.nvim', branch = '0.1.x',
+        'nvim-telescope/telescope.nvim',
+        branch = '0.1.x',
         requires = { {'nvim-lua/plenary.nvim'} }
     },
 
@@ -74,8 +87,11 @@ local plugins = {
 vim.cmd [[packadd packer.nvim]]
 vim.cmd [[packadd termdebug]]
 
-return require("packer").startup(function(use)
+local x = require("packer").startup(function(use)
+
     for _, plugin in ipairs(plugins) do
         use(plugin)
     end
 end)
+
+return x
