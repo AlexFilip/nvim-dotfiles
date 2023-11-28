@@ -7,6 +7,9 @@ local plugins = {
     "tpope/vim-repeat",
     "mbbill/undotree",
 
+    -- TODO: setup git-worktree, harpoon and dadbod
+    "tpope/vim-dadbod",
+
     -- Prime
     'ThePrimeagen/git-worktree.nvim',
     {
