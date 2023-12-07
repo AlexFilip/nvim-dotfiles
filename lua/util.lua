@@ -1,5 +1,14 @@
 
 local exports = {}
+
+function exports.getKeys(obj)
+    local keys = ""
+    for key,value in pairs(obj) do
+        keys = keys .. key .. ", "
+    end
+    return "{" .. keys .. "}"
+end
+
 function exports.stringify(obj)
     if type(obj) == "string" then
         return "\"" .. obj .. "\""

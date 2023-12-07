@@ -4,9 +4,10 @@ local json = require("jsonpath")
 local exports = {}
 
 function exports:getPath()
+    local filetype = vim.bo.filetype
+
     -- This plugin has trouble loading right away, DO NOT put this require at the top level
     local yaml = require("yaml_nvim")
-    local filetype = vim.bo.filetype
 
     if filetype == "json" then
         return json.get()

@@ -1,6 +1,3 @@
--- TODO:
---  luasnip snippets
-
 require('plugins')
 
 local settings = require('settings')

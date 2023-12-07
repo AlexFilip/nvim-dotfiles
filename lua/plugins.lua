@@ -2,12 +2,13 @@ local plugins = {
     -- Let Packer manage itself
     "wbthomason/packer.nvim",
 
-    -- Useful plugins
+    -- Useful editor plugins
     "tpope/vim-surround",
     "tpope/vim-repeat",
     "mbbill/undotree",
 
     -- TODO: setup git-worktree, harpoon and dadbod
+    -- Database management
     "tpope/vim-dadbod",
 
     -- Prime
@@ -18,6 +19,13 @@ local plugins = {
             'nvim-lua/plenary.nvim',
         }
     },
+
+    -- Project management
+    {
+        'junegunn/fzf',
+        run = ':call fzf#install()'
+    },
+    'junegunn/fzf.vim',
 
     -- Explore config files
     'phelipetls/jsonpath.nvim',
@@ -44,6 +52,7 @@ local plugins = {
         requires = { {'nvim-lua/plenary.nvim'} }
     },
 
+    -- LSP support
     {
         "williamboman/mason.nvim",
         run = ":MasonUpdate" -- :MasonUpdate updates registry contents
