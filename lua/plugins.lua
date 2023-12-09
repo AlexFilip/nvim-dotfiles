@@ -42,6 +42,7 @@ local plugins = {
                     ".git", "_darcs", ".hg", ".bzr", ".svn", "Makefile", "package.json",
                     -- custom
                     "compile",
+                    "tmux.conf",
                     "docker-compose.yml", "docker-compose.yaml", "compose.yml", "compose.yaml",
                 },
 
