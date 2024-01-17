@@ -113,3 +113,11 @@ vim.treesitter.language.register('templ', 'templ')
 
 -- require("orgmode").setup_ts_grammar()
 
+parser_config.caddy = {
+  install_info = {
+    url = "https://github.com/Samonitari/tree-sitter-caddy",
+    files = {"src/parser.c", "src/scanner.c"},
+    branch = "master",
+  },
+}
+vim.treesitter.language.register('caddy', 'Caddyfile')
