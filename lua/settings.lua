@@ -1,14 +1,14 @@
-
 local exports = {}
 
 local homeDirectory = os.getenv('HOME')
 exports.homeDirectory = homeDirectory
 
-local undo_dir = homeDirectory .. "/.local/nvim-undos"
 -- Persistent Undo
 vim.o.undofile   = true     -- Save undos after file closes
 vim.o.undolevels = 1000     -- How many undos
 vim.o.undoreload = 10000    -- number of lines to save for undo
+
+local undo_dir = homeDirectory .. "/.local/nvim-undos"
 vim.o.undodir    = undo_dir -- where to save undo histories
 if not vim.fn.isdirectory(undo_dir) then
     vim.fn.mkdir(undo_dir)
@@ -23,6 +23,8 @@ vim.o.mouse      = "a"           -- Allow mouse input
 vim.o.sidescroll = 1             -- Number of columns to scroll left and right
 vim.o.backspace  = "indent"      -- allow backspacing only over automatic indenting (:help 'backspace')
 vim.o.wildmenu   = true          -- Display a menu of all completions for commands when pressing tab
+vim.o.number     = false         -- Do not show line numbers
+vim.o.signcolumn = "yes"         -- always show the sidebar with signs for diagnostics
 -- vim.o.clipboard   = "unnamedplus" -- Use system clipboard
 
 -- Leading tabs (trailing spaces coming soon)
@@ -60,14 +62,13 @@ vim.o.cinoptions  = "l1,=4,:4,(0,{0,+2,w1,W4,t0,j1,J1"
 vim.o.shortmess   = "fFcCtToOsSiIlnxW"
 vim.o.cinkeys     = vim.o.cinkeys:gsub(",0#", "")
 
--- set viminfo+=n~/.local/nviminfo -- Out of sight, out of mind
 vim.o.viminfo     = ""
 vim.o.display     = "lastline"
 vim.o.swapfile    = false
-vim.o.hlsearch    = false
+vim.o.hlsearch    = true
 vim.o.incsearch   = true
-vim.o.colorcolumn = 80
-vim.o.scrolloff   = 5
+-- vim.o.colorcolumn = '80'
+-- vim.o.scrolloff   = 5
 vim.o.updatetime  = 50
 
 vim.g.netrw_liststyle = 0
@@ -76,22 +77,5 @@ vim.g.netrw_keepdir   = 1
 
 -- Docs: http://vimhelp.appspot.com/eval.txt.html
 vim.o.fillchars="stlnc:|,vert:|,fold:.,diff:."
-
-local function appendOption(opt, newOpt)
-    local currentVal = vim.api.nvim_get_option_value(opt, {}) or ""
-    vim.api.nvim_set_option_value(opt, currentVal .. [[ \e[6 q ]], {})
-end
-
--- Change cursor shape in different mode (macOS default terminal)
--- For all cursor shapes visit
--- http://vim.wikia.com/wiki/Change_cursor_shape_in_different_modes
---               | Blink | Static
---         block |   1   |   2   |
---     underline |   3   |   4   |
--- vertical line |   5   |   6   |
-
-appendOption('t_SI', [[ \e[6 q ]])
-appendOption('t_SR', [[ \e[4 q ]])
-appendOption('t_EI', [[ \e[2 q ]])
 
 return exports

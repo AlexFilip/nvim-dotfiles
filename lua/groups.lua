@@ -42,9 +42,10 @@ local WrapLines = exports:makeGroup("WrapLines")
 WrapLines:autoCmd("FileType", { "txt", "markdown", "md", "notes", "org", "tex", "plaintex" }, function()
     local bufnr = vim.api.nvim_get_current_buf()
 
-    vim.api.nvim_set_option_value('wrap', true, { buf = bufnr })
-    vim.api.nvim_set_option_value('linebreak', true, { buf = bufnr })
-    vim.api.nvim_set_option_value('list', false, { buf = bufnr })
+    -- NOTE: Cannot pass { buf = bufnr } to any of these because the options are window-local
+    vim.api.nvim_set_option_value('wrap', true, {})
+    vim.api.nvim_set_option_value('linebreak', true, {})
+    vim.api.nvim_set_option_value('list', false, {})
 
     vim.keymap.set("n", "j", "gj", { buffer = bufnr, desc = "Go down one visual line" })
     vim.keymap.set("n", "k", "gk", { buffer = bufnr, desc = "Go up one visual line" })

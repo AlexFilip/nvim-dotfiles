@@ -7,18 +7,15 @@ local plugins = {
     "tpope/vim-repeat",
     "mbbill/undotree",
 
-    -- TODO: setup git-worktree, harpoon and dadbod
-    -- Database management
-    "tpope/vim-dadbod",
+    -- TODO: setup git-worktree and harpoon
 
-    -- Prime
-    'ThePrimeagen/git-worktree.nvim',
-    {
-        'ThePrimeagen/harpoon',
-        requires = {
-            'nvim-lua/plenary.nvim',
-        }
-    },
+    -- 'ThePrimeagen/git-worktree.nvim',
+    -- {
+    --     'ThePrimeagen/harpoon',
+    --     requires = {
+    --         'nvim-lua/plenary.nvim',
+    --     }
+    -- },
 
     -- Explore config files
     'phelipetls/jsonpath.nvim',
@@ -32,12 +29,11 @@ local plugins = {
     },
 
     -- Theming
+    "catppuccin/nvim",
     {
         'nvim-lualine/lualine.nvim',
         requires = { 'nvim-tree/nvim-web-devicons', opt = true }
     },
-
-    "catppuccin/nvim",
 
     {
         'nvim-telescope/telescope.nvim',
@@ -50,20 +46,22 @@ local plugins = {
         "williamboman/mason.nvim",
         run = ":MasonUpdate" -- :MasonUpdate updates registry contents
     },
-
     "williamboman/mason-lspconfig.nvim",
 
     -- Languages via treesitter
     { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' },
-    {
-        'nvim-treesitter/playground',
-        after = "nvim-treesitter",
-        requires = "nvim-treesitter/nvim-treesitter",
-    },
+    -- {
+    --     'nvim-treesitter/playground',
+    --     after = "nvim-treesitter",
+    --     requires = "nvim-treesitter/nvim-treesitter",
+    -- },
     {
         "nvim-orgmode/orgmode",
         after = "nvim-treesitter",
         requires = "nvim-treesitter/nvim-treesitter",
+        config = function()
+            require('orgmode').setup{}
+        end
     },
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
@@ -75,9 +73,17 @@ local plugins = {
 
     -- Git support
     "tpope/vim-fugitive",
+    -- {
+    --     "NeogitOrg/neogit",
+    --     requires = {
+    --         "nvim-lua/plenary.nvim",         -- required
+    --         "sindrets/diffview.nvim",        -- optional - Diff integration
 
-    -- GnuPG support buggy, doesn't work with GPG_TTY, have to use qt, gnome or gtk
-    "jamessan/vim-gnupg",
+    --         -- Only one of these is needed, not both.
+    --         "nvim-telescope/telescope.nvim", -- optional
+    --         -- "ibhagwan/fzf-lua",              -- optional
+    --     }
+    -- },
 
     -- Cmp
     "neovim/nvim-lspconfig",
@@ -91,7 +97,12 @@ local plugins = {
     "saadparwaiz1/cmp_luasnip",
 
     -- Debugger
-    "mfussenegger/nvim-dap",
+    {
+        "mfussenegger/nvim-dap",
+        requires = {
+            "nvim-neotest/nvim-nio"
+        }
+    },
     "leoluz/nvim-dap-go",
     "rcarriga/nvim-dap-ui",
     "theHamsta/nvim-dap-virtual-text",

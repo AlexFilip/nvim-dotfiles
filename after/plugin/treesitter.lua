@@ -3,19 +3,18 @@ require("nvim-treesitter.configs").setup {
     -- A list of parser names, or "all" (the five listed parsers should always be installed)
     ensure_installed = {
         "c", "cpp",
-        "java", -- "scala",
-        "lua", "vim", "vimdoc", "query",
+        "java",
+        "lua", "vim", "vimdoc",
         "python", "r", "julia",
-        -- "org",
         "bash", "awk",
         "make", "cmake",
         "javascript", "typescript",
-        "rust", "json", "yaml",
-        -- "swift",
+        "rust",
+        "swift",
         "go",
         "html", "css",
-        "json", "json5",
-        -- "hcl", -- terraform
+        -- "json", "yaml",
+        -- "json5",
         "markdown", "comment",
     },
 
@@ -93,31 +92,35 @@ require("nvim-treesitter.configs").setup {
     },
 }
 
-local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-parser_config.hcl = {
-    install_info = {
-        url = "https://github.com/MichaHoffmann/tree-sitter-hcl", -- local path or git repo
-        files = {"src/parser.c", "src/scanner.c"}
-    }
-}
-vim.treesitter.language.register('hcl', 'tf')
+-----------------------------------------------------------
+-- Terraform
+-- local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+-- parser_config.hcl = {
+--     install_info = {
+--         url = "https://github.com/MichaHoffmann/tree-sitter-hcl", -- local path or git repo
+--         files = {"src/parser.c", "src/scanner.c"}
+--     }
+-- }
+-- vim.treesitter.language.register('hcl', 'tf')
 
-parser_config.templ = {
-  install_info = {
-    url = "https://github.com/vrischmann/tree-sitter-templ.git",
-    files = {"src/parser.c", "src/scanner.c"},
-    branch = "master",
-  },
-}
-vim.treesitter.language.register('templ', 'templ')
+-----------------------------------------------------------
+-- Templ
+-- parser_config.templ = {
+--   install_info = {
+--     url = "https://github.com/vrischmann/tree-sitter-templ.git",
+--     files = {"src/parser.c", "src/scanner.c"},
+--     branch = "master",
+--   },
+-- }
+-- vim.treesitter.language.register('templ', 'templ')
 
--- require("orgmode").setup_ts_grammar()
-
-parser_config.caddy = {
-  install_info = {
-    url = "https://github.com/Samonitari/tree-sitter-caddy",
-    files = {"src/parser.c", "src/scanner.c"},
-    branch = "master",
-  },
-}
-vim.treesitter.language.register('caddy', 'Caddyfile')
+-----------------------------------------------------------
+-- Caddy
+-- parser_config.caddy = {
+--   install_info = {
+--     url = "https://github.com/Samonitari/tree-sitter-caddy",
+--     files = {"src/parser.c", "src/scanner.c"},
+--     branch = "master",
+--   },
+-- }
+-- vim.treesitter.language.register('caddy', 'Caddyfile')

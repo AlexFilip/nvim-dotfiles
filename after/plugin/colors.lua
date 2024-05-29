@@ -1,16 +1,16 @@
 
 require("catppuccin").setup({
-    flavour = "macchiato", -- latte, frappe, macchiato, mocha
+    flavour = "frappe", -- latte, frappe, macchiato, mocha
     background = { -- :h background
         light = "latte",
-        dark = "macchiato",
+        dark = "frappe",
     },
     transparent_background = false, -- disables setting the background color.
     show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
     term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
     dim_inactive = {
         enabled = false, -- dims the background color of inactive window
-        shade = "dark",
+        shade = "light",
         percentage = 0.15, -- percentage of the shade to apply to the inactive window
     },
     no_italic = false, -- Force no italic
@@ -43,18 +43,18 @@ require("catppuccin").setup({
     },
 })
 
-local function SetTransparentBackground(color)
+local function SetTransparentBackground(color, theme)
     color = color or "catppuccin"
+    vim.o.background = theme or 'dark'
     vim.cmd.colorscheme(color)
 
-    vim.api.nvim_set_hl(0, "Normal",       { ctermbg = "none", bg = "none" })
-    vim.api.nvim_set_hl(0, "NormalNC",     { ctermbg = "none", bg = "none" })
-    vim.api.nvim_set_hl(0, "NormalFloat",  { ctermbg = "none", bg = "none" })
-    vim.api.nvim_set_hl(0, "CursorLineNR", { ctermbg = "none", bg = "none" })
-    vim.api.nvim_set_hl(0, "CursorLine",   { ctermbg = "none", bg = "none" })
-    vim.api.nvim_set_hl(0, "NonText",      { ctermbg = "none", bg = "none", fg = "none" })
-    vim.api.nvim_set_hl(0, "EndOfBuffer",  { ctermbg = "none", bg = "none" })
+    -- vim.api.nvim_set_hl(0, "Normal",       { ctermbg = "none", bg = "none" })
+    -- vim.api.nvim_set_hl(0, "NormalNC",     { ctermbg = "none", bg = "none" })
+    -- vim.api.nvim_set_hl(0, "NormalFloat",  { ctermbg = "none", bg = "none" })
+    -- vim.api.nvim_set_hl(0, "CursorLineNR", { ctermbg = "none", bg = "none" })
+    -- vim.api.nvim_set_hl(0, "CursorLine",   { ctermbg = "none", bg = "none" })
+    -- vim.api.nvim_set_hl(0, "NonText",      { ctermbg = "none", bg = "none", fg = "none" })
+    -- vim.api.nvim_set_hl(0, "EndOfBuffer",  { ctermbg = "none", bg = "none" })
 end
 
-SetTransparentBackground("catppuccin")
-
+SetTransparentBackground("catppuccin", "dark")

@@ -22,15 +22,15 @@ vim.keymap.set("n", "<leader>lp", function() dap.set_breakpoint(nil, nil, vim.fn
 vim.keymap.set("n", "<leader>dr", function() dap.repl.open() end, { desc = "Open debugger repl" })
 
 dap.listeners.after.event_initialized["dapui_config"] = function()
-  dapui.open()
+    dapui.open()
 end
 
 dap.listeners.before.event_terminated["dapui_config"] = function()
-  dapui.close()
+    dapui.close()
 end
 
 dap.listeners.before.event_exited["dapui_config"] = function()
-  dapui.close()
+    dapui.close()
 end
 
 require('dap-go').setup({
@@ -107,5 +107,4 @@ rt.setup({
         }
     },
 })
-
 

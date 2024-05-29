@@ -85,13 +85,16 @@ vnoremap(carriageReturn.on("p"), nullRegister.on("dP"), { desc = "Replace text w
 inoremap("<Up>",   "<C-p>", { desc = "Previous in completion list" });
 inoremap("<Down>", "<C-n>", { desc = "Next in completion list" });
 
-nnoremap(leader.on("n"), function()
-    vim.o.relativenumber = not vim.o.relativenumber
+nnoremap(leader.on("nn"), function()
     vim.o.number = not vim.o.number
-end, { desc = "Toggle line and relative numbers" })
+end, { desc = "Toggle line numbers" })
 
-nnoremap("<leader>s", ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { desc = "Search word under cursor" })
-nnoremap("<leader>df", function()
+nnoremap(leader.on("nr"), function()
+    vim.o.relativenumber = not vim.o.relativenumber
+end, { desc = "Toggle relative numbers" })
+
+nnoremap(leader.on("s"), ":%s/\\<<C-r><C-w>\\>/<C-r><C-w>/gI<Left><Left><Left>", { desc = "Search word under cursor" })
+nnoremap(leader.on("df"), function()
     if vim.o.diff then
         vim.cmd.diffoff()
     else
@@ -113,8 +116,8 @@ end
 
 doNotRespond({ "n", "v", "o" }, { "<CR>", "<Del>", "<BS>", "<Space>", "Q" })
 
-nnoremap("<CR>j", "o<Esc>", { desc = "Make new line below" })
-nnoremap("<CR>k", "O<Esc>", { desc = "Make new line above" })
+nnoremap(carriageReturn.on("j"), "o<Esc>", { desc = "Make new line below" })
+nnoremap(carriageReturn.on("k"), "O<Esc>", { desc = "Make new line above" })
 
 cnoremap("<C-f>", "<Right>", { desc = "Forward" })
 cnoremap("<C-b>", "<Left>", { desc = "Back" })
@@ -132,7 +135,7 @@ nnoremap("<C-J>", "zl", { desc = "Scroll right" })
 nnoremap("<C-H>", "zh", { desc = "Scroll left" })
 
 -- Make current file executable
-nnoremap("<leader>ex", function()
+nnoremap(leader.on("ex"), function()
     local filename = vim.fn.expand("%")
     local is_executable = vim.fn.executable("./" .. filename)
 
