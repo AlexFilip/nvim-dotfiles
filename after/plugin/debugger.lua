@@ -64,14 +64,5 @@ require('dap-go').setup({
     },
 })
 
-dap.configurations.rust = {
-    {
-        type = "rust",
-        name = "Attach remote",
-        mode = "remote",
-        request = "attach",
-    },
-}
-
 -- Rust
--- Should be set up automatically with the mrcjkb/rustaceanvim plugin
+-- Should be set up automatically with the mrcjkb/rustaceanvim plugin, extra configs in lsp.lua

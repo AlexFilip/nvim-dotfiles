@@ -2,8 +2,8 @@ local default_capabilities = require("cmp_nvim_lsp").default_capabilities()
 local lspconfig = require("lspconfig")
 
 local virtual_types_onattach = require('virtualtypes').on_attach
-function lsp_attach(client, bufnr, ...)
-    virtual_types_onattach(client, bufnr, ...)
+function lsp_attach(client, bufnr)
+    virtual_types_onattach(client, bufnr)
 end
 
 vim.lsp.inlay_hint.enable(true)
@@ -25,8 +25,6 @@ vim.g.rustaceanvim = {
     -- LSP configuration
     server = {
         on_attach = function(client, bufnr)
-            -- you can also put keymaps in here
-            -- vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
             virtual_types_onattach(client, bufnr)
         end,
         default_settings = {
@@ -36,26 +34,16 @@ vim.g.rustaceanvim = {
         },
     },
     -- DAP configuration
-    -- dap = {
-    -- },
+    dap = {
+        type = "rust",
+        name = "Attach remote",
+        mode = "remote",
+        request = "attach",
+    },
 }
-
--- lspconfig.rust_analyzer.setup {
---     capabilities = default_capabilities,
---     on_attach = lsp_attach,
---     cmd = {
---         "rustup", "run", "stable", "rust-analyzer"
---     }
---     -- Server-specific settings. See `:help lspconfig-setup`
---     -- settings = {
---     --     ["rust-analyzer"] = {},
---     -- },
--- }
 
 lspconfig.terraformls.setup{}
 lspconfig.tflint.setup{}
-
--- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false, signs = false, underline = false })
 
 -- TODO: Disable specifically for C & C++
 -- vim.diagnostic.enable(false)
