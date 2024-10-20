@@ -78,31 +78,6 @@ cmp.setup.cmdline(":", {
     })
 })
 
--- Set up lspconfig.
-local default_capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-local lspconfig = require("lspconfig")
-
-lspconfig.clangd.setup {
-    capabilities = default_capabilities
-}
-
-lspconfig.gopls.setup { }
-
-lspconfig.rust_analyzer.setup {
-    capabilities = default_capabilities,
-    cmd = {
-        "rustup", "run", "stable", "rust-analyzer"
-    }
-    -- Server-specific settings. See `:help lspconfig-setup`
-    -- settings = {
-    --     ["rust-analyzer"] = {},
-    -- },
-}
-
-lspconfig.terraformls.setup{}
-lspconfig.tflint.setup{}
-
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 -- vim.keymap.set("n", "<space>o", vim.diagnostic.open_float, { desc = "" })

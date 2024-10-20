@@ -68,3 +68,4 @@ createCommand("RenameFiles", {}, function()
     end)
     vim.fn.append(0, commands)
 end)
+

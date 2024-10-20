@@ -16,9 +16,9 @@ vim.keymap.set("n", "<F5>",       function() dap.continue() end, { desc = "Start
 vim.keymap.set("n", "<F1>",       function() dap.step_into() end , { desc = "Step into" })
 vim.keymap.set("n", "<F2>",       function() dap.step_over() end , { desc = "Step over" })
 vim.keymap.set("n", "<F3>",       function() dap.step_out()  end , { desc = "Step out"  })
-vim.keymap.set("n", "<leader>b",  function() dap.toggle_breakpoint() end, { desc = "Toggle breakpoint" })
+vim.keymap.set("n", "<leader>br",  function() dap.toggle_breakpoint() end, { desc = "Toggle breakpoint" })
 vim.keymap.set("n", "<leader>B",  function() dap.set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, { desc = "Conditional breakpoint" })
-vim.keymap.set("n", "<leader>lp", function() dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: ")) end, { desc = "Logging breakpoint" })
+vim.keymap.set("n", "<leader>bl", function() dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: ")) end, { desc = "Logging breakpoint" })
 vim.keymap.set("n", "<leader>dr", function() dap.repl.open() end, { desc = "Open debugger repl" })
 
 dap.listeners.after.event_initialized["dapui_config"] = function()
@@ -74,37 +74,4 @@ dap.configurations.rust = {
 }
 
 -- Rust
-
-local rt = require("rust-tools")
-local mason_registry = require("mason-registry")
-
-local extension_path = mason_registry.get_package("codelldb"):get_install_path() .. "/extension/"
-local codelldb_path = extension_path .. "adapter/codelldb"
-local liblldb_path = extension_path .. "lldb/lib/liblldb.so" -- Note: this may be .dylib on mac and .lib on some systems
-local adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path)
-table.insert(adapter.executable.args, "${pid}")
-
--- print(util.stringify(adapter))
-
-dap.adapters.rust = adapter
-
-rt.setup({
-    dap = {
-        adapter = adapter
-    },
-
-    server = {
-        capabilities = require("cmp_nvim_lsp").default_capabilities(),
-        on_attach = function(_, bufnr)
-            vim.keymap.set("n", "<leader>k", rt.hover_actions.hover_actions, { buffer = bufnr })
-            vim.keymap.set("n", "<leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
-        end,
-    },
-
-    tools = {
-        hover_actions = {
-            auto_focus = true
-        }
-    },
-})
-
+-- Should be set up automatically with the mrcjkb/rustaceanvim plugin

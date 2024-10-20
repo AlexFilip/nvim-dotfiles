@@ -17,17 +17,6 @@ local plugins = {
     --     }
     -- },
 
-    -- Explore config files
-    'phelipetls/jsonpath.nvim',
-    {
-        "cuducos/yaml.nvim",
-        ft = { "yaml" }, -- optional
-        requires = {
-            "nvim-treesitter/nvim-treesitter",
-            "nvim-telescope/telescope.nvim" -- optional
-        }
-    },
-
     -- Theming
     "catppuccin/nvim",
     {
@@ -56,20 +45,24 @@ local plugins = {
     --     requires = "nvim-treesitter/nvim-treesitter",
     -- },
     {
-        "nvim-orgmode/orgmode",
-        after = "nvim-treesitter",
-        requires = "nvim-treesitter/nvim-treesitter",
-        config = function()
-            require('orgmode').setup{}
-        end
-    },
-    {
         "nvim-treesitter/nvim-treesitter-textobjects",
         after = "nvim-treesitter",
         requires = "nvim-treesitter/nvim-treesitter",
     },
 
-    "simrat39/rust-tools.nvim",
+    -- Explore config files
+    'phelipetls/jsonpath.nvim',
+    {
+        "cuducos/yaml.nvim",
+        ft = { "yaml" }, -- optional
+        requires = {
+            "nvim-treesitter/nvim-treesitter",
+            "nvim-telescope/telescope.nvim" -- optional
+        }
+    },
+
+    "mrcjkb/rustaceanvim",
+    "jubnzv/virtual-types.nvim", -- display types in virtual text on same line
 
     -- Git support
     "tpope/vim-fugitive",

@@ -1,28 +1,64 @@
 local default_capabilities = require("cmp_nvim_lsp").default_capabilities()
 local lspconfig = require("lspconfig")
 
+local virtual_types_onattach = require('virtualtypes').on_attach
+function lsp_attach(client, bufnr, ...)
+    virtual_types_onattach(client, bufnr, ...)
+end
+
+vim.lsp.inlay_hint.enable(true)
+
 lspconfig.clangd.setup {
-    capabilities = default_capabilities
+    capabilities = default_capabilities,
+    on_attach = lsp_attach
 }
 
 lspconfig.gopls.setup {
-    capabilities = default_capabilities
+    capabilities = default_capabilities,
+    on_attach = lsp_attach,
 }
 
-lspconfig.rust_analyzer.setup {
-    capabilities = default_capabilities,
-    cmd = {
-        "rustup", "run", "stable", "rust-analyzer"
-    }
-    -- Server-specific settings. See `:help lspconfig-setup`
-    -- settings = {
-    --     ["rust-analyzer"] = {},
+vim.g.rustaceanvim = {
+    -- Plugin configuration
+    -- tools = {
+    -- },
+    -- LSP configuration
+    server = {
+        on_attach = function(client, bufnr)
+            -- you can also put keymaps in here
+            -- vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+            virtual_types_onattach(client, bufnr)
+        end,
+        default_settings = {
+            -- rust-analyzer language server configuration
+            ['rust-analyzer'] = {
+            },
+        },
+    },
+    -- DAP configuration
+    -- dap = {
     -- },
 }
 
--- lspconfig.terraformls.setup{}
--- lspconfig.tflint.setup{}
+-- lspconfig.rust_analyzer.setup {
+--     capabilities = default_capabilities,
+--     on_attach = lsp_attach,
+--     cmd = {
+--         "rustup", "run", "stable", "rust-analyzer"
+--     }
+--     -- Server-specific settings. See `:help lspconfig-setup`
+--     -- settings = {
+--     --     ["rust-analyzer"] = {},
+--     -- },
+-- }
 
+lspconfig.terraformls.setup{}
+lspconfig.tflint.setup{}
+
+-- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false, signs = false, underline = false })
+
+-- TODO: Disable specifically for C & C++
+-- vim.diagnostic.enable(false)
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 -- vim.keymap.set("n", "<space>o", vim.diagnostic.open_float, { desc = "" })
