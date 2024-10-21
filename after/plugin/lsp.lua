@@ -3,7 +3,9 @@ local lspconfig = require("lspconfig")
 
 local virtual_types_onattach = require('virtualtypes').on_attach
 function lsp_attach(client, bufnr)
-    virtual_types_onattach(client, bufnr)
+    if client.supports_method("textDocument/codeLens") then
+        virtual_types_onattach(client, bufnr)
+    end
 end
 
 vim.lsp.inlay_hint.enable(true)
@@ -25,7 +27,7 @@ vim.g.rustaceanvim = {
     -- LSP configuration
     server = {
         on_attach = function(client, bufnr)
-            virtual_types_onattach(client, bufnr)
+            lsp_attach(client, bufnr)
         end,
         default_settings = {
             -- rust-analyzer language server configuration
