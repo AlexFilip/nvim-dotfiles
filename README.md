@@ -6,7 +6,7 @@ There are still some kinks I need to work out, especially with the terminal and 
 ## Installation:
 Save this directory as `~/.config/nvim/`
 ```
-git clone https://github.com/AlexFilip/nvim ~/.config/nvim
+git clone https://github.com/AlexFilip/nvim-dotfiles ~/.config/nvim
 ```
 
 or symlink it from your preferred location
