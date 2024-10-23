@@ -12,8 +12,9 @@ git clone https://github.com/AlexFilip/nvim-dotfiles ~/.config/nvim
 or symlink it from your preferred location
 
 ```
-git clone https://github.com/AlexFilip/nvim your/preferred/location
-ln -sf ~/.config/nvim your/preferred/location
+PREFERRED_LOCATION="your/preferred/location"
+git clone https://github.com/AlexFilip/nvim-dotfiles $PREFERRED_LOCATION
+ln -sf ~/.config/nvim $PREFERRED_LOCATION
 ```
 
 ## Local vimrc
