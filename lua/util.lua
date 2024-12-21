@@ -74,4 +74,6 @@ function exports.arrayConcat(...)
     return newArray
 end
 
+exports.config_dir = vim.fn.fnamemodify(vim.env.MYVIMRC, ":h")
+
 return exports

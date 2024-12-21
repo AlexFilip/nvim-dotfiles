@@ -8,9 +8,6 @@ mason.setup()
 
 require("nvim-dap-virtual-text").setup()
 
--- Install in mason:
---     codelldb for rust
-
 vim.keymap.set("n", "<F5>",       function() dap.continue() end, { desc = "Start debugger or continue"})
 vim.keymap.set("n", "<F1>",       function() dap.step_into() end , { desc = "Step into" })
 vim.keymap.set("n", "<F2>",       function() dap.step_over() end , { desc = "Step over" })

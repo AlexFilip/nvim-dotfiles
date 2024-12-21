@@ -16,6 +16,15 @@ local base_path = vim.env.HOME .. "/code"
 local uid_gid  = io.popen("id -u"):read("*a"):gsub("%s+", "") .. ":" .. io.popen("id -g"):read("*a"):gsub("%s+", "")
 local clangd_dir = lspconfig_util.root_pattern(".git", vim.fn.getcwd())
 
+
+
+-- TODO: Since these are all sharing the home directory, I should make it use a single docker container
+-- running in detached mode for all tasks of a single language, even across neovim instances. Then, I
+-- can make this do a single `docker exec ...` for lsp and debugger needs. I would also have to make my
+-- own images for this. I should upload them, if I do.
+-- - Put a script in the config directory and use util.config_dir to find and execute it.
+--   Give the container a well-known name and use "docker run -d ..." if it isn't already running.
+--   Once we know the container exists, use "docker exec -i ..." to run the actual lsp or debugger
 local workdir = vim.env.HOME
 local cmd_prefix = {
     "docker",
