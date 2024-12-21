@@ -80,7 +80,6 @@ local plugins = {
 
     -- Cmp
     "neovim/nvim-lspconfig",
-    'lspcontainers/lspcontainers.nvim',
 
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-buffer",

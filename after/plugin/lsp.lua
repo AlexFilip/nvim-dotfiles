@@ -1,7 +1,7 @@
 local default_capabilities = require("cmp_nvim_lsp").default_capabilities()
 local lspconfig = require("lspconfig")
-local lspconfig_util = require('lspconfig/util')
-local lspcontainers = require('lspcontainers')
+local lspconfig_util = require("lspconfig/util")
+local util = require("util")
 
 local virtual_types_onattach = require('virtualtypes').on_attach
 function lsp_attach(client, bufnr)
@@ -12,69 +12,52 @@ end
 
 vim.lsp.inlay_hint.enable(true)
 
+local base_path = vim.env.HOME .. "/code"
+local uid_gid  = io.popen("id -u"):read("*a"):gsub("%s+", "") .. ":" .. io.popen("id -g"):read("*a"):gsub("%s+", "")
+local clangd_dir = lspconfig_util.root_pattern(".git", vim.fn.getcwd())
+
+local workdir = vim.env.HOME
+local cmd_prefix = {
+    "docker",
+    "container",
+    "run",
+    "--interactive",
+    "--rm",
+    "-u", uid_gid,
+    "--network=none",
+    "--workdir", workdir,
+    "--volume", workdir .. ":" ..workdir .. ":z",
+}
+
 lspconfig.clangd.setup {
     on_attach = on_attach,
     capabilities = default_capabilities,
-    cmd = lspcontainers.command('clangd'),
-    root_dir = lspconfig_util.root_pattern(".git", vim.fn.getcwd()),
+    cmd = util.arrayConcat(cmd_prefix, { "lspcontainers/clangd-language-server:latest" }),
+    root_dir = lspconfig_util.root_pattern(".git", base_path),
 }
 
+local gopath = vim.env.GOPATH or vim.env.HOME .. "/go"
 lspconfig.gopls.setup {
     on_attach = lsp_attach,
     capabilities = default_capabilities,
-    cmd = lspcontainers.command('gopls'),
+    cmd = util.arrayConcat(cmd_prefix, {
+        "--volume", gopath .. ":" .. gopath .. ":z",
+        "lspcontainers/gopls:latest",
+    }),
     root_dir = lspconfig_util.root_pattern(".git", vim.fn.getcwd()),
 }
 
 lspconfig.rust_analyzer.setup {
     on_attach = lsp_attach,
     capabilities = default_capabilities,
-    cmd = require'lspcontainers'.command('rust_analyzer'),
+    cmd = util.arrayConcat(cmd_prefix, { "lspcontainers/rust-analyzer:latest" }),
     root_dir = lspconfig_util.root_pattern(".git", vim.fn.getcwd()),
 }
-
--- vim.g.rustaceanvim = {
---     -- Plugin configuration
---     -- tools = { },
---     -- LSP configuration
---     server = {
---         on_attach = function(client, bufnr)
---             lsp_attach(client, bufnr)
---         end,
---         cmd = lspcontainers.command('rust-analyzer', {
---             image = "lspcontainers/rust-analyzer:latest",
---             cmd = function (runtime, volume, image)
---                 return {
---                     runtime,
---                     "container",
---                     "run",
---                     "--interactive",
---                     "--rm",
---                     "--volume",
---                     volume,
---                     image
---                 }
---             end,
---         }),
---         default_settings = {
---             -- rust-analyzer language server configuration
---             ['rust-analyzer'] = {
---             },
---         },
---     },
---     -- DAP configuration
---     dap = {
---         type = "rust",
---         name = "Attach remote",
---         mode = "remote",
---         request = "attach",
---     },
--- }
 
 lspconfig.terraformls.setup{
     on_attach = lsp_attach,
     capabilities = default_capabilities,
-    cmd = lspcontainers.command('terraformls'),
+    cmd = util.arrayConcat(cmd_prefix, { "lspcontainers/terraform-ls:latest" }),
     filetypes = { "hcl", "tf", "terraform", "tfvars" },
     root_dir = lspconfig_util.root_pattern(".git", vim.fn.getcwd()),
 }

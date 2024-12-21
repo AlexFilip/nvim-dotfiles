@@ -64,4 +64,14 @@ function exports.arrayReplace(array, value, newValue)
     return newArray
 end
 
+function exports.arrayConcat(...)
+    local newArray = {}
+    for _, innerArray in ipairs({ ... }) do
+        for _, v in ipairs(innerArray) do
+            newArray[#newArray+1] = v
+        end
+    end
+    return newArray
+end
+
 return exports

@@ -1,5 +1,4 @@
 
-local util = require("util")
 local dap = require("dap")
 local dapui = require("dapui")
 dapui.setup()
@@ -65,4 +64,5 @@ require('dap-go').setup({
 })
 
 -- Rust
--- Should be set up automatically with the mrcjkb/rustaceanvim plugin, extra configs in lsp.lua
+-- Was previously done automatically by the mrcjkb/rustaceanvim plugin in lsp.lua
+-- Now it's not as easy since I want to use docker containers
