@@ -61,7 +61,7 @@ local plugins = {
         }
     },
 
-    "mrcjkb/rustaceanvim",
+    -- "mrcjkb/rustaceanvim",
     "jubnzv/virtual-types.nvim", -- display types in virtual text on same line
 
     -- Git support
@@ -80,6 +80,8 @@ local plugins = {
 
     -- Cmp
     "neovim/nvim-lspconfig",
+    'lspcontainers/lspcontainers.nvim',
+
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",

@@ -1,5 +1,7 @@
 local default_capabilities = require("cmp_nvim_lsp").default_capabilities()
 local lspconfig = require("lspconfig")
+local lspconfig_util = require('lspconfig/util')
+local lspcontainers = require('lspcontainers')
 
 local virtual_types_onattach = require('virtualtypes').on_attach
 function lsp_attach(client, bufnr)
@@ -11,41 +13,73 @@ end
 vim.lsp.inlay_hint.enable(true)
 
 lspconfig.clangd.setup {
+    on_attach = on_attach,
     capabilities = default_capabilities,
-    on_attach = lsp_attach
+    cmd = lspcontainers.command('clangd'),
+    root_dir = lspconfig_util.root_pattern(".git", vim.fn.getcwd()),
 }
 
 lspconfig.gopls.setup {
-    capabilities = default_capabilities,
     on_attach = lsp_attach,
+    capabilities = default_capabilities,
+    cmd = lspcontainers.command('gopls'),
+    root_dir = lspconfig_util.root_pattern(".git", vim.fn.getcwd()),
 }
 
-vim.g.rustaceanvim = {
-    -- Plugin configuration
-    -- tools = {
-    -- },
-    -- LSP configuration
-    server = {
-        on_attach = function(client, bufnr)
-            lsp_attach(client, bufnr)
-        end,
-        default_settings = {
-            -- rust-analyzer language server configuration
-            ['rust-analyzer'] = {
-            },
-        },
-    },
-    -- DAP configuration
-    dap = {
-        type = "rust",
-        name = "Attach remote",
-        mode = "remote",
-        request = "attach",
-    },
+lspconfig.rust_analyzer.setup {
+    on_attach = lsp_attach,
+    capabilities = default_capabilities,
+    cmd = require'lspcontainers'.command('rust_analyzer'),
+    root_dir = lspconfig_util.root_pattern(".git", vim.fn.getcwd()),
 }
 
-lspconfig.terraformls.setup{}
-lspconfig.tflint.setup{}
+-- vim.g.rustaceanvim = {
+--     -- Plugin configuration
+--     -- tools = { },
+--     -- LSP configuration
+--     server = {
+--         on_attach = function(client, bufnr)
+--             lsp_attach(client, bufnr)
+--         end,
+--         cmd = lspcontainers.command('rust-analyzer', {
+--             image = "lspcontainers/rust-analyzer:latest",
+--             cmd = function (runtime, volume, image)
+--                 return {
+--                     runtime,
+--                     "container",
+--                     "run",
+--                     "--interactive",
+--                     "--rm",
+--                     "--volume",
+--                     volume,
+--                     image
+--                 }
+--             end,
+--         }),
+--         default_settings = {
+--             -- rust-analyzer language server configuration
+--             ['rust-analyzer'] = {
+--             },
+--         },
+--     },
+--     -- DAP configuration
+--     dap = {
+--         type = "rust",
+--         name = "Attach remote",
+--         mode = "remote",
+--         request = "attach",
+--     },
+-- }
+
+lspconfig.terraformls.setup{
+    on_attach = lsp_attach,
+    capabilities = default_capabilities,
+    cmd = lspcontainers.command('terraformls'),
+    filetypes = { "hcl", "tf", "terraform", "tfvars" },
+    root_dir = lspconfig_util.root_pattern(".git", vim.fn.getcwd()),
+}
+
+-- lspconfig.tflint.setup{ }
 
 -- TODO: Disable specifically for C & C++
 -- vim.diagnostic.enable(false)
