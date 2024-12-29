@@ -1,3 +1,4 @@
+local util = require('util')
 
 require("catppuccin").setup({
     flavour = "frappe", -- latte, frappe, macchiato, mocha
@@ -5,7 +6,7 @@ require("catppuccin").setup({
         light = "latte",
         dark = "frappe",
     },
-    transparent_background = false, -- disables setting the background color.
+    transparent_background = true, -- disables setting the background color.
     show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
     term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
     dim_inactive = {
@@ -43,10 +44,24 @@ require("catppuccin").setup({
     },
 })
 
+-- Nord config
+util.setValuesInObject(vim.g, {
+    nord_contrast = false,
+    nord_borders = true,
+    nord_disable_background = false,
+    nord_cursorline_transparent = true,
+    nord_enable_sidebar_background = false,
+    nord_italic = true,
+    nord_uniform_diff_background = true,
+    nord_bold = true,
+})
+
+-- Load the colorscheme
+require('nord').set()
+
 local function SetTransparentBackground(color, theme)
-    color = color or "catppuccin"
-    vim.o.background = theme or 'dark'
-    vim.cmd.colorscheme(color)
+    vim.o.background = theme or "dark"
+    vim.cmd.colorscheme(color or "nord")
 
     -- vim.api.nvim_set_hl(0, "Normal",       { ctermbg = "none", bg = "none" })
     -- vim.api.nvim_set_hl(0, "NormalNC",     { ctermbg = "none", bg = "none" })
@@ -57,4 +72,10 @@ local function SetTransparentBackground(color, theme)
     -- vim.api.nvim_set_hl(0, "EndOfBuffer",  { ctermbg = "none", bg = "none" })
 end
 
-SetTransparentBackground("catppuccin", "dark")
+SetTransparentBackground("nord", "dark")
+
+util.setValuesInObject(vim.o, {
+    showtabline = 0,
+    laststatus  = 3,
+    winbar      = "%f %m %{%v:lua.require('config_files').getPath()%}",
+})

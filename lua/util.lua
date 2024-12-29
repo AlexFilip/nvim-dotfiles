@@ -74,6 +74,12 @@ function exports.arrayConcat(...)
     return newArray
 end
 
+function exports.setValuesInObject(obj, values)
+    for k, v in pairs(values) do
+        obj[k] = v
+    end
+end
+
 exports.config_dir = vim.fn.fnamemodify(vim.env.MYVIMRC, ":h")
 
 return exports

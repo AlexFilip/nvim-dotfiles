@@ -84,7 +84,3 @@ require('lualine').setup {
     inactive_winbar = {},
     extensions = {}
 }
-
-vim.o.showtabline = 0
-vim.o.laststatus  = 3
-vim.o.winbar      = "%f %m %{%v:lua.require('config_files').getPath()%}"

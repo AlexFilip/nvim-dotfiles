@@ -19,6 +19,7 @@ local plugins = {
 
     -- Theming
     "catppuccin/nvim",
+    "shaunsingh/nord.nvim",
     {
         'nvim-lualine/lualine.nvim',
         requires = { 'nvim-tree/nvim-web-devicons', opt = true }
