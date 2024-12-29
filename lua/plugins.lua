@@ -18,7 +18,6 @@ local plugins = {
     -- },
 
     -- Theming
-    "catppuccin/nvim",
     "shaunsingh/nord.nvim",
     {
         'nvim-lualine/lualine.nvim',
