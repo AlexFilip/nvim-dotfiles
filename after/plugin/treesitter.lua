@@ -13,7 +13,7 @@ require("nvim-treesitter.configs").setup {
         -- "swift",
         "go",
         "html", "css",
-        -- "json", "yaml",
+        "json", "yaml",
         -- "json5",
         "markdown", "comment",
     },

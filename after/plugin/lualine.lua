@@ -1,3 +1,5 @@
+local util = require("util")
+local config = require('config_files')
 
 function searchCount()
     local search = vim.fn.searchcount({ maxcount = 0 }) -- maxcount = 0 makes the number not be capped at 99
@@ -25,15 +27,25 @@ require('lualine').setup {
         },
         ignore_focus = {},
         always_divide_middle = true,
-        globalstatus = false,
+        globalstatus = true,
         refresh = {
-            statusline = 1000,
+            -- statusline = 1000,
             tabline = 1000,
-            winbar = 1000,
+            winbar  = 1000,
         }
     },
 
     sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = {},
+        lualine_x = {},
+        lualine_y = {},
+        lualine_z = {}
+    },
+
+    always_show_tabline = true,
+    tabline = {
         lualine_a = {'mode'},
         lualine_b = {'branch', 'diff', 'diagnostics'},
         lualine_c = {
@@ -60,7 +72,6 @@ require('lualine').setup {
                 --     local winnr = vim.fn.tabpagewinnr(context.tabnr)
                 --     local bufnr = buflist[winnr]
                 --     local mod = vim.fn.getbufvar(bufnr, '&mod')
-
                 --     return name .. (mod == 1 and ' +' or '')
                 -- end
             }
@@ -79,8 +90,48 @@ require('lualine').setup {
         lualine_z = {}
     },
 
-    tabline = {},
-    winbar = {},
+    winbar = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = {
+            {
+                'filename',
+                file_status = true,        -- display monified, readonly, etc.
+                newfile_status = false,    -- Display new file status (new file means no write after created)
+                path = 1,                  -- Relative path
+                shorting_target = 40,      -- How many spaces to leave in window for other components
+            }
+        },
+        lualine_x = {
+            {
+                'path',
+                icons_enabled = false,
+                cond = function()
+                    local filetype = vim.bo.filetype
+                    return filetype == "json" or filetype == "yaml"
+                end,
+                fmt = function(toDisplay, context)
+                    return config.getPath()
+                end,
+                on_click = function(numClicks, button, modifiers)
+                    local register
+                    if modifiers:find("c", 1, true) ~= nil then
+                        register = "+"
+                    -- else if modifiers:find("a", 1, true) ~= nil then -- alt
+                    -- else if modifiers:find("m", 1, true) ~= nil then -- meta
+                    -- else if modifiers:find("s", 1, true) ~= nil then -- shift
+                    else -- no other modifiers
+                        register = [["]]
+                    end
+                    config.yankToRegister(register)
+                end,
+            }
+        },
+        lualine_y = {},
+        lualine_z = {}
+    },
     inactive_winbar = {},
     extensions = {}
 }
+
+vim.o.laststatus = 0

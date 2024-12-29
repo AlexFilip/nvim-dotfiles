@@ -4,7 +4,7 @@ local util = require('util')
 util.setValuesInObject(vim.g, {
     nord_contrast = false,
     nord_borders = true,
-    nord_disable_background = false,
+    nord_disable_background = true,
     nord_cursorline_transparent = true,
     nord_enable_sidebar_background = false,
     nord_italic = true,
@@ -29,9 +29,3 @@ local function SetTransparentBackground(color, theme)
 end
 
 SetTransparentBackground("nord", "dark")
-
-util.setValuesInObject(vim.o, {
-    showtabline = 0,
-    laststatus  = 3,
-    winbar      = "%f %m %{%v:lua.require('config_files').getPath()%}",
-})
