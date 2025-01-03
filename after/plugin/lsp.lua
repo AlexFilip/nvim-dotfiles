@@ -33,7 +33,7 @@ local cmd_prefix = {
     "--interactive",
     "--rm",
     "-u", uid_gid,
-    "--network=none",
+    -- "--network=none", -- might need to exec into container to get a new package
     "--workdir", workdir,
     "--volume", workdir .. ":" ..workdir .. ":z",
 }
