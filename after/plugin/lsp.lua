@@ -12,11 +12,8 @@ end
 
 vim.lsp.inlay_hint.enable(true)
 
-local base_path = vim.env.HOME .. "/code"
 local uid_gid  = io.popen("id -u"):read("*a"):gsub("%s+", "") .. ":" .. io.popen("id -g"):read("*a"):gsub("%s+", "")
-local clangd_dir = lspconfig_util.root_pattern(".git", vim.fn.getcwd())
-
-
+local clangd_dir = lspconfig_util.root_pattern(".git", "compile", "build-image", "run", vim.fn.getcwd())
 
 -- TODO: Since these are all sharing the home directory, I should make it use a single docker container
 -- running in detached mode for all tasks of a single language, even across neovim instances. Then, I
@@ -39,10 +36,18 @@ local cmd_prefix = {
 }
 
 lspconfig.clangd.setup {
-    on_attach = on_attach,
+    on_attach = lsp_attach,
     capabilities = default_capabilities,
-    cmd = util.arrayConcat(cmd_prefix, { "lspcontainers/clangd-language-server:latest" }),
-    root_dir = lspconfig_util.root_pattern(".git", base_path),
+    cmd = util.arrayConcat(cmd_prefix, {
+        "lspcontainers/clangd-language-server:latest",
+        "--background-index",
+        "--clang-tidy",
+        "--header-insertion=iwyu",
+        "--completion-style=detailed",
+        "--function-arg-placeholders",
+        "--fallback-style=llvm",
+    }),
+    root_dir = lspconfig_util.root_pattern(".git", "compile", "build-image", "run", vim.fn.getcwd()),
 }
 
 local gopath = vim.env.GOPATH or vim.env.HOME .. "/go"
@@ -53,14 +58,14 @@ lspconfig.gopls.setup {
         "--volume", gopath .. ":" .. gopath .. ":z",
         "lspcontainers/gopls:latest",
     }),
-    root_dir = lspconfig_util.root_pattern(".git", vim.fn.getcwd()),
+    root_dir = lspconfig_util.root_pattern(".git", "compile", "build-image", "run", "go.mod", "go.sum", vim.fn.getcwd()),
 }
 
 lspconfig.rust_analyzer.setup {
     on_attach = lsp_attach,
     capabilities = default_capabilities,
     cmd = util.arrayConcat(cmd_prefix, { "lspcontainers/rust-analyzer:latest" }),
-    root_dir = lspconfig_util.root_pattern(".git", vim.fn.getcwd()),
+    root_dir = lspconfig_util.root_pattern(".git", "compile", "build-image", "run", "Cargo.toml", vim.fn.getcwd()),
 }
 
 lspconfig.terraformls.setup{

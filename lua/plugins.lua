@@ -104,7 +104,9 @@ local plugins = {
 }
 
 vim.cmd [[packadd packer.nvim]]
-vim.cmd [[packadd termdebug]]
+-- if vim.fn.exists(':Termdebug') == 0 then
+--   vim.cmd [[packadd termdebug]]
+-- end
 
 local x = require("packer").startup(function(use)
 

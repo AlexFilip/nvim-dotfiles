@@ -27,6 +27,7 @@ local winbar_config = {
             shorting_target = 40,      -- How many spaces to leave in window for other components
         }
     },
+    ---
     lualine_x = {
         {
             'path',
@@ -53,7 +54,7 @@ local winbar_config = {
         }
     },
     lualine_y = {},
-    lualine_z = {}
+    lualine_z = {},
 }
 
 require('lualine').setup {
@@ -98,14 +99,14 @@ require('lualine').setup {
                 },
 
                 -- fmt = function(name, context)
-                --     -- Show + if buffer is modified in tab
-                --     local buflist = vim.fn.tabpagebuflist(context.tabnr)
-                --     local winnr = vim.fn.tabpagewinnr(context.tabnr)
-                --     local bufnr = buflist[winnr]
-                --     local mod = vim.fn.getbufvar(bufnr, '&mod')
-                --     return name .. (mod == 1 and ' +' or '')
-                -- end
-            }
+                    --     -- Show + if buffer is modified in tab
+                    --     local buflist = vim.fn.tabpagebuflist(context.tabnr)
+                    --     local winnr = vim.fn.tabpagewinnr(context.tabnr)
+                    --     local bufnr = buflist[winnr]
+                    --     local mod = vim.fn.getbufvar(bufnr, '&mod')
+                    --     return name .. (mod == 1 and ' +' or '')
+                    -- end
+            },
         },
         lualine_x = {{ searchCount }, 'encoding', 'fileformat', 'filetype'},
         lualine_y = {'progress'},
