@@ -1,11 +1,13 @@
 -- Set up nvim-cmp.
 local cmp = require("cmp")
 local luasnip = require("luasnip")
+local remap = require("remap") -- In lua/ directory
+local util = require("util") -- In lua/ directory
 
 cmp.setup({
     snippet = {
         expand = function(args)
-            require("luasnip").lsp_expand(args.body)
+            luasnip.lsp_expand(args.body)
         end,
     },
 
@@ -95,24 +97,31 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
         -- Buffer local mappings.
         -- See `:help vim.lsp.*` for documentation on any of the below functions
-        vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = ev.buf, desc = "Go to declaration" })
-        vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = ev.buf, desc = "Go to definition" })
-        vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = ev.buf, desc = "Show documentation" })
-        vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { buffer = ev.buf, desc = "Go to implementation" })
-        vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { buffer = ev.buf, desc = "Signature help" })
-        vim.keymap.set("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, { buffer = ev.buf, desc = "Add to workspace folder" })
-        vim.keymap.set("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, { buffer = ev.buf, desc = "Remove from workspace folder" })
-        vim.keymap.set("n", "<leader>wl", function()
-            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-        end, { buffer = ev.buf, desc = "Print workspace folders" })
-        vim.keymap.set("n", "<leader>D", vim.lsp.buf.type_definition, { buffer = ev.buf, desc = "Go to type definition" })
-        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { buffer = ev.buf, desc = "Rename identifier" })
-        vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { buffer = ev.buf, desc = "Code action" })
-        vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = ev.buf, desc = "Show references" })
-        vim.keymap.set("n", "<leader>=", function()
-            vim.lsp.buf.format { async = true }
-        end, { buffer = ev.buf, desc = "Format code" })
-        vim.keymap.set("n", "<leader>er", vim.diagnostic.open_float, { buffer = ev.buf, desc = "Expand error message" })
+        local lst = {
+            --        description                        keys         action         modes
+            { "Go to declaration",                       "gD", "declaration" },
+            { "Go to definition",                        "gd", "definition" },
+            { "Show documentation",                       "K", "hover" },
+            { "Go to implementation",                    "gi", "implementation" },
+            { "Signature help",                       "<C-k>", "signature_help" },
+            { "Show references",                         "gr", "references" },
+            { "Add to workspace folder",      leader.on("wa"), "add_workspace_folder" },
+            { "Remove from workspace folder", leader.on("wr"), "remove_workspace_folder" },
+            { "Go to type definition",        leader.on( "D"), "type_definition" },
+            { "Rename identifier",            leader.on("rn"), "rename" },
+            { "Code action",                  leader.on("ca"), "code_action", { "n", "v" } },
+            { "Expand error message",         leader.on("er"), vim.diagnostic.open_float },
+            { "Format code",                  leader.on( "="), function() vim.lsp.buf.format({ async = true }) end },
+            { "Print workspace folders",      leader.on("wl"), function() print(vim.inspect(vim.lsp.buf.list_workspace_folders())) end },
+        }
+
+        for k, v in lst do
+            vim.keymap.set(
+                lst[4] == nil and "n" or lst[4],
+                lst[2],
+                (type(lst[3]) == "string") and lst[3] or vim.lsp.buf[lst[3]],
+                { buffer = ev.buf, desc = lst[1]})
+        end
     end,
 })
 
