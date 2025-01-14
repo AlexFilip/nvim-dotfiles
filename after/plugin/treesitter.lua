@@ -12,6 +12,7 @@ require("nvim-treesitter.configs").setup {
         "rust",
         -- "swift",
         "go",
+        "dockerfile",
         "html", "css",
         "json", "yaml",
         -- "json5",
@@ -95,10 +96,10 @@ require("nvim-treesitter.configs").setup {
         -- disable = {},
     },
 }
+local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 
 -----------------------------------------------------------
 -- Terraform
--- local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 -- parser_config.hcl = {
 --     install_info = {
 --         url = "https://github.com/MichaHoffmann/tree-sitter-hcl", -- local path or git repo
@@ -120,11 +121,11 @@ require("nvim-treesitter.configs").setup {
 
 -----------------------------------------------------------
 -- Caddy
--- parser_config.caddy = {
---   install_info = {
---     url = "https://github.com/Samonitari/tree-sitter-caddy",
---     files = {"src/parser.c", "src/scanner.c"},
---     branch = "master",
---   },
--- }
--- vim.treesitter.language.register('caddy', 'Caddyfile')
+parser_config.caddy = {
+  install_info = {
+    url = "https://github.com/Samonitari/tree-sitter-caddy",
+    files = {"src/parser.c", "src/scanner.c"},
+    branch = "master",
+  },
+}
+vim.treesitter.language.register('caddy', 'Caddyfile')

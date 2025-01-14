@@ -81,12 +81,13 @@ local plugins = {
     -- Cmp
     "neovim/nvim-lspconfig",
 
-    "hrsh7th/cmp-nvim-lsp",
-    "hrsh7th/cmp-buffer",
-    "hrsh7th/cmp-path",
-    "hrsh7th/cmp-cmdline",
-    "hrsh7th/nvim-cmp",
+    "hrsh7th/nvim-cmp",       -- Completion engine
+    "hrsh7th/cmp-nvim-lsp",   -- Language server protocol
+    "hrsh7th/cmp-buffer",     -- Source for buffer words
+    "hrsh7th/cmp-path",       -- Source for filesystem paths
+    "hrsh7th/cmp-cmdline",    -- Source for command line
 
+    -- Snippets
     "L3MON4D3/LuaSnip",
     "saadparwaiz1/cmp_luasnip",
 
