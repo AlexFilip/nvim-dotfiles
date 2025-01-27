@@ -1,7 +1,9 @@
+
 require('plugins')
 
 local settings = require('settings')
 require('remap')
+require('clipboard')
 require('groups')
 require('git')
 require('tabs')

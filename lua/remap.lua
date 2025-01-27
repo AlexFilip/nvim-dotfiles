@@ -85,6 +85,16 @@ vnoremap(carriageReturn.on("p"), nullRegister.on("dP"), { desc = "Replace text w
 inoremap("<Up>",   "<C-p>", { desc = "Previous in completion list" });
 inoremap("<Down>", "<C-n>", { desc = "Next in completion list" });
 
+nnoremap(leader.on("cp"), function()
+    local absolute_path = vim.fn.getcwd():gsub("[\n\r]", "")
+
+    -- TODO: Make this use a copy function supplied by clipboard.lua
+    --   This should become clipboard.copy(clipboard.system, absolute_path)
+    vim.fn.systemlist("echo '" .. absolute_path .. "' | wl-copy", {""}, 1) -- "1" keeps empty lines
+    print("Copied current path (" .. absolute_path .. ") to clipboard")
+
+end, { desc = "Copy current path to clipboard" })
+
 nnoremap(leader.on("nn"), function()
     vim.o.number = not vim.o.number
 end, { desc = "Toggle line numbers" })
