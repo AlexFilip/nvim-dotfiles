@@ -3,9 +3,6 @@ local dap = require("dap")
 local dapui = require("dapui")
 dapui.setup()
 
-local mason = require("mason")
-mason.setup()
-
 require("nvim-dap-virtual-text").setup()
 
 vim.keymap.set("n", "<F5>",       function() dap.continue() end, { desc = "Start debugger or continue"})

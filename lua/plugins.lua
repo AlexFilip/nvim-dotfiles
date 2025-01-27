@@ -30,20 +30,9 @@ local plugins = {
         requires = { {'nvim-lua/plenary.nvim'} }
     },
 
-    -- LSP support
-    {
-        "williamboman/mason.nvim",
-        run = ":MasonUpdate" -- :MasonUpdate updates registry contents
-    },
-    "williamboman/mason-lspconfig.nvim",
-
     -- Languages via treesitter
     { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' },
-    -- {
-    --     'nvim-treesitter/playground',
-    --     after = "nvim-treesitter",
-    --     requires = "nvim-treesitter/nvim-treesitter",
-    -- },
+
     {
         "nvim-treesitter/nvim-treesitter-textobjects",
         after = "nvim-treesitter",
