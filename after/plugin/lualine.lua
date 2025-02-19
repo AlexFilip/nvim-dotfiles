@@ -1,6 +1,7 @@
 local util = require("util")
 local config = require('config_files')
 
+-- Count how many instances of a search term are found
 function searchCount()
     local search = vim.fn.searchcount({ maxcount = 0 }) -- maxcount = 0 makes the number not be capped at 99
     local searchCurrent = search.current
@@ -61,8 +62,10 @@ require('lualine').setup {
     options = {
         icons_enabled = true,
         theme = 'auto',
-        component_separators = { left = '', right = ''},
-        section_separators = { left = '', right = ''},
+        -- component_separators = { left = '', right = ''},
+        -- section_separators = { left = '', right = ''},
+        component_separators = { left = '', right = ''},
+        section_separators = { left = '', right = ''},
         disabled_filetypes = {
             statusline = {},
             winbar = {},
@@ -70,11 +73,11 @@ require('lualine').setup {
         ignore_focus = {},
         always_divide_middle = true,
         globalstatus = true,
-        refresh = {
-            -- statusline = 1000,
-            tabline = 1000,
-            winbar  = 1000,
-        }
+        -- refresh = {
+        --     -- statusline = 1000,
+        --     -- tabline = 1000,
+        --     winbar  = 1000,
+        -- }
     },
 
     sections = {
@@ -108,13 +111,14 @@ require('lualine').setup {
                     -- end
             },
         },
-        lualine_x = {{ searchCount }, 'encoding', 'fileformat', 'filetype'},
+
+        lualine_x = {{ searchCount }, 'encoding', { 'fileformat', icons_enabled = false }, 'filetype'},
         lualine_y = {'progress'},
         lualine_z = {'location'}
     },
 
     always_show_tabline = false,
-    tabline = { },
+    tabline = nil,
 
     inactive_sections = {
         lualine_a = {},
@@ -131,3 +135,4 @@ require('lualine').setup {
 }
 
 -- vim.o.laststatus = 0
+vim.o.showtabline = 0
