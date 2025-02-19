@@ -32,6 +32,8 @@ require("nvim-treesitter.configs").setup {
                 ["if"] = { query = "@function.inner", desc = "Select inside a function" },
                 ["ac"] = { query = "@class.outer", desc = "Select around a class" },
                 ["ic"] = { query = "@class.inner", desc = "Select inside a class" },
+                ["a/"] = { query = "@comment.outer", desc = "Select around a comment" },
+                ["i/"] = { query = "@comment.inner", desc = "Select inside a comment" },
                 -- You can also use captures from other query groups like `locals.scm`
                 -- ["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
             },
