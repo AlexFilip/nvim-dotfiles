@@ -1,5 +1,8 @@
 local util = require('util')
 
+local named_colors = require('nord.named_colors')
+local nord_theme = require('nord.theme')
+
 -- Nord config
 util.setValuesInObject(vim.g, {
     nord_contrast = false,
@@ -12,12 +15,23 @@ util.setValuesInObject(vim.g, {
     nord_bold = true,
 })
 
--- Load the colorscheme
+-- Load the theme
+vim.o.background = "dark"
 require('nord').set()
 
-local function SetTransparentBackground(color, theme)
-    vim.o.background = theme or "dark"
-    vim.cmd.colorscheme(color or "nord")
-end
+vim.o.background = theme or "dark"
+vim.cmd.colorscheme(color or "nord")
 
-SetTransparentBackground("nord", "dark")
+-- Modifications to theme
+-- Vim syntax
+vim.cmd.highlight("Comment",        "guifg=" .. named_colors.green, "gui=NONE")
+vim.cmd.highlight("SpecialComment", "guifg=" .. named_colors.green, "gui=NONE")
+vim.cmd.highlight("Character",      "guifg=" .. named_colors.red,   "gui=NONE")
+vim.cmd.highlight("SpecialChar",    "guifg=" .. named_colors.red,   "gui=NONE")
+vim.cmd.highlight("String",         "guifg=" .. named_colors.red,   "gui=NONE")
+
+-- Treesitter
+vim.cmd.highlight("@comment",   "guifg=" .. named_colors.green, "gui=NONE")
+vim.cmd.highlight("TSComment",  "guifg=" .. named_colors.green, "gui=NONE")
+vim.cmd.highlight("@character", "guifg=" .. named_colors.red,   "gui=NONE")
+vim.cmd.highlight("@string",    "guifg=" .. named_colors.red,   "gui=NONE")

@@ -87,7 +87,7 @@ require("nvim-treesitter.configs").setup {
     -- ignore_install = {},
 
     highlight = {
-        enable = true,
+        enable = false,
 
         -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
         -- Set this to `true` if you depend on "syntax" being enabled (like for indentation).
@@ -98,6 +98,7 @@ require("nvim-treesitter.configs").setup {
         -- disable = {},
     },
 }
+
 local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 
 -----------------------------------------------------------
