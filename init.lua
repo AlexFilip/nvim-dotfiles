@@ -63,6 +63,10 @@ else
     end
 end
 
+if vim.loop.os_uname().sysname == "Darwin" then
+    settings.syntax(false) -- disable syntax for mac, since it doesn't handle nord syntax well
+end
+
 local dot_vim_path = vim.fn.fnamemodify(vim.env.MYVIMRC, ":p:h")
 local path_separator = '/'
 if vim.fn.has('win32') ~= 0 then

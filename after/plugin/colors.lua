@@ -1,7 +1,5 @@
 local util = require('util')
-
 local named_colors = require('nord.named_colors')
-local nord_theme = require('nord.theme')
 
 -- Nord config
 util.setValuesInObject(vim.g, {

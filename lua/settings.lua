@@ -85,5 +85,8 @@ util.setValuesInObject(vim.g, {
     netrw_keepdir   = 1,
 })
 
+function exports.syntax(flag)
+    vim.cmd.syntax(flag and "on" or "off")
+end
 
 return exports
