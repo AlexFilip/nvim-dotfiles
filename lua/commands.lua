@@ -1,9 +1,11 @@
 
-local function createCommand(customCommand, opts, handler)
-    vim.api.nvim_create_user_command(customCommand, function(tbl)
-        tbl.args = vim.api.nvim_parse_cmd("a " .. tbl.args, {}).args
-        handler(tbl)
-    end, opts)
+local function createCommand(customCommands, opts, handler)
+    for _, cmd in ipairs(customCommands) do
+        vim.api.nvim_create_user_command(cmd, function(tbl)
+            tbl.args = vim.api.nvim_parse_cmd("a " .. tbl.args, {}).args
+            handler(tbl)
+        end, opts)
+    end
 end
 
 local function QWE_fn(str)
@@ -12,21 +14,18 @@ local function QWE_fn(str)
     end
 end
 
-createCommand("Q", { bang = true }, QWE_fn("q"))
-createCommand("W", { bang = true, nargs = "?", complete = "file" }, QWE_fn("w"))
-createCommand("E", { bang = true, nargs = "?", complete = "file" }, QWE_fn("e"))
+createCommand({ "Q" }, { bang = true }, QWE_fn("q"))
+createCommand({ "W" }, { bang = true, nargs = "?", complete = "file" }, QWE_fn("w"))
+createCommand({ "E" }, { bang = true, nargs = "?", complete = "file" }, QWE_fn("e"))
 
-createCommand("Qa", { bang = true }, QWE_fn("qa"))
-createCommand("QA", { bang = true }, QWE_fn("qa"))
-createCommand("Wq", { bang = true, nargs = "?", complete = "file" }, QWE_fn("wq"))
-createCommand("WQ", { bang = true, nargs = "?", complete = "file" }, QWE_fn("wq"))
+createCommand({ "Qa", "QA" }, { bang = true }, QWE_fn("qa"))
+createCommand({ "Wq", "WQ" }, { bang = true, nargs = "?", complete = "file" }, QWE_fn("wq"))
 
-createCommand("RmColor", {}, function(tbl)
+createCommand({ "RmColor" }, {}, function(tbl)
     local lastSearch = vim.fn.getreg("/", 1)
     vim.cmd [[ %s/[[0-9;]*[mK]//g ]]
     vim.fn.setreg("/", lastSearch)
 end)
-
 
 --[[
     Usage:
@@ -42,7 +41,8 @@ end)
         5. Run commands from buffer in your favorite shell
             :w !zsh
 ]]
-createCommand("RenameFiles", {}, function()
+
+createCommand({ "RenameFiles" }, {}, function()
     local lines = vim.fn.filter(vim.fn.getline(1, '$'), function(index, value)
         return value:len() > 0
     end)
