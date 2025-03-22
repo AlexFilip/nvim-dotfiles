@@ -2,26 +2,26 @@
 require("nvim-treesitter.configs").setup {
     -- A list of parser names, or "all" (the five listed parsers should always be installed)
     ensure_installed = {
-        "c", "cpp",
-        "java",
-        "lua", "vim", "vimdoc",
-        "python", "r", "julia",
-        "bash", "awk",
-        "make", "cmake",
-        "javascript", "typescript",
-        "rust",
-        -- "swift",
-        "go",
-        "dockerfile",
-        "html", "css",
-        "json", "yaml",
-        -- "json5",
-        "markdown", "comment",
+        -- "c", "cpp",
+        -- "java",
+        -- "lua", "vim", "vimdoc",
+        -- "python", "r", "julia",
+        -- "bash", "awk",
+        -- "make", "cmake",
+        -- "javascript", "typescript",
+        -- "rust",
+        -- -- "swift",
+        -- "go",
+        -- "dockerfile",
+        -- "html", "css",
+        -- "json", "yaml",
+        -- -- "json5",
+        -- "markdown", "comment",
     },
 
     textobjects = {
         select = {
-            enable = true,
+            enable = false,
 
             -- Automatically jump forward to textobj, similar to targets.vim
             lookahead = true,
@@ -56,7 +56,7 @@ require("nvim-treesitter.configs").setup {
 
         -- Swap function parameters
         swap = {
-            enable = true,
+            enable = false,
             swap_next = {
                 ["<leader>l"] = "@parameter.inner",
             },
@@ -67,7 +67,7 @@ require("nvim-treesitter.configs").setup {
         },
 
         lsp_interop = {
-            enable = true,
+            enable = false,
             border = "single",
             floating_preview_opts = {},
             peek_definition_code = {
