@@ -7,14 +7,6 @@ local plugins = {
     "tpope/vim-repeat",
     "mbbill/undotree",
 
-    -- 'ThePrimeagen/git-worktree.nvim',
-    -- {
-    --     'ThePrimeagen/harpoon',
-    --     requires = {
-    --         'nvim-lua/plenary.nvim',
-    --     }
-    -- },
-
     -- Theming
     "shaunsingh/nord.nvim",
     {
@@ -48,13 +40,6 @@ local plugins = {
         }
     },
 
-    {
-        "jubnzv/virtual-types.nvim", -- display types in virtual text on same line
-        requires = {
-            "nvim-treesitter/nvim-treesitter",
-        },
-    },
-
     -- Git support
     "tpope/vim-fugitive",
     -- {
@@ -75,7 +60,6 @@ vim.cmd [[packadd packer.nvim]]
 -- end
 
 local x = require("packer").startup(function(use)
-
     for _, plugin in ipairs(plugins) do
         use(plugin)
     end
