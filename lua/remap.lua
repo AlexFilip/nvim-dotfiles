@@ -139,6 +139,8 @@ cnoremap("<C-W>", "\\<\\><Left><Left>", { desc = "Search for word" })
 -- Move selected lines up and down
 vnoremap("<C-J>", ":m '>+1<CR>gv=gv", { desc = "Move lines down and match indent" })
 vnoremap("<C-K>", ":m '<-2<CR>gv=gv", { desc = "Move lines up and match indent" })
+-- vnoremap <C-J> :m '>+1<CR>gv=gv
+-- vnoremap <C-K> :m '<-2<CR>gv=gv
 
 -- Horizontal scrolling. Only useful when wrap is turned off.
 nnoremap("<C-J>", "zl", { desc = "Scroll right" })
