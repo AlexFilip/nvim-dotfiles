@@ -20,38 +20,8 @@ local plugins = {
         requires = { {'nvim-lua/plenary.nvim'} }
     },
 
-    -- Languages via treesitter
-    { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' },
-
-    {
-        "nvim-treesitter/nvim-treesitter-textobjects",
-        after = "nvim-treesitter",
-        requires = "nvim-treesitter/nvim-treesitter",
-    },
-
-    -- Explore config files
-    'phelipetls/jsonpath.nvim',
-    {
-        "cuducos/yaml.nvim",
-        ft = { "yaml" }, -- optional
-        requires = {
-            "nvim-treesitter/nvim-treesitter",
-            "nvim-telescope/telescope.nvim" -- optional
-        }
-    },
-
     -- Git support
     "tpope/vim-fugitive",
-    -- {
-    --     "NeogitOrg/neogit",
-    --     requires = {
-    --         "nvim-lua/plenary.nvim",         -- required
-    --         "sindrets/diffview.nvim",        -- optional - Diff integration
-    --         -- Only one of these is needed, not both.
-    --         "nvim-telescope/telescope.nvim", -- optional
-    --         -- "ibhagwan/fzf-lua",              -- optional
-    --     }
-    -- },
 }
 
 vim.cmd [[packadd packer.nvim]]

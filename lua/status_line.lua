@@ -1,8 +1,7 @@
 local util = require("util")
-local config = require('config_files')
 
 -- Count how many instances of a search term are found
-function searchCount()
+local function searchCount()
     local search = vim.fn.searchcount({ maxcount = 0 }) -- maxcount = 0 makes the number not be capped at 99
     local searchCurrent = search.current
     local searchTotal = search.total
@@ -29,31 +28,7 @@ local winbar_config = {
         }
     },
     ---
-    lualine_x = {
-        {
-            'path',
-            icons_enabled = false,
-            cond = function()
-                local filetype = vim.bo.filetype
-                return filetype == "json" or filetype == "yaml"
-            end,
-            fmt = function(toDisplay, context)
-                return config.getPath()
-            end,
-            on_click = function(numClicks, button, modifiers)
-                local register
-                if modifiers:find("c", 1, true) ~= nil then
-                    register = "+"
-                    -- else if modifiers:find("a", 1, true) ~= nil then -- alt
-                    -- else if modifiers:find("m", 1, true) ~= nil then -- meta
-                    -- else if modifiers:find("s", 1, true) ~= nil then -- shift
-                else -- no other modifiers
-                    register = [["]]
-                end
-                config.yankToRegister(register)
-            end,
-        }
-    },
+    lualine_x = {},
     lualine_y = {},
     lualine_z = {},
 }
@@ -62,8 +37,6 @@ require('lualine').setup {
     options = {
         icons_enabled = true,
         theme = 'auto',
-        -- component_separators = { left = '', right = ''},
-        -- section_separators = { left = '', right = ''},
         component_separators = { left = '', right = ''},
         section_separators = { left = '', right = ''},
         disabled_filetypes = {
@@ -100,15 +73,6 @@ require('lualine').setup {
                     active = 'lualine_a_normal',     -- Color for active tab.
                     inactive = 'lualine_b_inactive', -- Color for inactive tab.
                 },
-
-                -- fmt = function(name, context)
-                    --     -- Show + if buffer is modified in tab
-                    --     local buflist = vim.fn.tabpagebuflist(context.tabnr)
-                    --     local winnr = vim.fn.tabpagewinnr(context.tabnr)
-                    --     local bufnr = buflist[winnr]
-                    --     local mod = vim.fn.getbufvar(bufnr, '&mod')
-                    --     return name .. (mod == 1 and ' +' or '')
-                    -- end
             },
         },
 

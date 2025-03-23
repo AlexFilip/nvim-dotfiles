@@ -82,4 +82,33 @@ end
 
 exports.config_dir = vim.fn.fnamemodify(vim.env.MYVIMRC, ":h")
 
+local function keymap(mode, keybinding, mapping, extra)
+    -- print(mode .. "noremapping " .. keybinding .. " to " .. util.stringify(mapping))
+    vim.keymap.set(mode, keybinding, mapping, extra)
+end
+
+exports.keymap = keymap
+
+-- Create functions for all of the noremaps
+for _, mode in ipairs({"n", "v", "c", "i", "t"}) do
+    local fnName = mode .. "noremap"
+    local mappingFunction = function(keybinding, mapping, extra)
+        keymap(mode, keybinding, mapping, extra)
+    end
+
+    exports[fnName] = mappingFunction
+end
+
+function exports.copy_command(args)
+    return function(lines, mode)
+        return vim.fn.systemlist("wl-copy " .. args .. " --type text/plain", lines, 1)
+    end
+end
+
+function exports.paste_command(args)
+    return function()
+        return vim.fn.systemlist("wl-paste " .. args .. " --no-newline | tr -d '\\n\\r'", {""}, 1) -- "1" keeps empty lines
+    end
+end
+
 return exports
