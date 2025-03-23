@@ -79,7 +79,7 @@ vim.g.GPGDefaultRecipients = {}
 -- Clipboard
 if vim.fn.executable("wl-copy") then
     vim.g.clipboard = {
-        name = "wl-clipboard (wsl)",
+        name = "wl-clipboard",
         copy = {
             ["+"] = util.copy_command(""),
             ["*"] = util.copy_command("--primary")
