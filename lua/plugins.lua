@@ -7,6 +7,9 @@ local plugins = {
     "tpope/vim-repeat",
     "mbbill/undotree",
 
+    -- Git support
+    "tpope/vim-fugitive",
+
     -- Theming
     "shaunsingh/nord.nvim",
     {
@@ -19,9 +22,6 @@ local plugins = {
         branch = '0.1.x',
         requires = { {'nvim-lua/plenary.nvim'} }
     },
-
-    -- Git support
-    "tpope/vim-fugitive",
 }
 
 vim.cmd [[packadd packer.nvim]]

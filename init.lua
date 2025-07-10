@@ -93,6 +93,7 @@ if vim.fn.executable("wl-copy") then
 else
     print("wl-clipboard not found, clipboard integration won't work")
 end
+
 -- Shortcuts
 --   Undotree
 util.nnoremap("<leader>u", vim.cmd.UndotreeToggle, { desc = "Toggle undo tree" })
@@ -106,7 +107,6 @@ util.nnoremap('<leader>ff', telescope_builtin.find_files, { desc = "Search for f
 util.nnoremap('<leader>fg', telescope_builtin.git_files, { desc = "Git search" })
 util.nnoremap('<leader>fb', telescope_builtin.buffers, { desc = "Search buffers" })
 util.nnoremap('<leader>fs', telescope_builtin.live_grep, { desc = "Search file contents" })
-
 
 -- Colorscheme
 local named_colors = require('nord.named_colors')
@@ -137,7 +137,6 @@ vim.cmd.highlight("SpecialComment", "guifg=" .. named_colors.green, "gui=NONE")
 vim.cmd.highlight("Character",      "guifg=" .. named_colors.red,   "gui=NONE")
 vim.cmd.highlight("SpecialChar",    "guifg=" .. named_colors.red,   "gui=NONE")
 vim.cmd.highlight("String",         "guifg=" .. named_colors.red,   "gui=NONE")
-
 
 -- Load extra config from local file. **Keep this at the end**
 local local_vimrc_path = table.concat({ settings.homeDirectory, '.local', 'neovimrc.lua' }, path_separator)

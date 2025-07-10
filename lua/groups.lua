@@ -64,3 +64,10 @@ end)
 makeCommand({ "BufNewFile", "BufRead" }, { "Makefile", "makefile", "Caddyfile", "*.go" }, function()
     vim.o.expandtab = false
 end)
+
+makeCommand({ "BufRead" }, { "*.clj", "*.lisp" }, function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    -- Newline in lisp/clojure
+    util.nnoremap("(", "[(", { buffer = bufnr, desc = "Skip to (" })
+    util.nnoremap(")", "])", { buffer = bufnr, desc = "Skip to )" })
+end)
