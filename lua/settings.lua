@@ -65,7 +65,6 @@ util.setValuesInObject(vim.o, {
     cinoptions  = "l1,=4,:4,(0,{0,+2,w1,W4,t0,j1,J1",
     shortmess   = "fFcCtToOsSiIlnxW",
     cinkeys     = newCinkeys,
-
     viminfo     = "",
     display     = "lastline",
     swapfile    = false,
@@ -76,7 +75,7 @@ util.setValuesInObject(vim.o, {
     updatetime  = 50,
 
     -- Docs: http://vimhelp.appspot.com/eval.txt.html
-    fillchars="stlnc:|,vert:|,fold:.,diff:.",
+    fillchars = "stlnc:|,vert:|,fold:.,diff:.",
 })
 
 util.setValuesInObject(vim.g, {

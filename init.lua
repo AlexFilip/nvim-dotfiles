@@ -10,7 +10,6 @@ require('navigation')
 require('status_line')
 local util = require('util')
 
-
 vim.cmd [[ filetype plugin indent on ]]
 
 local PATH_separator = ""

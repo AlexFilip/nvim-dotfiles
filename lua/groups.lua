@@ -1,14 +1,11 @@
-
 local util = require('util')
 
 local autoGroup = vim.api.nvim_create_augroup("AutoGroup", { clear = true })
-
 local function makeCommand(event, pattern, action)
     local opts = {
         pattern = pattern,
         group   = autoGroup,
     }
-
     local action_type = type(action)
     if action_type == "function" then
         opts.callback = action
@@ -18,27 +15,23 @@ local function makeCommand(event, pattern, action)
         -- vim.cmd.echoerr('action in autoCmd was set to value of unsupported type ' .. action_type)
         return
     end
-
     return vim.api.nvim_create_autocmd(event, opts)
 end
 
 -- OpenInNewTab
-makeCommand("FileType", { "help", "man" }, function() 
+makeCommand("FileType", { "help", "man" }, function()
     vim.cmd.wincmd("T")
 end)
 
 -- WrapLines
 makeCommand("FileType", { "txt", "markdown", "md", "notes", "org", "tex", "plaintex" }, function()
     local bufnr = vim.api.nvim_get_current_buf()
-
     -- NOTE: Cannot pass { buf = bufnr } to any of these because the options are window-local
     vim.api.nvim_set_option_value('wrap', true, {})
     vim.api.nvim_set_option_value('linebreak', true, {})
     vim.api.nvim_set_option_value('list', false, {})
-
     util.nnoremap("j", "gj", { buffer = bufnr, desc = "Go down one visual line" })
     util.nnoremap("k", "gk", { buffer = bufnr, desc = "Go up one visual line" })
-
 end)
 
 -- Python

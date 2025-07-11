@@ -18,7 +18,6 @@ function exports.stringify(obj)
     elseif type(obj) ~= "table" then
         return "" .. obj
     end
-
     local keys = ""
     for key,value in pairs(obj) do
         keys = keys .. key .. " = " .. exports.stringify(value) .. ", "

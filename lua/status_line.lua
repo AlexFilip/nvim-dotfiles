@@ -6,12 +6,10 @@ local function searchCount()
     local searchCurrent = search.current
     local searchTotal = search.total
     local result = ""
-
     if searchCurrent > 0 then
         -- result = "/" .. vim.fn.getreg("/") .. " [" .. searchCurrent .. "/" .. searchTotal .. "]"
         result = "[" .. searchCurrent .. "/" .. searchTotal .. "]"
     end
-
     return result
 end
 
