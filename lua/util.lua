@@ -89,7 +89,7 @@ end
 exports.keymap = keymap
 
 -- Create functions for all of the noremaps
-for _, mode in ipairs({"n", "v", "c", "i", "t"}) do
+for _, mode in ipairs({"n", "v", "c", "i", "t", "o"}) do
     local fnName = mode .. "noremap"
     local mappingFunction = function(keybinding, mapping, extra)
         keymap(mode, keybinding, mapping, extra)

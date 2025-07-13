@@ -63,4 +63,10 @@ makeCommand({ "BufRead" }, { "*.clj", "*.lisp", "*.cl", "*.scm" }, function()
     -- Newline in lisp/clojure/scheme
     util.nnoremap("(", "[(", { buffer = bufnr, desc = "Skip to (" })
     util.nnoremap(")", "])", { buffer = bufnr, desc = "Skip to )" })
+
+    util.vnoremap("(", "[(", { buffer = bufnr, desc = "Skip to (" })
+    util.vnoremap(")", "])", { buffer = bufnr, desc = "Skip to )" })
+
+    util.onoremap("(", "[(", { buffer = bufnr, desc = "Skip to (" })
+    util.onoremap(")", "])", { buffer = bufnr, desc = "Skip to )" })
 end)
