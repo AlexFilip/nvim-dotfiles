@@ -2,7 +2,7 @@
 local util = require('util')
 
 -- Tabs
-util.nnoremap("<leader>mt", function() vim.cmd.tabnew() end, { desc = "Create new tab" })
+util.keymap("n", "<leader>mt", function() vim.cmd.tabnew() end, { desc = "Create new tab" })
 
 function MoveTab(multiplier)
     local amount = (vim.v.count ~= 0) and vim.v.count or 1
@@ -23,13 +23,13 @@ function MoveTab(multiplier)
     end
 end
 
-util.nnoremap("<leader>{", function() MoveTab(-1) end, { desc = "Move current tab to the left" })
-util.nnoremap("<leader>}", function() MoveTab( 1) end, { desc = "Move current tab to the right" })
+util.keymap("n", "<leader>{", function() MoveTab(-1) end, { desc = "Move current tab to the left" })
+util.keymap("n", "<leader>}", function() MoveTab( 1) end, { desc = "Move current tab to the right" })
 
 -- Splits
-util.nnoremap("<leader>mv", function() vim.cmd 'vnew' end, { desc = "Create new vertical split" })
+util.keymap("n", "<leader>mv", function() vim.cmd 'vnew' end, { desc = "Create new vertical split" })
 
-util.nnoremap("<M-s>", function()
+util.keymap("n", "<M-s>", function()
     local layout = vim.fn.winlayout()
     -- Any layout of multiple splits will be turned into a single buffer view
     -- single buffer view will turn into 2 side-by-side buffers
@@ -41,8 +41,8 @@ util.nnoremap("<M-s>", function()
     end
 end, { desc = "Toggle a vertical split" })
 
-util.nnoremap("<M-k>", function() vim.cmd.wincmd("k") end, { desc = "Move one pane up" })
-util.nnoremap("<M-j>", function() vim.cmd.wincmd("j") end, { desc = "Move one pane down" })
-util.nnoremap("<M-h>", function() vim.cmd.wincmd("h") end, { desc = "Move one pane left" })
-util.nnoremap("<M-l>", function() vim.cmd.wincmd("l") end, { desc = "Move one pane right" })
+util.keymap("n", "<M-k>", function() vim.cmd.wincmd("k") end, { desc = "Move one pane up" })
+util.keymap("n", "<M-j>", function() vim.cmd.wincmd("j") end, { desc = "Move one pane down" })
+util.keymap("n", "<M-h>", function() vim.cmd.wincmd("h") end, { desc = "Move one pane left" })
+util.keymap("n", "<M-l>", function() vim.cmd.wincmd("l") end, { desc = "Move one pane right" })
 

@@ -82,21 +82,26 @@ end
 exports.config_dir = vim.fn.fnamemodify(vim.env.MYVIMRC, ":h")
 
 local function keymap(mode, keybinding, mapping, extra)
-    -- print(mode .. "noremapping " .. keybinding .. " to " .. util.stringify(mapping))
-    vim.keymap.set(mode, keybinding, mapping, extra)
-end
-
-exports.keymap = keymap
-
--- Create functions for all of the noremaps
-for _, mode in ipairs({"n", "v", "c", "i", "t", "o"}) do
-    local fnName = mode .. "noremap"
-    local mappingFunction = function(keybinding, mapping, extra)
-        keymap(mode, keybinding, mapping, extra)
+    local function bindWithConstMode(mode, keybinding, mapping, extra)
+        -- print("remapping " .. keybinding .. " in mode " .. mode .. " to " .. util.stringify(mapping))
+        if type(keybinding) == "table" then
+            for _, k in ipairs(keybinding) do
+                bindWithConstMode(mode, k, mapping, extra)
+            end
+        elseif type(keybinding) == "string" then
+            vim.keymap.set(mode, keybinding, mapping, extra)
+        end
     end
 
-    exports[fnName] = mappingFunction
+    if type(mode) == "table" then
+        for _, m in ipairs(mode) do
+            keymap(m, keybinding, mapping, extra)
+        end
+    elseif type(mode) == "string" then
+        bindWithConstMode(mode, keybinding, mapping, extra)
+    end
 end
+exports.keymap = keymap
 
 function exports.copy_command(args)
     return function(lines, mode)

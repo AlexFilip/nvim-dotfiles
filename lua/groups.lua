@@ -30,8 +30,8 @@ makeCommand("FileType", { "txt", "markdown", "md", "notes", "org", "tex", "plain
     vim.api.nvim_set_option_value('wrap', true, {})
     vim.api.nvim_set_option_value('linebreak', true, {})
     vim.api.nvim_set_option_value('list', false, {})
-    util.nnoremap("j", "gj", { buffer = bufnr, desc = "Go down one visual line" })
-    util.nnoremap("k", "gk", { buffer = bufnr, desc = "Go up one visual line" })
+    util.keymap("n", "j", "gj", { buffer = bufnr, desc = "Go down one visual line" })
+    util.keymap("n", "k", "gk", { buffer = bufnr, desc = "Go up one visual line" })
 end)
 
 -- Python
@@ -61,12 +61,6 @@ end)
 makeCommand({ "BufRead" }, { "*.clj", "*.cljc", "*.cljs", "*.lisp", "*.cl", "*.scm" }, function()
     local bufnr = vim.api.nvim_get_current_buf()
     -- Newline in lisp/clojure/scheme
-    util.nnoremap("(", "[(", { buffer = bufnr, desc = "Skip to (" })
-    util.nnoremap(")", "])", { buffer = bufnr, desc = "Skip to )" })
-
-    util.vnoremap("(", "[(", { buffer = bufnr, desc = "Skip to (" })
-    util.vnoremap(")", "])", { buffer = bufnr, desc = "Skip to )" })
-
-    util.onoremap("(", "[(", { buffer = bufnr, desc = "Skip to (" })
-    util.onoremap(")", "])", { buffer = bufnr, desc = "Skip to )" })
+    util.keymap({ "n", "v", "o" }, "(", "[(", { buffer = bufnr, desc = "Skip to (" })
+    util.keymap({ "n", "v", "o" }, ")", "])", { buffer = bufnr, desc = "Skip to )" })
 end)

@@ -95,17 +95,17 @@ end
 
 -- Shortcuts
 --   Undotree
-util.nnoremap("<leader>u", vim.cmd.UndotreeToggle, { desc = "Toggle undo tree" })
+util.keymap("n", "<leader>u", vim.cmd.UndotreeToggle, { desc = "Toggle undo tree" })
 
 --   Fugitive
-util.nnoremap("<leader>gs", vim.cmd.Git, { desc = "Open git view" })
+util.keymap("n", "<leader>gs", vim.cmd.Git, { desc = "Open git view" })
 
 --   Telescope
 local telescope_builtin = require('telescope.builtin')
-util.nnoremap('<leader>ff', telescope_builtin.find_files, { desc = "Search for files" })
-util.nnoremap('<leader>fg', telescope_builtin.git_files, { desc = "Git search" })
-util.nnoremap('<leader>fb', telescope_builtin.buffers, { desc = "Search buffers" })
-util.nnoremap('<leader>fs', telescope_builtin.live_grep, { desc = "Search file contents" })
+util.keymap("n", '<leader>ff', telescope_builtin.find_files, { desc = "Search for files" })
+util.keymap("n", '<leader>fg', telescope_builtin.git_files, { desc = "Git search" })
+util.keymap("n", '<leader>fb', telescope_builtin.buffers, { desc = "Search buffers" })
+util.keymap("n", '<leader>fs', telescope_builtin.live_grep, { desc = "Search file contents" })
 
 -- Colorscheme
 local named_colors = require('nord.named_colors')
