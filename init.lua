@@ -1,19 +1,14 @@
 
+-- Files in the lua subdirectory should stay OS independent
 require('plugins')
 
-local settings = require('settings')
-require('remap')
-require('groups')
-require('git')
-require('commands')
-require('navigation')
-require('status_line')
+local settings = require('custom')
 local util = require('util')
 
+-- Everything here is either OS dependent or used to set 
 vim.cmd [[ filetype plugin indent on ]]
 
-local PATH_separator = ""
-local function AddToPath(...)
+local function AddToPath(PATH_separator, ...)
     local arg = {...}
     local exist_in_path = {}
     local new_path = {}
@@ -47,15 +42,13 @@ local function AddToPath(...)
 end
 
 if vim.fn.has("win32") ~= 0 then
-    PATH_separator = ";"
-    AddToPath("C:\\tools", "C:\\Program Files\\Git\\bin")
+    AddToPath(";", "C:\\tools", "C:\\Program Files\\Git\\bin")
 else
     if vim.fn.executable("/bin/zsh") ~= 0 then
         vim.o.shell="/bin/zsh" -- Shell to launch in terminal
     end
 
-    PATH_separator = ":"
-    AddToPath("/usr/local/sbin", settings.homeDirectory .. "/bin", "/usr/local/bin")
+    AddToPath(":", "/usr/local/sbin", settings.homeDirectory .. "/bin", "/usr/local/bin")
     if vim.fn.has("mac") ~= 0 then
         AddToPath("/opt/homebrew/bin", "/sbin", "/usr/sbin")
     end
@@ -92,50 +85,6 @@ if vim.fn.executable("wl-copy") then
 else
     print("wl-clipboard not found, clipboard integration won't work")
 end
-
--- Shortcuts
---   Undotree
-util.keymap("n", "<leader>u", vim.cmd.UndotreeToggle, { desc = "Toggle undo tree" })
-
---   Fugitive
-util.keymap("n", "<leader>gs", vim.cmd.Git, { desc = "Open git view" })
-
---   Telescope
-local telescope_builtin = require('telescope.builtin')
-util.keymap("n", '<leader>ff', telescope_builtin.find_files, { desc = "Search for files" })
-util.keymap("n", '<leader>fg', telescope_builtin.git_files, { desc = "Git search" })
-util.keymap("n", '<leader>fb', telescope_builtin.buffers, { desc = "Search buffers" })
-util.keymap("n", '<leader>fs', telescope_builtin.live_grep, { desc = "Search file contents" })
-
--- Colorscheme
-local named_colors = require('nord.named_colors')
-
--- Nord config
-util.setValuesInObject(vim.g, {
-    nord_contrast = false,
-    nord_borders = true,
-    nord_disable_background = true,
-    nord_cursorline_transparent = true,
-    nord_enable_sidebar_background = false,
-    nord_italic = true,
-    nord_uniform_diff_background = true,
-    nord_bold = true,
-})
-
--- Load the theme
-vim.o.background = "dark"
-require('nord').set()
-
-vim.o.background = theme or "dark"
-vim.cmd.colorscheme(color or "nord")
-
--- Modifications to theme
--- Vim syntax
-vim.cmd.highlight("Comment",        "guifg=" .. named_colors.green, "gui=NONE")
-vim.cmd.highlight("SpecialComment", "guifg=" .. named_colors.green, "gui=NONE")
-vim.cmd.highlight("Character",      "guifg=" .. named_colors.red,   "gui=NONE")
-vim.cmd.highlight("SpecialChar",    "guifg=" .. named_colors.red,   "gui=NONE")
-vim.cmd.highlight("String",         "guifg=" .. named_colors.red,   "gui=NONE")
 
 -- Load extra config from local file. **Keep this at the end**
 local local_vimrc_path = table.concat({ settings.homeDirectory, '.local', 'neovimrc.lua' }, path_separator)
