@@ -1,22 +1,22 @@
 local util = require('util')
 
-local package_path = vim.fn.stdpath("data") .. "/lazy"
+local package_path = vim.fn.stdpath('data') .. '/lazy'
 function ensure (repo, package, dir)
-    local install_path = string.format("%s/%s", package_path, package)
+    local install_path = string.format('%s/%s', package_path, package)
     if not (vim.uv or vim.loop).fs_stat(install_path) then
         local out = vim.fn.system({
-            "git",
-            "clone",
-            "--filter=blob:none",
-            "--single-branch",
-            "https://github.com/" .. repo .. ".git",
+            'git',
+            'clone',
+            '--filter=blob:none',
+            '--single-branch',
+            'https://github.com/' .. repo .. '.git',
             install_path,
         })
         if vim.v.shell_error ~= 0 then
             vim.api.nvim_echo({
-                { "Failed to clone " .. package .. ":\n", "ErrorMsg" },
-                { out, "WarningMsg" },
-                { "\nPress any key to exit..." },
+                { 'Failed to clone ' .. package .. ':\n', 'ErrorMsg' },
+                { out, 'WarningMsg' },
+                { '\nPress any key to exit...' },
             }, true, {})
             vim.fn.getchar()
             os.exit(1)
@@ -25,49 +25,47 @@ function ensure (repo, package, dir)
     vim.opt.runtimepath:prepend(install_path)
 end
 
--- ensure("Olical/aniseed", "aniseed")
--- vim.g["aniseed#env"] = {module = "init", compile = true}
+-- ensure('Olical/aniseed', 'aniseed')
+-- vim.g['aniseed#env'] = {module = 'init', compile = true}
 -- require('aniseed.env').init()
 
-ensure("folke/lazy.nvim", "lazy.nvim")
+ensure('folke/lazy.nvim', 'lazy.nvim')
 
 -- Leader and localleader mappings
-vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
+vim.g.mapleader = ' '
+vim.g.maplocalleader = '\\'
 
 -- Setup lazy.nvim
-require("lazy").setup({
+require('lazy').setup({
     spec = {
         -- import your plugins
-        { import = "plugins" },
+        { import = 'plugins' },
 
         -- Useful editor plugins
-        "tpope/vim-surround",
-        "tpope/vim-repeat",
+        'tpope/vim-surround',
+        'tpope/vim-repeat',
         {
-            "mbbill/undotree",
+            'mbbill/undotree',
             keys = {
-                { '<leader>u', "<cmd>UndotreeToggle<cr>", desc = "Toggle undo tree" },
+                { '<leader>u', '<cmd>UndotreeToggle<cr>', desc = 'Toggle undo tree' },
             },
         },
 
         -- Git support
         {
-            "tpope/vim-fugitive",
+            'tpope/vim-fugitive',
             lazy = true,
-            cmd = {
-                "Git",
-            },
+            cmd = { 'Git', },
             keys = {
-                { "<leader>gs", "<cmd>Git<cr>", desc = "Open git view" },
+                { '<leader>gs', '<cmd>Git<cr>', desc = 'Open git view' },
             },
         },
 
         -- Theming
         {
-            "shaunsingh/nord.nvim",
+            'shaunsingh/nord.nvim',
             init = function(plugin)
-                vim.o.background = "dark"
+                vim.o.background = 'dark'
                 util.setValuesInObject(vim.g, {
                     nord_contrast = false,
                     nord_borders = true,
@@ -80,14 +78,14 @@ require("lazy").setup({
                 })
             end,
             config = function()
-                vim.cmd.colorscheme("nord")
+                vim.cmd.colorscheme('nord')
                 -- Modifications to nord theme
                 local named_colors = require('nord.named_colors')
-                vim.cmd.highlight("Comment",        "guifg=" .. named_colors.green, "gui=NONE")
-                vim.cmd.highlight("SpecialComment", "guifg=" .. named_colors.green, "gui=NONE")
-                vim.cmd.highlight("Character",      "guifg=" .. named_colors.red,   "gui=NONE")
-                vim.cmd.highlight("SpecialChar",    "guifg=" .. named_colors.red,   "gui=NONE")
-                vim.cmd.highlight("String",         "guifg=" .. named_colors.red,   "gui=NONE")
+                vim.cmd.highlight('Comment',        'guifg=' .. named_colors.green, 'gui=NONE')
+                vim.cmd.highlight('SpecialComment', 'guifg=' .. named_colors.green, 'gui=NONE')
+                vim.cmd.highlight('Character',      'guifg=' .. named_colors.red,   'gui=NONE')
+                vim.cmd.highlight('SpecialChar',    'guifg=' .. named_colors.red,   'gui=NONE')
+                vim.cmd.highlight('String',         'guifg=' .. named_colors.red,   'gui=NONE')
             end,
             lazy = false,
             priority = 1000,
@@ -105,13 +103,6 @@ require("lazy").setup({
                 '<leader>fb',
                 '<leader>fs',
             },
-
-            config = function()
-                util.keymap('n', '<leader>ff', require('telescope.builtin').find_files, { desc = "Search for files" })
-                util.keymap('n', '<leader>fg', require('telescope.builtin').git_files,  { desc = "Git search" })
-                util.keymap('n', '<leader>fb', require('telescope.builtin').buffers,    { desc = "Search buffers" })
-                util.keymap('n', '<leader>fs', require('telescope.builtin').live_grep,  { desc = "Search file contents" })
-            end
         },
 
         -- Lisp
@@ -141,12 +132,20 @@ require("lazy").setup({
     -- Configure any other settings here. See the documentation for more details.
     -- colorscheme that will be used when installing plugins.
     install = {
-        colorscheme = { "nord.nvim" }
+        colorscheme = { 'nord.nvim' }
     },
 
     -- automatically check for plugin updates
     checker = { enabled = true },
 })
+
+local builtin = require('telescope.builtin')
+util.keymap('n', '<leader>ff', builtin.find_files, { desc = 'Search for files' })
+util.keymap('n', '<leader>fg', builtin.git_files,  { desc = 'Git search' })
+util.keymap('n', '<leader>fb', builtin.buffers,    { desc = 'Search buffers' })
+util.keymap('n', '<leader>fs', builtin.live_grep,  { desc = 'Search file contents' })
+util.keymap('n', '<leader>fm', builtin.marks,      { desc = 'Search file contents' })
+util.keymap('n', '<leader>fr', builtin.registers,  { desc = 'Search file contents' })
 
 -- Since lualine doesn't have an option for hiding the tab bar entirely
 vim.o.showtabline = 0
@@ -190,45 +189,45 @@ local function AddToPath(PATH_separator, ...)
     return vim.env.PATH
 end
 
-if vim.fn.has("win32") ~= 0 then
-    AddToPath(";", "C:\\tools", "C:\\Program Files\\Git\\bin")
+if vim.fn.has('win32') ~= 0 then
+    AddToPath(';', 'C:\\tools', 'C:\\Program Files\\Git\\bin')
 else
-    if vim.fn.executable("/bin/zsh") ~= 0 then
-        vim.o.shell="/bin/zsh" -- Shell to launch in terminal
+    if vim.fn.executable('/bin/zsh') ~= 0 then
+        vim.o.shell='/bin/zsh' -- Shell to launch in terminal
     end
 
-    AddToPath(":", "/usr/local/sbin", settings.homeDirectory .. "/bin", "/usr/local/bin")
-    if vim.fn.has("mac") ~= 0 then
-        AddToPath("/opt/homebrew/bin", "/sbin", "/usr/sbin")
+    AddToPath(':', '/usr/local/sbin', settings.homeDirectory .. '/bin', '/usr/local/bin')
+    if vim.fn.has('mac') ~= 0 then
+        AddToPath('/opt/homebrew/bin', '/sbin', '/usr/sbin')
     end
 end
 
-local dot_vim_path = vim.fn.fnamemodify(vim.env.MYVIMRC, ":p:h")
+local dot_vim_path = vim.fn.fnamemodify(vim.env.MYVIMRC, ':p:h')
 local path_separator = '/'
 if vim.fn.has('win32') ~= 0 then
     path_separator = '\\'
 end
 
-vim.env.PINENTRY_USER_DATA="qt"
+vim.env.PINENTRY_USER_DATA='qt'
 vim.env.GPG_TTY=''
 vim.g.GPGDefaultRecipients = {}
 
 -- Clipboard
-if vim.fn.executable("wl-copy") then
+if vim.fn.executable('wl-copy') then
     vim.g.clipboard = {
-        name = "wl-clipboard",
+        name = 'wl-clipboard',
         copy = {
-            ["+"] = util.copy_command(""),
-            ["*"] = util.copy_command("--primary")
+            ['+'] = util.copy_command(''),
+            ['*'] = util.copy_command('--primary')
         },
         paste = {
-            ["+"] = util.paste_command(""),
-            ["*"] = util.paste_command("--primary"),
+            ['+'] = util.paste_command(''),
+            ['*'] = util.paste_command('--primary'),
         },
         cache_enabled = true
     }
 else
-    print("wl-clipboard not found, clipboard integration won't work")
+    print('wl-clipboard not found, clipboard integration won\'t work')
 end
 
 -- Load extra config from local file. **Keep this at the end**

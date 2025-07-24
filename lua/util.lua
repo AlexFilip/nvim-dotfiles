@@ -1,34 +1,34 @@
 local exports = {}
 
 function exports.getKeys(obj)
-    local keys = ""
+    local keys = ''
     for key,value in pairs(obj) do
-        keys = keys .. key .. ", "
+        keys = keys .. key .. ', '
     end
-    return "{" .. keys .. "}"
+    return '{' .. keys .. '}'
 end
 
 function exports.stringify(obj)
-    if type(obj) == "string" then
-        return "\"" .. obj .. "\""
-    elseif type(obj) == "function" then
-        return "<function>"
-    elseif type(obj) == "boolean" then
-        return obj and "true" or "false"
-    elseif type(obj) ~= "table" then
-        return "" .. obj
+    if type(obj) == 'string' then
+        return '\"' .. obj .. '\"'
+    elseif type(obj) == 'function' then
+        return '<function>'
+    elseif type(obj) == 'boolean' then
+        return obj and 'true' or 'false'
+    elseif type(obj) ~= 'table' then
+        return '' .. obj
     end
-    local keys = ""
+    local keys = ''
     for key,value in pairs(obj) do
-        keys = keys .. key .. " = " .. exports.stringify(value) .. ", "
+        keys = keys .. key .. ' = ' .. exports.stringify(value) .. ', '
     end
-    return "{" .. keys .. "}"
+    return '{' .. keys .. '}'
 end
 
 function exports.tableMerge(t1, t2)
     for k,v in pairs(t2) do
-        if type(v) == "table" then
-            if type(t1[k] or false) == "table" then
+        if type(v) == 'table' then
+            if type(t1[k] or false) == 'table' then
                 tableMerge(t1[k] or {}, t2[k] or {})
             else
                 t1[k] = v
@@ -79,25 +79,25 @@ function exports.setValuesInObject(obj, values)
     end
 end
 
-exports.config_dir = vim.fn.fnamemodify(vim.env.MYVIMRC, ":h")
+exports.config_dir = vim.fn.fnamemodify(vim.env.MYVIMRC, ':h')
 
 local function keymap(mode, keybinding, mapping, extra)
     local function bindWithConstMode(mode, keybinding, mapping, extra)
-        -- print("remapping " .. keybinding .. " in mode " .. mode .. " to " .. util.stringify(mapping))
-        if type(keybinding) == "table" then
+        -- print('remapping ' .. keybinding .. ' in mode ' .. mode .. ' to ' .. util.stringify(mapping))
+        if type(keybinding) == 'table' then
             for _, k in ipairs(keybinding) do
                 bindWithConstMode(mode, k, mapping, extra)
             end
-        elseif type(keybinding) == "string" then
+        elseif type(keybinding) == 'string' then
             vim.keymap.set(mode, keybinding, mapping, extra)
         end
     end
 
-    if type(mode) == "table" then
+    if type(mode) == 'table' then
         for _, m in ipairs(mode) do
             keymap(m, keybinding, mapping, extra)
         end
-    elseif type(mode) == "string" then
+    elseif type(mode) == 'string' then
         bindWithConstMode(mode, keybinding, mapping, extra)
     end
 end
@@ -105,13 +105,13 @@ exports.keymap = keymap
 
 function exports.copy_command(args)
     return function(lines, mode)
-        return vim.fn.systemlist("wl-copy " .. args .. " --type text/plain", lines, 1)
+        return vim.fn.systemlist('wl-copy ' .. args .. ' --type text/plain', lines, 1)
     end
 end
 
 function exports.paste_command(args)
     return function()
-        return vim.fn.systemlist("wl-paste " .. args .. " --no-newline | tr -d '\\n\\r'", {""}, 1) -- "1" keeps empty lines
+        return vim.fn.systemlist('wl-paste ' .. args .. ' --no-newline | tr -d \'\\n\\r\'', {''}, 1) -- '1' keeps empty lines
     end
 end
 
