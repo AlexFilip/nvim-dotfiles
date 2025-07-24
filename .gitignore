@@ -6,3 +6,4 @@ spell/
 python*-env/
 wip/
 /plugin/
+/lazy-lock.json

@@ -142,10 +142,6 @@ function exports.syntax(flag)
     vim.cmd.syntax(flag and "on" or "off")
 end
 
--- Leader and localleader mappings
-vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
-
 -- Open vim explore
 util.keymap("n", leader.on("ef"), vim.cmd.Ex, { desc = "Open directory current file is in" })
 

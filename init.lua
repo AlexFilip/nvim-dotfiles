@@ -1,9 +1,88 @@
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+    local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+    local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+    if vim.v.shell_error ~= 0 then
+        vim.api.nvim_echo({
+            { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+            { out, "WarningMsg" },
+            { "\nPress any key to exit..." },
+        }, true, {})
+        vim.fn.getchar()
+        os.exit(1)
+    end
+end
+vim.opt.rtp:prepend(lazypath)
 
--- Files in the lua subdirectory should stay OS independent
-local settings = require('custom')
+-- Leader and localleader mappings
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
+
+-- Conjure config
+vim.g['conjure#mapping#prefix'] = '<localleader>'
+
+-- Setup lazy.nvim
+require("lazy").setup({
+    spec = {
+        -- import your plugins
+        -- { import = "plugins" },
+
+        -- Useful editor plugins
+        "tpope/vim-surround",
+        "tpope/vim-repeat",
+        "mbbill/undotree",
+
+        -- Git support
+        "tpope/vim-fugitive",
+
+        -- Theming
+        "shaunsingh/nord.nvim",
+        {
+            'nvim-lualine/lualine.nvim',
+            dependencies = { 'nvim-tree/nvim-web-devicons' }
+        },
+
+        -- Utilities
+        {
+            'nvim-telescope/telescope.nvim',
+            branch = '0.1.x',
+            dependencies = { { 'nvim-lua/plenary.nvim' } }
+        },
+
+        -- Lisp
+        {
+            'guns/vim-sexp',
+            lazy = true,
+            ft = { 'clojure', 'lisp', 'scheme' },
+        },
+
+        {
+            'tpope/vim-sexp-mappings-for-regular-people',
+            lazy = true,
+            ft = { 'clojure', 'lisp', 'scheme' },
+        },
+
+        {
+            'Olical/conjure',
+            lazy = true,
+            ft = { 'clojure' },
+        },
+
+    },
+
+    -- Configure any other settings here. See the documentation for more details.
+    -- colorscheme that will be used when installing plugins.
+    install = { colorscheme = { "nord.nvim" } },
+
+    -- automatically check for plugin updates
+    checker = { enabled = true },
+})
 
 require('plugins')
 
+-- Files in the lua subdirectory should stay OS independent
+local settings = require('custom')
 local util = require('util')
 
 -- Everything here is either OS dependent or used to set 
@@ -53,10 +132,6 @@ else
     if vim.fn.has("mac") ~= 0 then
         AddToPath("/opt/homebrew/bin", "/sbin", "/usr/sbin")
     end
-end
-
-if vim.loop.os_uname().sysname == "Darwin" then
-    settings.syntax(false) -- disable syntax for mac, since it doesn't handle nord syntax well
 end
 
 local dot_vim_path = vim.fn.fnamemodify(vim.env.MYVIMRC, ":p:h")
