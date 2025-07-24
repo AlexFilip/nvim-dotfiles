@@ -19,11 +19,24 @@ local plugins = {
         requires = { 'nvim-tree/nvim-web-devicons', opt = true }
     },
 
+    -- Utilities
     {
         'nvim-telescope/telescope.nvim',
         branch = '0.1.x',
         requires = { {'nvim-lua/plenary.nvim'} }
     },
+
+    -- Lisp
+    'guns/vim-sexp',
+    'tpope/vim-sexp-mappings-for-regular-people',
+    {
+        'Olical/conjure',
+        ft = { 'clojure' },
+        config = function()
+            vim.g['conjure#mapping#prefix'] = '<localleader>'
+        end
+    }
+
 }
 
 vim.cmd [[packadd packer.nvim]]

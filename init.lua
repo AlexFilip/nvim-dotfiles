@@ -1,8 +1,9 @@
 
 -- Files in the lua subdirectory should stay OS independent
+local settings = require('custom')
+
 require('plugins')
 
-local settings = require('custom')
 local util = require('util')
 
 -- Everything here is either OS dependent or used to set 

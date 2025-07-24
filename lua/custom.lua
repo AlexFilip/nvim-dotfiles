@@ -98,6 +98,8 @@ local function makeOperatorPrefix(name, prefix)
 end
 
 local         leader = makeOperatorPrefix("Leader",    "<leader>")
+local    localLeader = makeOperatorPrefix("Leader",    "<localleader>")
+
 local carriageReturn = makeOperatorPrefix("Return",    "<CR>")
 local         delete = makeOperatorPrefix("Delete",    "<Del>")
 local      backspace = makeOperatorPrefix("Backspace", "<BS>")
@@ -140,8 +142,9 @@ function exports.syntax(flag)
     vim.cmd.syntax(flag and "on" or "off")
 end
 
--- Leader mappings
+-- Leader and localleader mappings
 vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
 
 -- Open vim explore
 util.keymap("n", leader.on("ef"), vim.cmd.Ex, { desc = "Open directory current file is in" })
