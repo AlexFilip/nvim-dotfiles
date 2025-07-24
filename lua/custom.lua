@@ -142,6 +142,12 @@ function exports.syntax(flag)
     vim.cmd.syntax(flag and "on" or "off")
 end
 
+-- Find highlight group under cursor
+util.keymap("n", "<C-g><C-h>", function()
+    local result = vim.treesitter.get_captures_at_cursor(0)
+    print(vim.inspect(result))
+end, { noremap = true, silent = false })
+
 -- Open vim explore
 util.keymap("n", leader.on("ef"), vim.cmd.Ex, { desc = "Open directory current file is in" })
 

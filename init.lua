@@ -1,53 +1,117 @@
--- Bootstrap lazy.nvim
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
-    local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-    local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
-    if vim.v.shell_error ~= 0 then
-        vim.api.nvim_echo({
-            { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-            { out, "WarningMsg" },
-            { "\nPress any key to exit..." },
-        }, true, {})
-        vim.fn.getchar()
-        os.exit(1)
+local util = require('util')
+
+local package_path = vim.fn.stdpath("data") .. "/lazy"
+function ensure (repo, package, dir)
+    local install_path = string.format("%s/%s", package_path, package)
+    if not (vim.uv or vim.loop).fs_stat(install_path) then
+        local out = vim.fn.system({
+            "git",
+            "clone",
+            "--filter=blob:none",
+            "--single-branch",
+            "https://github.com/" .. repo .. ".git",
+            install_path,
+        })
+        if vim.v.shell_error ~= 0 then
+            vim.api.nvim_echo({
+                { "Failed to clone " .. package .. ":\n", "ErrorMsg" },
+                { out, "WarningMsg" },
+                { "\nPress any key to exit..." },
+            }, true, {})
+            vim.fn.getchar()
+            os.exit(1)
+        end
     end
+    vim.opt.runtimepath:prepend(install_path)
 end
-vim.opt.rtp:prepend(lazypath)
+
+-- ensure("Olical/aniseed", "aniseed")
+-- vim.g["aniseed#env"] = {module = "init", compile = true}
+-- require('aniseed.env').init()
+
+ensure("folke/lazy.nvim", "lazy.nvim")
 
 -- Leader and localleader mappings
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
--- Conjure config
-vim.g['conjure#mapping#prefix'] = '<localleader>'
-
 -- Setup lazy.nvim
 require("lazy").setup({
     spec = {
         -- import your plugins
-        -- { import = "plugins" },
+        { import = "plugins" },
 
         -- Useful editor plugins
         "tpope/vim-surround",
         "tpope/vim-repeat",
-        "mbbill/undotree",
+        {
+            "mbbill/undotree",
+            keys = {
+                { '<leader>u', "<cmd>UndotreeToggle<cr>", desc = "Toggle undo tree" },
+            },
+        },
 
         -- Git support
-        "tpope/vim-fugitive",
+        {
+            "tpope/vim-fugitive",
+            lazy = true,
+            cmd = {
+                "Git",
+            },
+            keys = {
+                { "<leader>gs", "<cmd>Git<cr>", desc = "Open git view" },
+            },
+        },
 
         -- Theming
-        "shaunsingh/nord.nvim",
         {
-            'nvim-lualine/lualine.nvim',
-            dependencies = { 'nvim-tree/nvim-web-devicons' }
+            "shaunsingh/nord.nvim",
+            init = function(plugin)
+                vim.o.background = "dark"
+                util.setValuesInObject(vim.g, {
+                    nord_contrast = false,
+                    nord_borders = true,
+                    nord_disable_background = true,
+                    nord_cursorline_transparent = true,
+                    nord_enable_sidebar_background = false,
+                    nord_italic = true,
+                    nord_uniform_diff_background = true,
+                    nord_bold = true,
+                })
+            end,
+            config = function()
+                vim.cmd.colorscheme("nord")
+                -- Modifications to nord theme
+                local named_colors = require('nord.named_colors')
+                vim.cmd.highlight("Comment",        "guifg=" .. named_colors.green, "gui=NONE")
+                vim.cmd.highlight("SpecialComment", "guifg=" .. named_colors.green, "gui=NONE")
+                vim.cmd.highlight("Character",      "guifg=" .. named_colors.red,   "gui=NONE")
+                vim.cmd.highlight("SpecialChar",    "guifg=" .. named_colors.red,   "gui=NONE")
+                vim.cmd.highlight("String",         "guifg=" .. named_colors.red,   "gui=NONE")
+            end,
+            lazy = false,
+            priority = 1000,
         },
 
         -- Utilities
         {
             'nvim-telescope/telescope.nvim',
+            lazy = true,
             branch = '0.1.x',
-            dependencies = { { 'nvim-lua/plenary.nvim' } }
+            dependencies = { { 'nvim-lua/plenary.nvim' } },
+            keys = {
+                '<leader>ff',
+                '<leader>fg',
+                '<leader>fb',
+                '<leader>fs',
+            },
+
+            config = function()
+                util.keymap('n', '<leader>ff', require('telescope.builtin').find_files, { desc = "Search for files" })
+                util.keymap('n', '<leader>fg', require('telescope.builtin').git_files,  { desc = "Git search" })
+                util.keymap('n', '<leader>fb', require('telescope.builtin').buffers,    { desc = "Search buffers" })
+                util.keymap('n', '<leader>fs', require('telescope.builtin').live_grep,  { desc = "Search file contents" })
+            end
         },
 
         -- Lisp
@@ -65,6 +129,9 @@ require("lazy").setup({
 
         {
             'Olical/conjure',
+            init = function(plugin)
+                vim.g['conjure#mapping#prefix'] = '<localleader>'
+            end,
             lazy = true,
             ft = { 'clojure' },
         },
@@ -73,17 +140,19 @@ require("lazy").setup({
 
     -- Configure any other settings here. See the documentation for more details.
     -- colorscheme that will be used when installing plugins.
-    install = { colorscheme = { "nord.nvim" } },
+    install = {
+        colorscheme = { "nord.nvim" }
+    },
 
     -- automatically check for plugin updates
     checker = { enabled = true },
 })
 
-require('plugins')
+-- Since lualine doesn't have an option for hiding the tab bar entirely
+vim.o.showtabline = 0
 
 -- Files in the lua subdirectory should stay OS independent
 local settings = require('custom')
-local util = require('util')
 
 -- Everything here is either OS dependent or used to set 
 vim.cmd [[ filetype plugin indent on ]]
