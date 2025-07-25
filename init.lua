@@ -1,5 +1,8 @@
 local util = require('util')
 
+-- Lazy documentation: https://lazy.folke.io/
+-- Tangerine (use fennel (a lisp) instead of lua): https://github.com/udayvir-singh/tangerine.nvim
+-- Vim kickstart (ideas for a vim init): https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
 local package_path = vim.fn.stdpath('data') .. '/lazy'
 function ensure (repo, package, dir)
     local install_path = string.format('%s/%s', package_path, package)
@@ -124,7 +127,7 @@ require('lazy').setup({
                 vim.g['conjure#mapping#prefix'] = '<localleader>'
             end,
             lazy = true,
-            ft = { 'clojure' },
+            ft = { 'clojure', 'fennel' },
         },
 
     },
