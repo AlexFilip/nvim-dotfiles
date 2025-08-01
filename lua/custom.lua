@@ -119,7 +119,6 @@ end
 local systemRegister = makeRegister('system', '+')
 local nullRegister   = makeRegister('null', '_')
 
-
 local autoGroup = vim.api.nvim_create_augroup('AutoGroup', { clear = true })
 local function makeCommand(event, pattern, action)
     local opts = {

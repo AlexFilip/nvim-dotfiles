@@ -1,6 +1,5 @@
 .DS_Store
 .netrwhist
-plugins
 pythonx/
 spell/
 python*-env/

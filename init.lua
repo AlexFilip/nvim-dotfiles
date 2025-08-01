@@ -4,7 +4,7 @@ local util = require('util')
 -- Tangerine (use fennel (a lisp) instead of lua): https://github.com/udayvir-singh/tangerine.nvim
 -- Vim kickstart (ideas for a vim init): https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua
 local package_path = vim.fn.stdpath('data') .. '/lazy'
-function ensure (repo, package, dir)
+function ensure(repo, package, dir)
     local install_path = string.format('%s/%s', package_path, package)
     if not (vim.uv or vim.loop).fs_stat(install_path) then
         local out = vim.fn.system({
@@ -99,7 +99,10 @@ require('lazy').setup({
             'nvim-telescope/telescope.nvim',
             lazy = true,
             branch = '0.1.x',
-            dependencies = { { 'nvim-lua/plenary.nvim' } },
+            dependencies = {
+                { 'nvim-lua/plenary.nvim' },
+                { "nvim-treesitter/nvim-treesitter", branch = 'master', lazy = false, build = ":TSUpdate" }
+            },
             keys = {
                 '<leader>ff',
                 '<leader>fg',
@@ -129,7 +132,6 @@ require('lazy').setup({
             lazy = true,
             ft = { 'clojure', 'fennel' },
         },
-
     },
 
     -- Configure any other settings here. See the documentation for more details.
@@ -142,13 +144,13 @@ require('lazy').setup({
     checker = { enabled = true },
 })
 
-local builtin = require('telescope.builtin')
-util.keymap('n', '<leader>ff', builtin.find_files, { desc = 'Search for files' })
-util.keymap('n', '<leader>fg', builtin.git_files,  { desc = 'Git search' })
-util.keymap('n', '<leader>fb', builtin.buffers,    { desc = 'Search buffers' })
-util.keymap('n', '<leader>fs', builtin.live_grep,  { desc = 'Search file contents' })
-util.keymap('n', '<leader>fm', builtin.marks,      { desc = 'Search file contents' })
-util.keymap('n', '<leader>fr', builtin.registers,  { desc = 'Search file contents' })
+-- -- local builtin = require('telescope.builtin')
+-- -- util.keymap('n', '<leader>ff', builtin.find_files, { desc = 'Search for files' })
+-- -- util.keymap('n', '<leader>fg', builtin.git_files,  { desc = 'Git search' })
+-- -- util.keymap('n', '<leader>fb', builtin.buffers,    { desc = 'Search buffers' })
+-- -- util.keymap('n', '<leader>fs', builtin.live_grep,  { desc = 'Search file contents' })
+-- -- util.keymap('n', '<leader>fm', builtin.marks,      { desc = 'Search file contents' })
+-- -- util.keymap('n', '<leader>fr', builtin.registers,  { desc = 'Search file contents' })
 
 -- Since lualine doesn't have an option for hiding the tab bar entirely
 vim.o.showtabline = 0
@@ -210,10 +212,6 @@ local path_separator = '/'
 if vim.fn.has('win32') ~= 0 then
     path_separator = '\\'
 end
-
-vim.env.PINENTRY_USER_DATA='qt'
-vim.env.GPG_TTY=''
-vim.g.GPGDefaultRecipients = {}
 
 -- Clipboard
 if vim.fn.executable('wl-copy') then
