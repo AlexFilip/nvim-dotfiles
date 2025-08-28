@@ -288,12 +288,12 @@ makeCommand({ 'BufNewFile', 'BufRead' }, { 'Makefile', 'makefile', 'Caddyfile', 
     vim.o.expandtab = false
 end)
 
-makeCommand({ 'FileType' }, { 'clojure', 'lisp', 'scheme' }, function()
-    local bufnr = vim.api.nvim_get_current_buf()
-    -- Newline in lisp/clojure/scheme
-    util.keymap({ 'n', 'v', 'o' }, '(', '[(', { buffer = bufnr, desc = 'Skip to (' })
-    util.keymap({ 'n', 'v', 'o' }, ')', '])', { buffer = bufnr, desc = 'Skip to )' })
-end)
+-- makeCommand({ 'FileType' }, { 'clojure', 'lisp', 'scheme' }, function()
+--     local bufnr = vim.api.nvim_get_current_buf()
+--     -- Newline in lisp/clojure/scheme
+--     util.keymap({ 'n', 'v', 'o' }, '(', '[(', { buffer = bufnr, desc = 'Skip to (' })
+--     util.keymap({ 'n', 'v', 'o' }, ')', '])', { buffer = bufnr, desc = 'Skip to )' })
+-- end)
 
 -- Navigation
 util.keymap('n', '<leader>mt', function() vim.cmd.tabnew() end, { desc = 'Create new tab' })

@@ -141,16 +141,19 @@ require('lazy').setup({
     },
 
     -- automatically check for plugin updates
-    checker = { enabled = true },
+    checker = {
+        enabled = true,
+        notify = false
+    },
 })
 
--- -- local builtin = require('telescope.builtin')
--- -- util.keymap('n', '<leader>ff', builtin.find_files, { desc = 'Search for files' })
--- -- util.keymap('n', '<leader>fg', builtin.git_files,  { desc = 'Git search' })
--- -- util.keymap('n', '<leader>fb', builtin.buffers,    { desc = 'Search buffers' })
--- -- util.keymap('n', '<leader>fs', builtin.live_grep,  { desc = 'Search file contents' })
--- -- util.keymap('n', '<leader>fm', builtin.marks,      { desc = 'Search file contents' })
--- -- util.keymap('n', '<leader>fr', builtin.registers,  { desc = 'Search file contents' })
+local builtin = require('telescope.builtin')
+util.keymap('n', '<leader>ff', builtin.find_files, { desc = 'Search for files' })
+util.keymap('n', '<leader>fg', builtin.git_files,  { desc = 'Git search' })
+util.keymap('n', '<leader>fb', builtin.buffers,    { desc = 'Search buffers' })
+util.keymap('n', '<leader>fs', builtin.live_grep,  { desc = 'Search file contents' })
+util.keymap('n', '<leader>fm', builtin.marks,      { desc = 'Search file contents' })
+util.keymap('n', '<leader>fr', builtin.registers,  { desc = 'Search file contents' })
 
 -- Since lualine doesn't have an option for hiding the tab bar entirely
 vim.o.showtabline = 0
