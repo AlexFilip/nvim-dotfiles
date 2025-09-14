@@ -89,6 +89,8 @@ require('lazy').setup({
                 vim.cmd.highlight('Character',      'guifg=' .. named_colors.red,   'gui=NONE')
                 vim.cmd.highlight('SpecialChar',    'guifg=' .. named_colors.red,   'gui=NONE')
                 vim.cmd.highlight('String',         'guifg=' .. named_colors.red,   'gui=NONE')
+                vim.cmd.highlight('Visual',         'guibg=' .. named_colors.blue,  'gui=NONE')
+                vim.cmd.highlight('VisualNOS',      'guibg=' .. named_colors.blue,  'gui=NONE')
             end,
             lazy = false,
             priority = 1000,
