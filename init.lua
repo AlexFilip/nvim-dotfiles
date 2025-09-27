@@ -50,7 +50,7 @@ require('lazy').setup({
         {
             'mbbill/undotree',
             keys = {
-                { '<leader>u', '<cmd>UndotreeToggle<cr>', desc = 'Toggle undo tree' },
+                { '<leader>u', function(...) vim.cmd.UndotreeToggle(...) end, desc = 'Toggle undo tree' },
             },
         },
 
@@ -60,7 +60,7 @@ require('lazy').setup({
             lazy = true,
             cmd = { 'Git', },
             keys = {
-                { '<leader>gs', '<cmd>Git<cr>', desc = 'Open git view' },
+                { '<leader>gs', function(...) vim.cmd.Git(...) end, desc = 'Open git view' },
             },
         },
 
@@ -106,10 +106,12 @@ require('lazy').setup({
                 { "nvim-treesitter/nvim-treesitter", branch = 'master', lazy = false, build = ":TSUpdate" }
             },
             keys = {
-                '<leader>ff',
-                '<leader>fg',
-                '<leader>fb',
-                '<leader>fs',
+                { '<leader>ff', function(...) require('telescope.builtin').find_files(...) end, desc = 'Search for files' },
+                { '<leader>fg', function(...) require('telescope.builtin').git_files(...) end,  desc = 'Git search' },
+                { '<leader>fb', function(...) require('telescope.builtin').buffers(...) end,    desc = 'Search buffers' },
+                { '<leader>fs', function(...) require('telescope.builtin').live_grep(...) end,  desc = 'Search file contents' },
+                { '<leader>fm', function(...) require('telescope.builtin').marks(...) end,      desc = 'Search file contents' },
+                { '<leader>fr', function(...) require('telescope.builtin').registers(...) end,  desc = 'Search file contents' },
             },
         },
 
@@ -149,13 +151,6 @@ require('lazy').setup({
     },
 })
 
-local builtin = require('telescope.builtin')
-util.keymap('n', '<leader>ff', builtin.find_files, { desc = 'Search for files' })
-util.keymap('n', '<leader>fg', builtin.git_files,  { desc = 'Git search' })
-util.keymap('n', '<leader>fb', builtin.buffers,    { desc = 'Search buffers' })
-util.keymap('n', '<leader>fs', builtin.live_grep,  { desc = 'Search file contents' })
-util.keymap('n', '<leader>fm', builtin.marks,      { desc = 'Search file contents' })
-util.keymap('n', '<leader>fr', builtin.registers,  { desc = 'Search file contents' })
 
 -- Since lualine doesn't have an option for hiding the tab bar entirely
 vim.o.showtabline = 0
@@ -172,16 +167,11 @@ local function AddToPath(PATH_separator, ...)
     local new_path = {}
     local i = 1
 
-    while i <= #vim.env.PATH do
-        local sep_loc = string.find(vim.env.PATH, PATH_separator, i) or #vim.env.PATH+1
-        local sub_path = string.sub(vim.env.PATH, i, sep_loc-1)
-
-        if not exist_in_path[sub_path] then
-            new_path[#new_path + 1] = sub_path
-            exist_in_path[sub_path] = true
+    for path in string.gmatch(vim.env.PATH, '[^' .. PATH_separator .. ']+') do
+        if not exist_in_path[path] then
+            new_path[#new_path + 1] = path
+            exist_in_path[path] = true
         end
-
-        i = sep_loc + 1
     end
 
     local new_components = {}
@@ -196,16 +186,14 @@ local function AddToPath(PATH_separator, ...)
     end
 
     vim.env.PATH = table.concat(new_components, PATH_separator)
-    return vim.env.PATH
 end
 
 if vim.fn.has('win32') ~= 0 then
     AddToPath(';', 'C:\\tools', 'C:\\Program Files\\Git\\bin')
 else
-    if vim.fn.executable('/bin/zsh') ~= 0 then
-        vim.o.shell='/bin/zsh' -- Shell to launch in terminal
+    if vim.fn.executable('/bin/bash') ~= 0 then
+        vim.o.shell='/bin/bash' -- Shell to launch in terminal
     end
-
     AddToPath(':', '/usr/local/sbin', settings.homeDirectory .. '/bin', '/usr/local/bin')
     if vim.fn.has('mac') ~= 0 then
         AddToPath('/opt/homebrew/bin', '/sbin', '/usr/sbin')
