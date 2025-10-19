@@ -45,25 +45,40 @@ require('lazy').setup({
         { import = 'plugins' },
 
         -- Useful editor plugins
-        'tpope/vim-surround',
-        'tpope/vim-repeat',
+        {
+            "kylechui/nvim-surround",
+            version = "^3.0.0", -- Use for stability; omit to use `main` branch for the latest features
+            event = "VeryLazy",
+            config = function()
+                require("nvim-surround").setup({
+                    -- Configuration here, or leave empty to use defaults
+                })
+            end
+        },
         {
             'mbbill/undotree',
             keys = {
-                { '<leader>u', function(...) vim.cmd.UndotreeToggle(...) end, desc = 'Toggle undo tree' },
+                { '<leader>u', vim.cmd.UndotreeToggle, desc = 'Toggle undo tree' },
             },
         },
 
         -- Git support
         {
-            'tpope/vim-fugitive',
-            lazy = true,
-            cmd = { 'Git', },
+            "NeogitOrg/neogit",
             keys = {
-                { '<leader>gs', function(...) vim.cmd.Git(...) end, desc = 'Open git view' },
+                { '<leader>gs', vim.cmd.Neogit, desc = 'Open git view' },
+            },
+            dependencies = {
+                "nvim-lua/plenary.nvim",         -- required
+                "sindrets/diffview.nvim",        -- optional - Diff integration
+
+                -- Only one of these is needed.
+                "nvim-telescope/telescope.nvim", -- optional
+                "ibhagwan/fzf-lua",              -- optional
+                "nvim-mini/mini.pick",           -- optional
+                "folke/snacks.nvim",             -- optional
             },
         },
-
         -- Theming
         {
             'shaunsingh/nord.nvim',
@@ -118,12 +133,6 @@ require('lazy').setup({
         -- Lisp
         {
             'guns/vim-sexp',
-            lazy = true,
-            ft = { 'clojure', 'lisp', 'scheme' },
-        },
-
-        {
-            'tpope/vim-sexp-mappings-for-regular-people',
             lazy = true,
             ft = { 'clojure', 'lisp', 'scheme' },
         },
