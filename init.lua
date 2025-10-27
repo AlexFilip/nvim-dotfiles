@@ -205,7 +205,7 @@ else
     end
     AddToPath(':', '/usr/local/sbin', settings.homeDirectory .. '/bin', '/usr/local/bin')
     if vim.fn.has('mac') ~= 0 then
-        AddToPath('/opt/homebrew/bin', '/sbin', '/usr/sbin')
+        AddToPath(':', '/opt/homebrew/bin', '/sbin', '/usr/sbin')
     end
 end
 
