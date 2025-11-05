@@ -27,7 +27,6 @@ function ensure(repo, package, dir)
     end
     vim.opt.runtimepath:prepend(install_path)
 end
-
 ensure('folke/lazy.nvim', 'lazy.nvim')
 
 --- Status line
@@ -169,35 +168,104 @@ require('lazy').setup({
         },
 
         {
+            'hrsh7th/nvim-cmp',
+            config = function()
+                local cmp = require('cmp')
+
+                cmp.setup({
+                    snippet = {
+                        -- REQUIRED - you must specify a snippet engine
+                        expand = function(args)
+                            vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+                            -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+                            -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+                            -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+                            -- vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
+
+                            -- For `mini.snippets` users:
+                            -- local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
+                            -- insert({ body = args.body }) -- Insert at cursor
+                            -- cmp.resubscribe({ "TextChangedI", "TextChangedP" })
+                            -- require("cmp.config").set_onetime({ sources = {} })
+                        end,
+                    },
+                    window = {
+                        -- completion = cmp.config.window.bordered(),
+                        -- documentation = cmp.config.window.bordered(),
+                    },
+                    mapping = cmp.mapping.preset.insert({
+                        -- ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+                        -- ['<C-f>'] = cmp.mapping.scroll_docs(4),
+                        ['<C-Space>'] = cmp.mapping.complete(),
+                        ['<C-e>'] = cmp.mapping.abort(),
+                        ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+                    }),
+                    sources = cmp.config.sources({
+                        { name = 'nvim_lsp' },
+                        { name = 'vsnip' },
+                    }, {
+                        { name = 'buffer' },
+                    })
+                })
+
+                cmp.setup.cmdline({ '/', '?' }, {
+                    mapping = cmp.mapping.preset.cmdline(),
+                    sources = {
+                        { name = 'buffer' }
+                    }
+                })
+
+                -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+                cmp.setup.cmdline(':', {
+                    mapping = cmp.mapping.preset.cmdline(),
+                    sources = cmp.config.sources({
+                        { name = 'path' }
+                    }, {
+                        { name = 'cmdline' }
+                    }),
+                    matching = { disallow_symbol_nonprefix_matching = false }
+                })
+
+            end,
+
+            dependencies = {
+                'neovim/nvim-lspconfig',
+                'hrsh7th/cmp-nvim-lsp',
+                'hrsh7th/cmp-buffer',
+                'hrsh7th/cmp-path',
+                'hrsh7th/cmp-cmdline',
+                'hrsh7th/cmp-vsnip',
+                'hrsh7th/vim-vsnip',
+            },
+        },
+
+        {
+            "mason-org/mason.nvim",
+            opts = {},
+        },
+
+        {
             "nvim-treesitter/nvim-treesitter",
             branch = 'master',
             lazy = false,
             build = ":TSUpdate",
             opts = {
-                -- A list of parser names, or "all" (the listed parsers MUST always be installed)
                 ensure_installed = {
-                    "c", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline"
+                    "c", "cpp", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline"
                 },
-
-                -- Install parsers synchronously (only applied to `ensure_installed`)
                 sync_install = false,
-
-                -- Automatically install missing parsers when entering buffer
-                -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
                 auto_install = true,
-
-                -- List of parsers to ignore installing (or "all")
                 ignore_install = {},
 
                 ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
                 -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
-
                 highlight = {
                     enable = true,
-
                     additional_vim_regex_highlighting = false,
                 },
-
+                indent = {
+                    enable = false
+                },
             },
         },
 
@@ -232,6 +300,41 @@ require('lazy').setup({
                 vim.cmd.highlight('VisualNOS',      'guibg=' .. named_colors.blue,  'gui=NONE')
             end,
         },
+
+        -- Utilities
+        {
+            'nvim-telescope/telescope.nvim',
+            lazy = true,
+            branch = '0.1.x',
+            dependencies = {
+                { 'nvim-lua/plenary.nvim' },
+                { "nvim-treesitter/nvim-treesitter", branch = 'master', lazy = false, build = ":TSUpdate" }
+            },
+            keys = {
+                { '<leader>ff', function(...) require('telescope.builtin').find_files(...) end, desc = 'Search for files' },
+                { '<leader>fg', function(...) require('telescope.builtin').git_files(...) end,  desc = 'Git search' },
+                { '<leader>fb', function(...) require('telescope.builtin').buffers(...) end,    desc = 'Search buffers' },
+                { '<leader>fs', function(...) require('telescope.builtin').live_grep(...) end,  desc = 'Search file contents' },
+                { '<leader>fm', function(...) require('telescope.builtin').marks(...) end,      desc = 'Search file contents' },
+                { '<leader>fr', function(...) require('telescope.builtin').registers(...) end,  desc = 'Search file contents' },
+            },
+        },
+
+        -- Lisp
+        {
+            'guns/vim-sexp',
+            lazy = true,
+            ft = { 'clojure', 'lisp', 'scheme' },
+        },
+
+        {
+            'Olical/conjure',
+            init = function(plugin)
+                vim.g['conjure#mapping#prefix'] = '<localleader>'
+            end,
+            lazy = true,
+            ft = { 'clojure', 'fennel' },
+        },
     },
 
     install = {
@@ -249,6 +352,16 @@ require('lazy').setup({
     },
 
 })
+
+local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+local function addCapabilitiesToLSP(name)
+    vim.lsp.config(name, {
+        capabilities = capabilities
+    })
+    vim.lsp.enable(name)
+end
+
+addCapabilitiesToLSP('clangd')
 
 
 -- Since lualine doesn't have an option for hiding the tab bar entirely
