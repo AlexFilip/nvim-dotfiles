@@ -362,6 +362,11 @@ local function addCapabilitiesToLSP(name)
 end
 
 addCapabilitiesToLSP('clangd')
+addCapabilitiesToLSP('json-lsp')
+addCapabilitiesToLSP('html-lsp')
+addCapabilitiesToLSP('python-lsp-server')
+addCapabilitiesToLSP('clojure-lsp')
+addCapabilitiesToLSP('terraform-ls')
 
 
 -- Since lualine doesn't have an option for hiding the tab bar entirely
