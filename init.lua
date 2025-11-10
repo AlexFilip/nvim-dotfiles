@@ -249,6 +249,14 @@ require('lazy').setup({
             branch = 'master',
             lazy = false,
             build = ":TSUpdate",
+            keys = {
+                -- In your init.lua or similar configuration file
+                { "<leader>er", vim.diagnostic.open_float, desc = "Show diagnostic message" },
+                { "<leader>ner", vim.diagnostic.goto_next, desc = "Next diagnostic" },
+                { "<leader>per", vim.diagnostic.goto_prev, desc = "Previous diagnostic" },
+                { '<leader>gd', vim.lsp.buf.definition, desc = 'LSP Go to Definition' },
+                { '<leader>K', vim.lsp.buf.hover, desc = "Hover documentation" }
+            },
             opts = {
                 ensure_installed = {
                     "c", "cpp", "lua", "vim", "vimdoc", "query", "markdown", "markdown_inline"
