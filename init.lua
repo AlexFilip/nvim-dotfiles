@@ -95,12 +95,9 @@ require('lazy').setup({
             keys = {
                 { '<leader>gs', vim.cmd.Neogit, desc = 'Open git view' },
                 -- TODO: Adapt these to the new plugin
-                -- util.keymap('n', '<leader>gd', function() vim.cmd 'vert Gdiffsplit!' end, { desc = 'Solve merge conflict or git diff' })
-                -- util.keymap('n', '<leader>gh', function() vim.cmd 'diffget //2' end, { desc = 'Select left in conflict resolution' })
-                -- util.keymap('n', '<leader>gl', function() vim.cmd 'diffget //3' end, { desc = 'Select right in conflict resolution' })
-                -- 
-                -- util.keymap('n', '<leader>gp', function() vim.cmd 'Git push' end, { desc = 'git push' })
-                -- util.keymap('n', '<leader>gfp', function() vim.cmd 'Git push --force-with-lease' end, { desc = 'git force push' })
+                -- { '<leader>gd', function() vim.cmd 'vert Gdiffsplit!' end, desc = 'Solve merge conflict or git diff' }
+                -- { '<leader>gh', function() vim.cmd 'diffget //2' end, desc = 'Select left in conflict resolution' }
+                -- { '<leader>gl', function() vim.cmd 'diffget //3' end, desc = 'Select right in conflict resolution' }
             },
             dependencies = {
                 "nvim-lua/plenary.nvim",
@@ -369,14 +366,20 @@ require('lazy').setup({
 })
 
 local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-local function addCapabilitiesToLSP(name)
-    vim.lsp.config(name, {
-        capabilities = capabilities
+local function addCapabilitiesToLSP(name, options)
+    vim.lsp.config(name, options or {
+        capabilities = cmp_capabilities
     })
+
     vim.lsp.enable(name)
 end
 
-addCapabilitiesToLSP('clangd')
+addCapabilitiesToLSP('clangd',  {
+    capabilities = cmp_capabilities,
+    init_options = {
+        fallbackFlags = {'--std=c++20'}
+    },
+})
 addCapabilitiesToLSP('json-lsp')
 addCapabilitiesToLSP('html-lsp')
 addCapabilitiesToLSP('python-lsp-server')
