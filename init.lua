@@ -377,7 +377,7 @@ end
 addCapabilitiesToLSP('clangd',  {
     capabilities = cmp_capabilities,
     init_options = {
-        fallbackFlags = {'--std=c++20'}
+        fallbackFlags = {'--std=c++23'}
     },
 })
 addCapabilitiesToLSP('json-lsp')
