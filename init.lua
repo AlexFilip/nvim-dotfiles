@@ -455,6 +455,18 @@ if vim.fn.executable('wl-copy') then
         },
         cache_enabled = true
     }
+elseif vim.fn.has('mac') ~= 0 then
+    vim.g.clipboard = {
+        copy = {
+            ['+'] = util.copy_command(''),
+            ['*'] = util.copy_command('')
+        },
+        paste = {
+            ['+'] = util.paste_command(''),
+            ['*'] = util.paste_command(''),
+        },
+        cache_enabled = true
+    }
 else
     print('wl-clipboard not found, clipboard integration won\'t work')
 end

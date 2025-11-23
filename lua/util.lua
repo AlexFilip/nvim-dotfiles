@@ -104,14 +104,26 @@ end
 exports.keymap = keymap
 
 function exports.copy_command(args)
-    return function(lines, mode)
-        return vim.fn.systemlist('wl-copy ' .. args .. ' --type text/plain', lines, 1)
+    if vim.fn.has('mac') ~= 0 then
+        return function(lines, mode)
+            return vim.fn.systemlist('pbcopy ' .. args, lines, 1)
+        end
+    else
+        return function(lines, mode)
+            return vim.fn.systemlist('wl-copy ' .. args .. ' --type text/plain', lines, 1)
+        end
     end
 end
 
 function exports.paste_command(args)
-    return function()
-        return vim.fn.systemlist('wl-paste ' .. args .. ' --no-newline | tr -d \'\\n\\r\'', {''}, 1) -- '1' keeps empty lines
+    if vim.fn.has('mac') ~= 0 then
+        return function(lines, mode)
+            return vim.fn.systemlist('pbpaste ' .. args, {''}, 1)
+        end
+    else
+        return function()
+            return vim.fn.systemlist('wl-paste ' .. args .. ' --no-newline | tr -d \'\\n\\r\'', {''}, 1) -- '1' keeps empty lines
+        end
     end
 end
 
