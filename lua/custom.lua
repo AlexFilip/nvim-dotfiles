@@ -12,6 +12,11 @@ end
 local newFormatoptions = vim.o.formatoptions .. 'n'
 local newCinkeys       = vim.o.cinkeys:gsub(',0#', '')
 
+util.setValuesInObject(vim.opt, {
+    title = true,
+    titlestring = "%F%m",
+})
+
 util.setValuesInObject(vim.o, {
     -- Persistent Undo
     undofile   = true,     -- Save undos after file closes
@@ -408,4 +413,3 @@ createCommand({ 'RenameFiles' }, {}, function()
 end)
 
 return exports
-
