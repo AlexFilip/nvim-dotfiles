@@ -230,6 +230,10 @@ require('lazy').setup({
                     matching = { disallow_symbol_nonprefix_matching = false }
                 })
 
+                require("cmp").setup.filetype({"txt", "markdown", "org"}, {
+                    enabled = false,
+                })
+
             end,
 
             dependencies = {
