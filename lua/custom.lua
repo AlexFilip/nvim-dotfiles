@@ -14,7 +14,7 @@ local newCinkeys       = vim.o.cinkeys:gsub(',0#', '')
 
 util.setValuesInObject(vim.opt, {
     title = true,
-    titlestring = "%F%m",
+    titlestring = "Neovim %F%m",
 })
 
 util.setValuesInObject(vim.o, {
